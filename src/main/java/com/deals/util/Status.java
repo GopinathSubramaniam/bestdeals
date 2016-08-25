@@ -7,7 +7,7 @@ import lombok.ToString;
 @ToString
 @Setter
 @Getter
-public class Status {
+public class Status{
 
 	private String statusCode;
 	private String statusMsg;

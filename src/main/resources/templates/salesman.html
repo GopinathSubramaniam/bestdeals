@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="base-css">
+	<link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css"/>
+</head>
+<body>
+	<div th:include="header"></div>
+	<div th:include="left-side"></div>
+	<div class="container-fluid content-wrapper">
+		<div class="row">
+			<div align="center">
+				<h2 th:text="${title}" ></h2>
+			</div>
+			<div>
+				 <button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#saleRegisterationModal">Create New</button>
+			</div>
+			<div class="box">
+				 <table id="userTable" class="table table-bordered table-hover">
+				 	<thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Mobile</th>
+                        <th>SalesManager Name</th>
+                        <th>Company Name</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    	<tr th:each="salesman : ${salesmans}">
+                    		<td th:text="${salesman.name}"></td>
+                    		<td th:text="${salesman.email}"></td>
+                    		<td th:text="${salesman.mobile}"></td>
+                    		<td th:text="${salesman.salesManager.name}"></td>
+                    		<td th:text="${salesman.company.name}"></td>
+                    		<td>
+                    			<button title="Delete" class="btn btn-xs btn-danger"><i class="fa fa-fw fa-trash"></i></button>
+								<button title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#modal" th:onclick="'SalesMan.findSalesman('+${salesman.id}+')'"><i class="fa fa-fw fa-edit"></i></button>
+                    		</td>
+                    	</tr>
+                    </tbody>
+				 </table>
+			</div>
+		</div>
+	</div>
+	<div th:include="footer"></div>
+	<div th:include="base-js"></div>
+	<script src="scripts/services/salesman.js"></script>
+	
+	<!-- Edit user model start -->
+	<div id="modal" class="modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Edit User</h4>
+          </div>
+          <div class="modal-body">
+    		<p>One fine body&hellip;</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+	<!-- Edit user model end -->
+	
+	<!-- Create new sales model start -->
+	<div id="saleRegisterationModal" class="modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" th:text="${popupTitle}"></h4>
+          </div>
+          <form id="userRegisterform" class="form-horizontal" action="javascript:void(0);" method="post" th:onsubmit="'User.create(this);'">
+          <div class="modal-body">
+	        <div class="box-body">
+	         <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">Name</label>
+	            <div class="col-sm-10">
+	              <input type="text" name="name" class="form-control" id="inputname" placeholder="Name"/>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+	            <div class="col-sm-10">
+	              <input type="email" name="email" class="form-control" id="inputEmail3" placeholder="Email"/>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">Mobile</label>
+	            <div class="col-sm-10">
+	              <input type="text" name="mobile" class="form-control" id="inputMobile" placeholder="Mobile"/>
+	              <input type="hidden" name="userType" class="form-control" id="userType" placeholder="UserType" value="PUBLIC"/>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+	            <div class="col-sm-10">
+	              <input type="password" name="password" class="form-control" id="inputPassword3" placeholder="Password"/>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">Confirm Password</label>
+	            <div class="col-sm-10">
+	              <input type="password" name="inputConfirmPassword" class="form-control" id="inputConfirmPassword" placeholder="Confirm Password"/>
+	            </div>
+	          </div>
+	        </div>
+          </div>
+          <div class="modal-footer">
+          	<span class="form-group has-success pull-left">
+              <label class="control-label" for="inputSuccess" id="successMsg"></label>
+            </span>
+            <span class="form-group has-error pull-left">
+              <label class="control-label" for="inputError" id="errorMsg"></label>
+            </span>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+          </form>	
+        </div>
+      </div>
+    </div>
+	<!-- Create new sales model end -->
+</body>
+</html>

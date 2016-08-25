@@ -82,8 +82,8 @@ public class UserService {
 	
 	public Status getUser(Long id){
 		if(id != null && id !=0){
-			User user = userRepository.getOne(id);
-			status = App.getResponse(App.CODE_OK, App.STATUS_DELETE, App.MSG_DELETE, user);
+			User user = userRepository.findOne(id);
+			status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, user);
 		}else{
 			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_FAIL, null);
 		}
@@ -116,7 +116,15 @@ public class UserService {
 	
 	public Status delete(Long id){
 		if(id != null && id !=0){
-			userRepository.delete(id);
+			OTP otp = otpRepository.findByUserId(id);
+			if(otp!=null){
+				otpRepository.delete(otp);
+			}
+			
+			User user = userRepository.findOne(id);
+			if(user != null){
+				userRepository.delete(user);
+			}
 			status = App.getResponse(App.CODE_OK, App.STATUS_DELETE, App.MSG_DELETE, id);
 		}else{
 			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_FAIL, id);
@@ -141,6 +149,12 @@ public class UserService {
 		List<User> users = userRepository.findAllByUserType(userType);
 		return App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, users);
 		
+	}
+	
+	public Status findAll(){
+		List<User> users = userRepository.findAll();
+		Status status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, users);
+		return status;
 	}
 	
 }

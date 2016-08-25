@@ -1,5 +1,6 @@
 package com.deals.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.GeneratedValue;
@@ -17,8 +18,11 @@ import lombok.ToString;
 @Getter
 @Setter
 @MappedSuperclass
-public class BaseEntity {
+public class BaseEntity implements Serializable {
 
+	
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;

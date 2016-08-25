@@ -25,6 +25,11 @@ public class UserController {
 		return userService.create(user);
 	}
 	
+	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+	public Status delete(@PathVariable Long id){
+		return userService.delete(id);
+	}
+	
 	@RequestMapping(value="/saveUserDetail", method=RequestMethod.POST, produces={"application/json"})
 	public Status updateUserDetail(@RequestBody UserDetail userDetail){
 		return userService.saveUserDetail(userDetail);
@@ -32,7 +37,9 @@ public class UserController {
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public Status get(@PathVariable Long id){
-		return userService.getUser(id);
+		Status status = userService.getUser(id);
+		System.out.println("getUser Status :::: "+status);
+		return status;
 	}
 	
 	@RequestMapping(value="/verify/{codeOTP}/{loginId}", method=RequestMethod.GET)

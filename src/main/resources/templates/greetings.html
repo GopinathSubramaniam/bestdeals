@@ -4,7 +4,8 @@
 </head>
 <body>
 	<div th:include="header"></div>
-	<div class="container-fluid">
+	<div th:include="left-side"></div>
+	<div class="container-fluid content-wrapper">
 		<div class="row">
 			<h2 th:text="${message}" ></h2>	
 		</div>

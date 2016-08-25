@@ -56,4 +56,17 @@ public class SalesmanService {
 		return status;
 	}
 	
+	public Status findSalesManById(Long salesmanId){
+		Salesman salesman = salesmanRepository.findOne(salesmanId);
+		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, salesman);
+		return status;
+	}
+	
+	public Status findAllSalesMan(){
+		List<Salesman> salesmans = salesmanRepository.findAll();
+		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, salesmans);
+		return status;
+	}
+	
+	
 }

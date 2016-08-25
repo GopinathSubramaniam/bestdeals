@@ -7,5 +7,6 @@ import com.deals.model.OTP;
 public interface OTPRepository extends JpaRepository<OTP, Long>{
 	
 	public OTP findByUserId(Long id);
+	public void removeByUserId(Long id);
 	
 }
