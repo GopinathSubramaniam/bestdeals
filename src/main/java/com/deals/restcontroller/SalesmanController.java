@@ -29,6 +29,10 @@ public class SalesmanController {
 		return salesmanService.findSalesManById(salesmanId);
 	}
 	
+	@RequestMapping(value="/{salesmanId}", method=RequestMethod.DELETE)
+	public Status delete(@PathVariable Long salesmanId){
+		return salesmanService.deleteSalesManById(salesmanId);
+	}
 	
 	@RequestMapping(value="/findAllByManagerId/{managerId}", method=RequestMethod.GET, produces={"application/json"})
 	public Status findAllByManagerId(@PathVariable Long managerId){

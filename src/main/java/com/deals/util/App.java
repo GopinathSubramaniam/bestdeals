@@ -1,6 +1,13 @@
 package com.deals.util;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import com.deals.model.User;
 
 //import com.way2sms.SMS;
 
@@ -41,8 +48,25 @@ public class App {
 	
 	public static String MSG_USER_NOT_AUTH = "User not authenticated";
 	
-	
 	private static Status status = new Status();
+	
+	public static HttpSession setUserInSession(HttpServletRequest req, User user){
+		HttpSession httpSession = req.getSession();
+		httpSession.setAttribute("userId", user.getId());
+		httpSession.setAttribute("username", user.getName());
+		httpSession.setAttribute("loginState", user.getLoginState());
+		
+		return httpSession;
+	}
+	
+	public static List<String> getUserTypes(){
+		List<String> userTypes = new ArrayList<String>();
+		userTypes.add("ADMIN");
+		userTypes.add("FRANCHISE");
+		userTypes.add("PUBLIC");
+		userTypes.add("MERCHANT");
+		return userTypes;
+	}
 	
 	public static Status getResponse(String statusCode, String statusMsg, String message,  Object data ){
 		status.setStatusCode(statusCode);

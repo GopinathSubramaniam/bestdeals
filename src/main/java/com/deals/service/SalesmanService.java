@@ -39,6 +39,12 @@ public class SalesmanService {
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, salesmans);
 		return status;
 	}
+
+	public Status findAllSalesManagerByCompanyId(Long comapnyId) {
+		List<SalesManager> salesmans = salesManagerRepository.findAllByCompanyId(comapnyId);
+		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, salesmans);
+		return status;
+	}
 	
 	public Status createSalesManager(SalesManager salesManager){
 		if(salesManager != null){
@@ -59,6 +65,13 @@ public class SalesmanService {
 	public Status findSalesManById(Long salesmanId){
 		Salesman salesman = salesmanRepository.findOne(salesmanId);
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, salesman);
+		return status;
+	}
+	
+	public Status deleteSalesManById(Long salesmanId){
+		Salesman salesman = salesmanRepository.findOne(salesmanId);
+		salesmanRepository.delete(salesman);
+		status = App.getResponse(App.CODE_OK, App.STATUS_DELETE, App.MSG_DELETE, salesman);
 		return status;
 	}
 	

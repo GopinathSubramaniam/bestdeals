@@ -27,15 +27,14 @@
                       </tr>
                     </thead>
                     <tbody>
-                    	<tr th:each="salesman : ${salesmans}">
-                    		<td th:text="${salesman.name}"></td>
-                    		<td th:text="${salesman.email}"></td>
-                    		<td th:text="${salesman.mobile}"></td>
-                    		<td th:text="${salesman.salesManager} != null ? ${salesman.salesManager.name} : ''"></td>
-                    		<td th:text="${salesman.company} != null ? ${salesman.company.name} : ''"></td>
+                    	<tr th:each="salesManager : ${salesManagers}">
+                    		<td th:text="${salesManager.name}"></td>
+                    		<td th:text="${salesManager.email}"></td>
+                    		<td th:text="${salesManager.mobile}"></td>
+                    		<td th:text="${salesManager.company} != null ? ${salesManager.company.name} : ''"></td>
                     		<td>
-                    			<button title="Delete" class="btn btn-xs btn-danger" th:onclick="'Salesman.deleteSalesman('+${salesman.id}+')'"><i class="fa fa-fw fa-trash"></i></button>
-								<button title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#modal" th:onclick="'Salesman.findSalesman('+${salesman.id}+')'"><i class="fa fa-fw fa-edit"></i></button>
+                    			<button title="Delete" class="btn btn-xs btn-danger" th:onclick="'SalesManager.deleteSalesman('+${salesManager.id}+')'"><i class="fa fa-fw fa-trash"></i></button>
+								<button title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#modal" th:onclick="'SalesManager.findSalesman('+${salesManager.id}+')'"><i class="fa fa-fw fa-edit"></i></button>
                     		</td>
                     	</tr>
                     </tbody>

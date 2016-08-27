@@ -28,6 +28,8 @@ var App = (function(){
 	}
 })();
 
+$('#username').html(sessionStorage.getItem('username'));
+
 $('.sidebar-menu li').click(function(ev){
 	console.log('>>>> Side bar clicked >>>');
 	var elems = $('.sidebar-menu li');

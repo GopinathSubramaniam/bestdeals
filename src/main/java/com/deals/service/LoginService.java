@@ -27,7 +27,7 @@ public class LoginService {
 				}else{
 					user.setLoginState(LoginState.ONLINE);
 					userRepository.saveAndFlush(user);
-					user.setPassword(null);
+//					user.setPassword(null);
 					status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, user);
 				}
 			}else{
@@ -39,19 +39,19 @@ public class LoginService {
 		return status;
 	}
 	
-	public Status logout(User user){
-		if(user != null){
-			user = userRepository.findByEmail(user.getEmail());
+	public Status logout(Long id){
+		if(id != null && id != 0){
+			User user = userRepository.findOne(id);
 			if(user!=null){
 				user.setLoginState(LoginState.OFFLINE);
 				userRepository.saveAndFlush(user);
-				user.setPassword(null);
+//				user.setPassword(null);
 				status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, user);
 			}else{
 				status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_LOGIN_ERROR, user);
 			}
 		}else{
-			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_LOGIN_ERROR, user);
+			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_LOGIN_ERROR, null);
 		}
 		return status;
 	}

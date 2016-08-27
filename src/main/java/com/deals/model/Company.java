@@ -22,6 +22,7 @@ public class Company extends BaseEntity{
 	private String name;
 	private String mobile;
 	private String phone;
+	private String email;
 	private String address1;
 	private String address2;
 	

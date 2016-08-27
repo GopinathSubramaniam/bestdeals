@@ -17,18 +17,35 @@ var Login = (function(){
 				window.sessionStorage.setItem('loginState', response.data.loginState);
 				window.sessionStorage.setItem('email', response.data.email);
 				window.sessionStorage.setItem('userType', response.data.userType);
+				window.sessionStorage.setItem('userId', response.data.id);
 				window.location.href='/home';
 			}else{
-				$('.message').html('<span class="error">Invalid Username and Password</span>');
+				$('.message').html('<span class="error">Invalid Username and Password</span>').fadeIn(3000).fadeOut(5000);
 			}
 		}).error(function(error){
 			console.log('Error :::: ', error);
-			window.location.href='/home';
+			$('.message').html('<span class="error">Invalid Username and Password</span>').fadeIn(3000).fadeOut(5000);
 		});
-	}
+	};
+	var  doLogout = function(){
+		
+		var url = App.URL().BASE+App.URL().LOGIN+'out/'+sessionStorage.getItem('userId');
+		$.ajax({
+			url: url,
+			method: App.method.GET
+		}).done(function(response){
+			if(response.statusMsg == 'OK'){
+				sessionStorage.clear();
+				window.location.href = '/logout';
+			}
+		}).error(function(){
+			alert('Error in logout');
+		});
+	};
 	
 	return {
-		doLogin: doLogin
+		doLogin: doLogin,
+		doLogout: doLogout
 	}
 	
 })();

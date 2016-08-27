@@ -30,7 +30,7 @@ var User = (function(){
 			window.location.reload();
 		}).error(function(error){
 			console.log('Error ::: ', error);
-//			$('#errorMsg').html('<i class="fa fa-times"></i> Error in creating user. Please try again later.').fadeIn().fadeOut(5000);
+			$('#errorMsg').html('<i class="fa fa-times"></i> Error in creating user. Please try again later.').fadeIn().fadeOut(5000);
 		});
 	};
 	

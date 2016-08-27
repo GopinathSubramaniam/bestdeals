@@ -1,6 +1,7 @@
 package com.deals.restcontroller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,9 +23,9 @@ public class LoginController {
 		return loginService.login(user);
 	}
 	
-	@RequestMapping(value="/out", method= RequestMethod.POST, produces={"application/json"})
-	public Status logout(@RequestBody User user){
-		return loginService.logout(user);
+	@RequestMapping(value="/out/{userId}", method= RequestMethod.GET)
+	public Status logout(@PathVariable Long userId){
+		return loginService.logout(userId);
 	}
 	
 }
