@@ -1,17 +1,11 @@
 'usr strict';
 
 var Login = (function(){
+	var URL = App.URL().BASE+App.URL().LOGIN;
 	
 	var doLogin= function(ev){
 		var obj = App.serializeObject('loginform');
-		var url = App.URL().BASE+App.URL().LOGIN;
-		$.ajax({
-			url: url,
-			method: App.method.POST,
-			contentType: App.applicationJson,
-			data: JSON.stringify(obj)
-		}).done(function(response){
-			console.log('Done :::: ', response);
+		App.PostRequest(URL, obj).then(function(response){
 			if(response.statusMsg == 'OK'){
 				window.sessionStorage.setItem('username', response.data.name);
 				window.sessionStorage.setItem('loginState', response.data.loginState);
@@ -22,24 +16,17 @@ var Login = (function(){
 			}else{
 				$('.message').html('<span class="error">Invalid Username and Password</span>').fadeIn(3000).fadeOut(5000);
 			}
-		}).error(function(error){
-			console.log('Error :::: ', error);
-			$('.message').html('<span class="error">Invalid Username and Password</span>').fadeIn(3000).fadeOut(5000);
 		});
 	};
 	var  doLogout = function(){
-		
-		var url = App.URL().BASE+App.URL().LOGIN+'out/'+sessionStorage.getItem('userId');
-		$.ajax({
-			url: url,
-			method: App.method.GET
-		}).done(function(response){
+		var getUrl = URL+'out/'+sessionStorage.getItem('userId');
+		App.GetRequest(getUrl).then(function(response){
 			if(response.statusMsg == 'OK'){
 				sessionStorage.clear();
 				window.location.href = '/logout';
+			}else{
+				alert('Error in logout');
 			}
-		}).error(function(){
-			alert('Error in logout');
 		});
 	};
 	

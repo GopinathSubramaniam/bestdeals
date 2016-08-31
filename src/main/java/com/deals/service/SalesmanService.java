@@ -81,5 +81,12 @@ public class SalesmanService {
 		return status;
 	}
 	
+	public Status findAllSalesManager(){
+		List<SalesManager> salesManagers = salesManagerRepository.findAll();
+		System.out.println("Sales Managers :::: "+salesManagers);
+		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, salesManagers);
+		return status;
+	}
+	
 	
 }

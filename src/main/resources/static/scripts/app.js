@@ -18,14 +18,61 @@ var App = (function(){
 		obj.SALE = 'rest/salesman/'
 		return obj;
 	};
+	var PostRequest = function(url, data){
+		var defer = $.Deferred();
+		$.ajax({
+			url: url,
+			method: App.method.POST,
+			contentType: 'application/json',
+			data: JSON.stringify(data)
+		}).done(function(response){
+			console.log('PostRequest Done :::: ', response);
+			defer.resolve(response);
+		}).error(function(error){
+			console.log('PostRequest Error :::: ', error);
+			defer.resolve(response);
+		});
+		return defer.promise();
+	};
+	var GetRequest = function(url){
+		var defer = $.Deferred();
+		$.ajax({
+			url: url,
+			method: App.method.GET,
+			dataType: 'json'
+		}).done(function(response){
+			console.log('GetRequest Done :::: ', response);
+			defer.resolve(response);
+		}).error(function(error){
+			console.log('GetRequest Error :::: ', error);
+			defer.resolve(response);
+		});
+		return defer.promise();
+	};
+	
+	var DeleteRequest = function(url){
+		var defer = $.Deferred();
+		$.ajax({
+			url: url,
+			method: App.method.DELETE
+		}).done(function(response){
+			console.log('GetRequest Done :::: ', response);
+			defer.resolve(response);
+		}).error(function(error){
+			console.log('GetRequest Error :::: ', error);
+			defer.resolve(response);
+		});
+		return defer.promise();
+	};
 	
 	return {
 		URL: URL,
 		method: {GET:'GET', POST: 'POST', PUT: 'PUT', DELETE: 'DELETE'},
-		dataType: 'json',
-		applicationJson: 'application/json',
-		serializeObject: serializeObject
-	}
+		serializeObject: serializeObject,
+		PostRequest: PostRequest,
+		GetRequest: GetRequest
+	};
+	
 })();
 
 $('#username').html(sessionStorage.getItem('username'));

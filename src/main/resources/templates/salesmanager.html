@@ -12,7 +12,7 @@
 				<h2 th:text="${title}" ></h2>
 			</div>
 			<div>
-				 <button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#saleRegisterationModal">Create New</button>
+				 <button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#salesManagerRegisterModal">Create New</button>
 			</div>
 			<div class="box">
 				 <table id="userTable" class="table table-bordered table-hover">
@@ -21,7 +21,6 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Mobile</th>
-                        <th>SalesManager Name</th>
                         <th>Company Name</th>
                         <th>Action</th>
                       </tr>
@@ -33,8 +32,8 @@
                     		<td th:text="${salesManager.mobile}"></td>
                     		<td th:text="${salesManager.company} != null ? ${salesManager.company.name} : ''"></td>
                     		<td>
-                    			<button title="Delete" class="btn btn-xs btn-danger" th:onclick="'SalesManager.deleteSalesman('+${salesManager.id}+')'"><i class="fa fa-fw fa-trash"></i></button>
-								<button title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#modal" th:onclick="'SalesManager.findSalesman('+${salesManager.id}+')'"><i class="fa fa-fw fa-edit"></i></button>
+                    			<button title="Delete" class="btn btn-xs btn-danger" th:onclick="'SalesManager.deleteSalesManager('+${salesManager.id}+')'"><i class="fa fa-fw fa-trash"></i></button>
+								<button title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#modal" th:onclick="'SalesManager.findSalesManager('+${salesManager.id}+')'"><i class="fa fa-fw fa-edit"></i></button>
                     		</td>
                     	</tr>
                     </tbody>
@@ -44,10 +43,10 @@
 	</div>
 	<div th:include="footer"></div>
 	<div th:include="base-js"></div>
-	<script src="scripts/services/salesman.js"></script>
+	<script src="scripts/services/salesmanager.js"></script>
 	
 	<!-- Edit user model start -->
-	<div id="modal" class="modal">
+	<div id="salesManagerEditModal" class="modal">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -66,15 +65,15 @@
     </div>
 	<!-- Edit user model end -->
 	
-	<!-- Create new sales model start -->
-	<div id="saleRegisterationModal" class="modal">
+	<!-- Create new salesmanager model start -->
+	<div id="salesManagerRegisterModal" class="modal">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" th:text="${popupTitle}"></h4>
           </div>
-          <form id="salesRegisterform" class="form-horizontal" action="javascript:void(0);" method="post" th:onsubmit="'Salesman.create(this);'">
+          <form id="salesManagerRegisterForm" class="form-horizontal" action="javascript:void(0);" method="post" th:onsubmit="'SalesManager.create(this);'">
           <div class="modal-body">
 	        <div class="box-body">
 	         <div class="form-group">
@@ -93,7 +92,6 @@
 	            <label for="inputEmail3" class="col-sm-2 control-label">Mobile</label>
 	            <div class="col-sm-10">
 	              <input type="text" name="mobile" class="form-control" id="inputMobile" placeholder="Mobile"/>
-	              <input type="hidden" name="userType" class="form-control" id="userType" placeholder="UserType" value="PUBLIC"/>
 	            </div>
 	          </div>
 	          <div class="form-group">
@@ -102,15 +100,6 @@
 	            	<select id="inputCompany" name="company" class="form-control">
 	            		<option value="">--- Select ---</option>
 	            		<option th:each="company: ${companies}" th:value="${company.id}" th:text="${company.name}"></option>
-	            	</select>
-	            </div>
-	          </div>
-	          <div class="form-group">
-	            <label for="inputEmail3" class="col-sm-2 control-label">Sales Manager</label>
-	            <div class="col-sm-10">
-	            	<select id="inputSalesManager" name="salesManager" class="form-control" >
-	            		<option value="">--- Select ---</option>
-	            		<option th:each="salesManager : ${salesManagers}" th:value="${salesManager.id}" th:text="${salesManager.name}"></option>
 	            	</select>
 	            </div>
 	          </div>
@@ -136,6 +125,6 @@
         </div>
       </div>
     </div>
-	<!-- Create new sales model end -->
+	<!-- Create new salesmanager model end -->
 </body>
 </html>

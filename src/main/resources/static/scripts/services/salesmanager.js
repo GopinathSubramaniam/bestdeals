@@ -2,22 +2,25 @@
 
 var SalesManager = (function(){
 	
-	var create = function(){
-		var url = App.URL().BASE+App.URL().SALE;
-		$.ajax({
-			url: url,
-			method: App.method.POST,
-			contentType: App.applicationJson
-		}).done(function(res){
-			console.log('Creating salesrep manager successfully');
-			window.location.reload();
-		}).error(function(err){
-			console.log('Error in creating salesrep manager');
+	function create(){
+		var obj = App.serializeObject('salesManagerRegisterForm');
+		obj.company = {'id': parseFloat(obj.company)};
+		obj.user = {'id': parseFloat(sessionStorage.getItem('userId'))};
+		
+		var url = App.URL().BASE+App.URL().SALE+'createSalesManager';
+		
+		App.PostRequest(url, obj).then(function(res){
+			if(res.statusCode == '200'){
+				console.log('Creating salesrep manager successfully');
+				window.location.reload();
+			}else{
+				console.log('Error in creating salesrep manager');
+			}
 		});
 	};
 	
 	return {
 		create: create
-	}
+	};
 	
 })();

@@ -13,12 +13,6 @@ import com.deals.model.User;
 
 public class App {
 	
-	
-	// Pages START
-	public static String USER = "USER";
-	public static String SALE = "SALE";
-	// Pages END	
-	
 	public static String CODE_OK = "200";
 	public static String CODE_FAIL = "500";
 	public static String CODE_CANT_ACCESS = "403";

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.deals.enums.Page;
 import com.deals.model.User;
 import com.deals.service.CompanyService;
 import com.deals.service.LoginService;
@@ -38,20 +39,13 @@ public class AppController {
 		model.addAttribute("message", "Login in BestDeals");
 		return "login";
 	}
-	
 
 	@RequestMapping(value="/login")
 	public String dologin(Model model, User user, HttpServletRequest req){
 		user = (User)loginService.login(user).getData();
 		if(user != null){
-			HttpSession session = req.getSession();
-			session.setAttribute("userId", user.getId());
-			session.setAttribute("username", user.getName());
-			session.setAttribute("loginState", user.getLoginState());
-			
 			model.addAttribute("message", "Welcome to BestDeals!!!");
 			model.addAttribute("username", user.getName());
-			
 			return "greetings";
 		}else{
 			model.addAttribute("message", "Login in BestDeals");
@@ -70,56 +64,47 @@ public class AppController {
 	}
 	
 	@RequestMapping(value="/home")
-	public String home(Model model, HttpServletRequest req){
-		
-		HttpSession session = req.getSession();
+	public String home(Model model){
 		model.addAttribute("message", "Welcome to BestDeals API Section!!!");
-		model.addAttribute("username", session.getAttribute("username"));
-		
 		return "greetings";
 	}
 	
 	@RequestMapping(value="/salesman")
-	public String salespeople(Model model, HttpServletRequest req){
+	public String salespeople(Model model){
 		
-		HttpSession session = req.getSession();
 		model.addAttribute("title", "Sales List");
 		model.addAttribute("popupTitle", "Creaet New SalesMan");
 		model.addAttribute("salesmans", salesmanService.findAllSalesMan().getData());
 		model.addAttribute("companies", companyService.findAll().getData());
 		model.addAttribute("salesManagers", salesmanService.findAllSalesManagerByCompanyId(new Long(1)).getData());
-		model.addAttribute("username", session.getAttribute("username"));
 		
-		model.addAttribute("tab", App.SALE);
+		model.addAttribute("tab", Page.SALE.toString());
 		return "salesman";
 	}
 	
 	@RequestMapping(value="/salesManager")
-	public String salesManager(Model model, HttpServletRequest req){
+	public String salesManager(Model model){
 		
 		model.addAttribute("title", "SalesManager List");
 		model.addAttribute("popupTitle", "Creaet New SalesManager");
 		model.addAttribute("companies", companyService.findAll().getData());
-		model.addAttribute("salesManagers", salesmanService.findAllSalesManagerByCompanyId(new Long(1)).getData());
-		
-		model.addAttribute("tab", App.SALE);
-		return "salesman";
+		model.addAttribute("salesManagers", salesmanService.findAllSalesManager().getData());
+		model.addAttribute("tab", Page.SALES_MANAGER.toString());
+		return "salesmanager";
 	}
 	
 	@RequestMapping(value="/user")
-	public String user(Model model, HttpServletRequest req){
+	public String user(Model model){
 		List<String> userTypes = App.getUserTypes();
-		HttpSession session = req.getSession();
 		Status status = userService.findAll();
 		
 		model.addAttribute("users", status.getData());
 		model.addAttribute("title", "Users List");
 		model.addAttribute("popupTitle", "Create New User");
-		model.addAttribute("tab", App.USER);
+		model.addAttribute("tab", Page.USER.toString());
 		model.addAttribute("addNewBtnText", "Add New User");
 		model.addAttribute("userTypes", userTypes);
 		
-		model.addAttribute("username", session.getAttribute("username"));
 		return "user";
 	}
 	

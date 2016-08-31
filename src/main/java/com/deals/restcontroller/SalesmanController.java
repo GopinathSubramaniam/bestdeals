@@ -24,9 +24,14 @@ public class SalesmanController {
 		return salesmanService.create(salesman);
 	}
 	
-	@RequestMapping(value="/{salesmanId}", method=RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value="/{salesmanId}", method=RequestMethod.GET)
 	public Status findById(@PathVariable Long salesmanId){
 		return salesmanService.findSalesManById(salesmanId);
+	}
+	
+	@RequestMapping(value="/findAllSalesManager", method=RequestMethod.GET)
+	public Status findAllSalesManager(){
+		return salesmanService.findAllSalesManager();
 	}
 	
 	@RequestMapping(value="/{salesmanId}", method=RequestMethod.DELETE)
@@ -34,7 +39,7 @@ public class SalesmanController {
 		return salesmanService.deleteSalesManById(salesmanId);
 	}
 	
-	@RequestMapping(value="/findAllByManagerId/{managerId}", method=RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value="/findAllByManagerId/{managerId}", method=RequestMethod.GET)
 	public Status findAllByManagerId(@PathVariable Long managerId){
 		return salesmanService.findAllBySalesManager(managerId);
 	}
