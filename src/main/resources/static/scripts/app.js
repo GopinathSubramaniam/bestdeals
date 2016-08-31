@@ -12,10 +12,10 @@ var App = (function(){
 	};
 	var URL = function(){
 		var obj = new Object();
-		obj.BASE = window.location.protocol+'//'+window.location.hostname+':'+window.location.port+'/';
-		obj.LOGIN = 'rest/login/';
-		obj.USER = 'rest/user/';
-		obj.SALE = 'rest/salesman/'
+		obj.BASE = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/BestDeals';
+		obj.LOGIN = '/rest/login/';
+		obj.USER = '/rest/user/';
+		obj.SALE = '/rest/salesman/'
 		return obj;
 	};
 	var PostRequest = function(url, data){
