@@ -12,7 +12,7 @@ var Login = (function(){
 				window.sessionStorage.setItem('email', response.data.email);
 				window.sessionStorage.setItem('userType', response.data.userType);
 				window.sessionStorage.setItem('userId', response.data.id);
-				window.location.href='/home';
+				window.location.href='home';
 			}else{
 				$('.message').html('<span class="error">Invalid Username and Password</span>').fadeIn(3000).fadeOut(5000);
 			}
@@ -23,7 +23,7 @@ var Login = (function(){
 		App.GetRequest(getUrl).then(function(response){
 			if(response.statusMsg == 'OK'){
 				sessionStorage.clear();
-				window.location.href = '/logout';
+				window.location.href = 'logout';
 			}else{
 				alert('Error in logout');
 			}
