@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.deals.enums.Page;
 import com.deals.model.User;
+import com.deals.service.AppService;
 import com.deals.service.CompanyService;
 import com.deals.service.LoginService;
 import com.deals.service.SalesmanService;
@@ -22,6 +23,9 @@ import com.deals.util.Status;
 @Controller
 public class AppController {
 
+	@Autowired
+	private AppService appService;
+	
 	@Autowired
 	private LoginService loginService;
 	
@@ -65,7 +69,9 @@ public class AppController {
 	
 	@RequestMapping(value="/home")
 	public String home(Model model){
+		model.addAttribute("tab", "DASHBOARD");
 		model.addAttribute("message", "Welcome to BestDeals API Section!!!");
+		model.addAttribute("details", appService.getAdminDetail());
 		return "greetings";
 	}
 	
