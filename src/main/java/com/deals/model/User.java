@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 
 import com.deals.enums.AuthType;
@@ -41,6 +42,9 @@ public class User extends BaseEntity{
 	
 	@Enumerated(EnumType.STRING)
 	private LoginState loginState;
+	
+	@ManyToOne
+	private Plan plan;
 	
 	@PrePersist
 	public void prePersist(){

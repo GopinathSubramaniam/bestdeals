@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.deals.model.Plan;
+import com.deals.model.User;
 import com.deals.repository.PlanRepository;
+import com.deals.repository.UserRepository;
 import com.deals.util.App;
 import com.deals.util.Status;
 
@@ -17,6 +19,9 @@ public class PlanService {
 	
 	@Autowired
 	private PlanRepository planRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
 	
 	
 	public Status create(Plan plan){
@@ -35,8 +40,20 @@ public class PlanService {
 		return status;
 	}
 	
+	public Status findOne(Long id){
+		Plan plan = planRepository.findOne(id);
+		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, plan);
+		return status;
+	}
+	
 	public Status update(Plan plan){
-		plan = planRepository.saveAndFlush(plan);
+		Plan existingPlan = planRepository.findOne(plan.getId());
+		existingPlan.setName(plan.getName());
+		existingPlan.setAmount(plan.getAmount());
+		existingPlan.setDescription(plan.getDescription());
+		existingPlan.setPlanType(plan.getPlanType());
+		
+		plan = planRepository.saveAndFlush(existingPlan);
 		status = App.getResponse(App.CODE_OK, App.STATUS_UPDATE, App.MSG_UPDATE, plan);
 		return status;
 	}
@@ -44,6 +61,15 @@ public class PlanService {
 	public Status delete(Long id){
 		planRepository.delete(id);
 		status = App.getResponse(App.CODE_OK, App.STATUS_DELETE, App.MSG_DELETE, null);
+		return status;
+	}
+	
+	public Status assignPlanToUser(Long userId, Long planId){
+		Plan plan = planRepository.findOne(planId);
+		User user = userRepository.findOne(userId);
+		user.setPlan(plan);
+		user = userRepository.saveAndFlush(user);
+		status = App.getResponse(App.CODE_OK, App.STATUS_UPDATE, App.MSG_UPDATE, user);
 		return status;
 	}
 	

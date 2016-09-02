@@ -58,8 +58,8 @@ public class AppService {
 		adminDetail = new AdminDetail();
 		adminDetail.setName("Plans");
 		adminDetail.setCount(planRepository.count());
-		adminDetail.setIconName("fa fa-users");
-		adminDetail.setColorName("bg-yellow");
+		adminDetail.setIconName("fa fa-archive");
+		adminDetail.setColorName("bg-red");
 		adminDetail.setLandingPath("plan");
 		adminDetails.add(adminDetail);
 		

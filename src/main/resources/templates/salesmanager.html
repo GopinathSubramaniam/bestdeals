@@ -32,8 +32,8 @@
                     		<td th:text="${salesManager.mobile}"></td>
                     		<td th:text="${salesManager.company} != null ? ${salesManager.company.name} : ''"></td>
                     		<td>
-                    			<button title="Delete" class="btn btn-xs btn-danger" th:onclick="'SalesManager.deleteSalesManager('+${salesManager.id}+')'"><i class="fa fa-fw fa-trash"></i></button>
-								<button title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#modal" th:onclick="'SalesManager.findSalesManager('+${salesManager.id}+')'"><i class="fa fa-fw fa-edit"></i></button>
+                    			<button title="Delete" class="btn btn-xs btn-danger" th:onclick="'SalesManager.deleteSalesManager('+${salesManager.id}+')'"><i class="fa fa-fw fa-trash"></i>Delete</button>
+								<button title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#modal" th:onclick="'SalesManager.findSalesManager('+${salesManager.id}+')'"><i class="fa fa-fw fa-edit"></i>Edit</button>
                     		</td>
                     	</tr>
                     </tbody>

@@ -17,6 +17,8 @@ import lombok.ToString;
 @Entity
 public class Deal  extends BaseEntity{
 
+	private static final long serialVersionUID = 1L;
+
 	private String name;
 	
 	@Enumerated(EnumType.STRING)

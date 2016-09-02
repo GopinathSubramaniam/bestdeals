@@ -157,4 +157,10 @@ public class UserService {
 		return status;
 	}
 	
+	public Status findAllFranchise(){
+		List<User> users = userRepository.findAllByUserType(UserType.FRANCHISE);
+		Status status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, users);
+		return status;
+	}
+	
 }

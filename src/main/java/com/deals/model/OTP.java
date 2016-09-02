@@ -13,6 +13,8 @@ import lombok.Setter;
 @Entity
 public class OTP extends BaseEntity{
 	
+	private static final long serialVersionUID = 1L;
+
 	private String otpCode;
 	
 	@ManyToOne

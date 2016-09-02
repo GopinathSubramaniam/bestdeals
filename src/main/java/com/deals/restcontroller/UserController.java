@@ -30,6 +30,16 @@ public class UserController {
 		return userService.delete(id);
 	}
 	
+	@RequestMapping(value="/", method=RequestMethod.GET)
+	public Status findAll(){
+		return userService.findAll();
+	}
+	
+	@RequestMapping(value="/findAllFranchise", method=RequestMethod.GET)
+	public Status findAllFranchise(){
+		return userService.findAllFranchise();
+	}
+	
 	@RequestMapping(value="/saveUserDetail", method=RequestMethod.POST, produces={"application/json"})
 	public Status updateUserDetail(@RequestBody UserDetail userDetail){
 		return userService.saveUserDetail(userDetail);

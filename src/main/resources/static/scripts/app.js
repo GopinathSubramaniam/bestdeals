@@ -46,7 +46,23 @@ var App = (function(){
 			defer.resolve(response);
 		}).error(function(error){
 			console.log('GetRequest Error :::: ', error);
+			defer.resolve(error);
+		});
+		return defer.promise();
+	};
+	var PutRequest = function(url, data){
+		var defer = $.Deferred();
+		$.ajax({
+			url: url,
+			method: App.method.PUT,
+			contentType: 'application/json',
+			data: JSON.stringify(data)
+		}).done(function(response){
+			console.log('PutRequest Done :::: ', response);
 			defer.resolve(response);
+		}).error(function(error){
+			console.log('PutRequest Error :::: ', error);
+			defer.resolve(error);
 		});
 		return defer.promise();
 	};
@@ -57,21 +73,28 @@ var App = (function(){
 			url: url,
 			method: App.method.DELETE
 		}).done(function(response){
-			console.log('GetRequest Done :::: ', response);
+			console.log('DeleteRequest Done :::: ', response);
 			defer.resolve(response);
 		}).error(function(error){
-			console.log('GetRequest Error :::: ', error);
+			console.log('DeleteRequest Error :::: ', error);
 			defer.resolve(response);
 		});
 		return defer.promise();
+	};
+	
+	var getMessage = function(res){
+		 return (res.responseJSON != undefined ? res.responseJSON.error : res.message);
 	};
 	
 	return {
 		URL: URL,
 		method: {GET:'GET', POST: 'POST', PUT: 'PUT', DELETE: 'DELETE'},
 		serializeObject: serializeObject,
+		getMessage: getMessage,
 		PostRequest: PostRequest,
-		GetRequest: GetRequest
+		PutRequest: PutRequest,
+		GetRequest: GetRequest,
+		DeleteRequest: DeleteRequest
 	};
 	
 })();
