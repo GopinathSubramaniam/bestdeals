@@ -15,7 +15,8 @@ var App = (function(){
 		obj.BASE = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/BestDeals';
 		obj.LOGIN = '/rest/login/';
 		obj.USER = '/rest/user/';
-		obj.SALE = '/rest/salesman/'
+		obj.SALE = '/rest/salesman/';
+		obj.PLAN = '/rest/plan/'
 		return obj;
 	};
 	var PostRequest = function(url, data){

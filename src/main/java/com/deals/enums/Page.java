@@ -4,5 +4,6 @@ public enum Page {
 
 	USER,
 	SALE,
-	SALES_MANAGER
+	SALES_MANAGER,
+	PLAN
 }

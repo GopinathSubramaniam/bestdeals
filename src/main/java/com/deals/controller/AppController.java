@@ -15,6 +15,7 @@ import com.deals.model.User;
 import com.deals.service.AppService;
 import com.deals.service.CompanyService;
 import com.deals.service.LoginService;
+import com.deals.service.PlanService;
 import com.deals.service.SalesmanService;
 import com.deals.service.UserService;
 import com.deals.util.App;
@@ -37,6 +38,9 @@ public class AppController {
 	
 	@Autowired
 	private CompanyService companyService;
+	
+	@Autowired
+	private PlanService planService;
 	
 	@RequestMapping(value="/")
 	public String login(Model model){
@@ -112,6 +116,19 @@ public class AppController {
 		model.addAttribute("userTypes", userTypes);
 		
 		return "user";
+	}
+	
+	@RequestMapping(value="/plan")
+	public String plan(Model model){
+		model.addAttribute("tab", Page.PLAN.toString());
+		model.addAttribute("title", "Plan List");
+		model.addAttribute("addNewBtnText", "Add New Plan");
+		model.addAttribute("popupTitle", "Create New Plan");
+		model.addAttribute("plans", planService.findAll().getData());
+		model.addAttribute("planTypes", App.getPlanTypes());
+		model.addAttribute("companies", companyService.findAll().getData());
+		
+		return "plan";
 	}
 	
 }

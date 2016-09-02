@@ -17,6 +17,8 @@ import lombok.ToString;
 @Entity
 public class Plan  extends BaseEntity{
 
+	private static final long serialVersionUID = 1L;
+	
 	private String name;
 	private Double amount;
 	private String description;

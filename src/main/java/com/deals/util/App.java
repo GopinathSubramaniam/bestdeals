@@ -53,6 +53,15 @@ public class App {
 		return httpSession;
 	}
 	
+	public static List<String> getPlanTypes(){
+		List<String> planTypes = new ArrayList<String>();
+		planTypes.add("FREE");
+		planTypes.add("SILVER");
+		planTypes.add("GOLD");
+		planTypes.add("PLATINUM");
+		return planTypes;
+	}
+	
 	public static List<String> getUserTypes(){
 		List<String> userTypes = new ArrayList<String>();
 		userTypes.add("ADMIN");

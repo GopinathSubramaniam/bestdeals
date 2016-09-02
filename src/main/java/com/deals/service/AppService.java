@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.deals.model.AdminDetail;
+import com.deals.repository.PlanRepository;
 import com.deals.repository.SalesManagerRepository;
 import com.deals.repository.SalesmanRepository;
 import com.deals.repository.UserRepository;
@@ -22,6 +23,10 @@ public class AppService {
 	
 	@Autowired
 	private SalesManagerRepository salesManagerRepository;
+	
+	@Autowired
+	private PlanRepository planRepository;
+	
 	
 	public List<AdminDetail> getAdminDetail(){
 		List<AdminDetail> adminDetails = new ArrayList<>();
@@ -48,6 +53,14 @@ public class AppService {
 		adminDetail.setIconName("fa fa-users");
 		adminDetail.setColorName("bg-yellow");
 		adminDetail.setLandingPath("salesManager");
+		adminDetails.add(adminDetail);
+		
+		adminDetail = new AdminDetail();
+		adminDetail.setName("Plans");
+		adminDetail.setCount(planRepository.count());
+		adminDetail.setIconName("fa fa-users");
+		adminDetail.setColorName("bg-yellow");
+		adminDetail.setLandingPath("plan");
 		adminDetails.add(adminDetail);
 		
 		return adminDetails;

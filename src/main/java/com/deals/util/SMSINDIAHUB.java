@@ -1,4 +1,4 @@
-/*package com.deals.util;
+package com.deals.util;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -57,4 +57,3 @@ public class SMSINDIAHUB {
 
 	
 }
-*/
