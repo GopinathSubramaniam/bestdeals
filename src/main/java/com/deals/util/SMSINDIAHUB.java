@@ -1,4 +1,4 @@
-package com.deals.util;
+/*package com.deals.util;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -51,9 +51,10 @@ public class SMSINDIAHUB {
 	}
 	
 	public static void main(String[] args) {
-		String response = SMSSender("username", "password", "918103857676", "message", "WEBSMS", "0");
+		String response = SMSSender("gopinath90", "eTHICALhACKER#90", "9637752262", "message", "WEBSMS", "0");
 		System.out.println(response);
 	} 
 
 	
 }
+*/
