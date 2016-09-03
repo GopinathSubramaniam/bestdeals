@@ -63,7 +63,7 @@ $(function () {
     "RU": 3000 //Russia
   };
   //World map by jvectormap
-  $('#world-map').vectorMap({
+ /* $('#world-map').vectorMap({
     map: 'world_mill_en',
     backgroundColor: "transparent",
     regionStyle: {
@@ -86,7 +86,7 @@ $(function () {
       if (typeof visitorsData[code] != "undefined")
         el.html(el.html() + ': ' + visitorsData[code] + ' new visitors');
     }
-  });
+  });*/
 
   //Sparkline charts
   var myvalues = [1000, 1200, 920, 927, 931, 1027, 819, 930, 1021];
@@ -124,7 +124,7 @@ $(function () {
 
   /* Morris.js Charts */
   // Sales chart
-  var area = new Morris.Area({
+  /*var area = new Morris.Area({
     element: 'revenue-chart',
     resize: true,
     data: [
@@ -194,7 +194,7 @@ $(function () {
     donut.redraw();
     line.redraw();
   });
-
+*/
   /* The todo list plugin */
   $(".todo-list").todolist({
     onCheck: function (ele) {
