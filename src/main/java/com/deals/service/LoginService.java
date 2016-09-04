@@ -42,14 +42,14 @@ public class LoginService {
 	
 	public Status mobileLogin(User user){
 		if(user != null ){
-			user = userRepository.findByMobileAndPassword(user.getMobile(), user.getPassword());
-			if(user != null ){
-				status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, null);
+			User existUser = userRepository.findByMobile(user.getMobile());
+			if(existUser != null && existUser.getPassword().equals(user.getPassword()) ){
+				status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, existUser);
 			}else{
-				status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_LOGIN_ERROR, null);
+				status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_USER_NOT_REGISTERED, user);
 			}
 		}else{
-			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_LOGIN_ERROR, null);
+			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_LOGIN_ERROR, user);
 		}
 		return status;
 	}

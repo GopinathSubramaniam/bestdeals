@@ -41,6 +41,7 @@ public class App {
 	public static String MSG_MAIL_BODY = "Welcome to BestDeals. Enjoy your deals with us";
 	
 	public static String MSG_USER_NOT_AUTH = "User not authenticated";
+	public static String MSG_USER_NOT_REGISTERED = "Mobile number is not registered";
 	
 	private static Status status = new Status();
 	
