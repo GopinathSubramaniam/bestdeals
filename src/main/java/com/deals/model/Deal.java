@@ -20,6 +20,7 @@ public class Deal  extends BaseEntity{
 	private static final long serialVersionUID = 1L;
 
 	private String name;
+	private String imgUrl;
 	
 	@Enumerated(EnumType.STRING)
 	private DealType type;
@@ -27,6 +28,6 @@ public class Deal  extends BaseEntity{
 	private String description;
 	
 	@ManyToOne
-	private Company company;
+	private User user;
 	
 }
