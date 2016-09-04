@@ -39,6 +39,21 @@ public class LoginService {
 		return status;
 	}
 	
+	
+	public Status mobileLogin(User user){
+		if(user != null ){
+			user = userRepository.findByMobileAndPassword(user.getMobile(), user.getPassword());
+			if(user != null ){
+				status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, null);
+			}else{
+				status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_LOGIN_ERROR, null);
+			}
+		}else{
+			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_LOGIN_ERROR, null);
+		}
+		return status;
+	}
+	
 	public Status logout(Long id){
 		if(id != null && id != 0){
 			User user = userRepository.findOne(id);

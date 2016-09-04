@@ -26,6 +26,8 @@ public class User extends BaseEntity{
 	private static final long serialVersionUID = 1L;
 	
 	private String name;
+	
+	@Column(unique=true)
 	private String mobile;
 	
 	@Column(unique=true)

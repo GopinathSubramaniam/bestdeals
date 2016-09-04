@@ -23,6 +23,12 @@ public class LoginController {
 		return loginService.login(user);
 	}
 	
+	@RequestMapping(value="/mobileLogin", method= RequestMethod.POST, produces={"application/json"})
+	public Status mobileLogin(@RequestBody User user){
+		return loginService.mobileLogin(user);
+	}
+	
+	
 	@RequestMapping(value="/out/{userId}", method= RequestMethod.GET)
 	public Status logout(@PathVariable Long userId){
 		return loginService.logout(userId);
