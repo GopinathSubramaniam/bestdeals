@@ -42,6 +42,7 @@ public class App {
 	
 	public static String MSG_USER_NOT_AUTH = "User not authenticated";
 	public static String MSG_USER_NOT_REGISTERED = "Mobile number is not registered";
+	public static String MSG_USER_INCORRECT_PASSWORD = "Invalid password";
 	
 	private static Status status = new Status();
 	

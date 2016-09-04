@@ -43,8 +43,13 @@ public class LoginService {
 	public Status mobileLogin(User user){
 		if(user != null ){
 			User existUser = userRepository.findByMobile(user.getMobile());
-			if(existUser != null && existUser.getPassword().equals(user.getPassword()) ){
+			if(existUser != null){
 				status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, existUser);
+				if(!(existUser.getPassword().equals(user.getPassword()))){
+					status.setStatusMsg(App.MSG_USER_INCORRECT_PASSWORD);
+					status.setData(null);
+				}
+				
 			}else{
 				status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_USER_NOT_REGISTERED, user);
 			}
