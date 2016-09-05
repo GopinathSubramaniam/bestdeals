@@ -46,6 +46,8 @@ public class LoginService {
 			if(existUser != null){
 				status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, existUser);
 				if(!(existUser.getPassword().equals(user.getPassword()))){
+					status.setStatusCode(App.CODE_FAIL);
+					status.setStatusMsg(App.STATUS_FAIL);
 					status.setMessage(App.MSG_USER_INCORRECT_PASSWORD);
 					status.setData(null);
 				}
