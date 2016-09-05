@@ -6,6 +6,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 
 import com.deals.enums.DealType;
+import com.deals.enums.Priority;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +25,10 @@ public class Deal  extends BaseEntity{
 	
 	@Enumerated(EnumType.STRING)
 	private DealType type;
+	
+	@Enumerated(EnumType.STRING)
+	private Priority priority;
+	
 	
 	private String description;
 	

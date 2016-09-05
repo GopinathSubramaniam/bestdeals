@@ -33,9 +33,4 @@ public class CategoryService {
 		return status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, categories);
 	}
 	
-	public Status findAllByLoginId(Long loginId){
-		List<Category> categories = categoryRepository.findAllByUserId(loginId);
-		return status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, categories);
-	}
-	
 }

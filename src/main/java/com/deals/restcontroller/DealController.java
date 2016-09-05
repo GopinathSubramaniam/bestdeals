@@ -20,4 +20,9 @@ public class DealController {
 	public Status findAllByUserId(@PathVariable Long userId){
 		return dealService.findAllByUserId(userId);
 	} 
+	
+	@RequestMapping(value="/", method= RequestMethod.GET)
+	public Status findAll(){
+		return dealService.findAll();
+	} 
 }
