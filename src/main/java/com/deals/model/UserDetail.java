@@ -20,9 +20,17 @@ public class UserDetail {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
+	private String shopName;
 	private String address1;
 	private String address2;
 	private String address3;
+	private String latitude;
+	private String longitude;
+	private String timings;
+	private Integer likes;
+	private Integer views;
+	private String phoneNumbers;
+	private String placeName;
 	
 	@ManyToOne
 	private User user;

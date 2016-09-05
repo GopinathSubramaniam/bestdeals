@@ -7,7 +7,11 @@ import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.deals.model.Deal;
 import com.deals.model.User;
+import com.deals.model.UserDetail;
+import com.deals.vo.DealVO;
+import com.deals.vo.UserVO;
 
 //import com.way2sms.SMS;
 
@@ -80,6 +84,60 @@ public class App {
 		status.setData(data);
 		return status;
 	}
+	
+	public static UserVO setUserVo(User user, UserDetail userDetail, List<Deal> deals){
+		UserVO userVO = new UserVO();
+		
+		if(user != null){
+			userVO.setId(user.getId());
+			userVO.setName(user.getName());
+			userVO.setMobile(user.getMobile());
+			userVO.setEmail(user.getEmail());
+		}
+		if(userDetail !=null){
+			userVO.setUserDetailId(userDetail.getId());
+			userVO.setAddress1(userDetail.getAddress1());
+			userVO.setAddress2(userDetail.getAddress2());
+			userVO.setAddress3(userDetail.getAddress3());
+			userVO.setLatitude(userDetail.getLatitude());
+			userVO.setLongitude(userDetail.getLongitude());
+			userVO.setLikes(userDetail.getLikes());
+			userVO.setViews(userDetail.getViews());
+			userVO.setTimings(userDetail.getTimings());
+			userVO.setShopName(userDetail.getShopName());
+			userVO.setPlaceName(userDetail.getPlaceName());
+			userVO.setCityName(userDetail.getCity().getName());
+			userVO.setStateName(userDetail.getCity().getState().getName());
+			
+			List<String> phoneNumbers = new ArrayList<>();
+			if(userDetail.getPhoneNumbers() != null){
+				String[] numbers = userDetail.getPhoneNumbers().split(",");
+				for (String number : numbers) {
+					phoneNumbers.add(number);
+				}
+				userVO.setPhoneNumbers(phoneNumbers);
+			}
+		}
+		
+		userVO.setDeals(deals);
+		
+		return userVO;
+	}
+	
+	public static DealVO setDealVO(Deal deal) {
+		DealVO dealVO = new DealVO();
+		dealVO.setId(deal.getId());
+		dealVO.setName(deal.getName());
+		dealVO.setType(deal.getType().toString());
+		dealVO.setDescription(deal.getDescription());
+		dealVO.setCityName(deal.getCity().getName());
+		dealVO.setStateName(deal.getCity().getState().getName());
+		dealVO.setPlaceName(deal.getPlaceName());
+		dealVO.setUser(setUserVo(deal.getUser(), null, null));
+		dealVO.setImgUrl(deal.getImgUrl());
+		return dealVO;
+	}
+	
 	
 	public static String randomSixDigitNum(int length) {
 		StringBuffer sb = new StringBuffer();

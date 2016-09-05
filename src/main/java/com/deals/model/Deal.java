@@ -22,6 +22,7 @@ public class Deal  extends BaseEntity{
 
 	private String name;
 	private String imgUrl;
+	private String description;
 	
 	@Enumerated(EnumType.STRING)
 	private DealType type;
@@ -29,8 +30,12 @@ public class Deal  extends BaseEntity{
 	@Enumerated(EnumType.STRING)
 	private Priority priority;
 	
+	@ManyToOne
+	private SubCategory subCategory;
 	
-	private String description;
+	@ManyToOne
+	private City city;
+	private String placeName; //Village Name
 	
 	@ManyToOne
 	private User user;

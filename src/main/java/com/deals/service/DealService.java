@@ -1,16 +1,19 @@
 package com.deals.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.deals.enums.PlanType;
-import com.deals.enums.Priority;
 import com.deals.model.Deal;
+import com.deals.model.UserDetail;
 import com.deals.repository.DealRepository;
 import com.deals.util.App;
 import com.deals.util.Status;
+import com.deals.vo.DealVO;
+import com.deals.vo.UserVO;
 
 @Service
 public class DealService {
@@ -20,6 +23,9 @@ public class DealService {
 	@Autowired
 	private DealRepository dealRepository;
 	
+	@Autowired
+	private UserDetailService userDetailService;
+	
 	public Status findAllByUserId(Long userId){
 		List<Deal> deals = dealRepository.findAllByUserId(userId);
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, deals);
@@ -27,22 +33,47 @@ public class DealService {
 	}
 	
 	public Status findAll(){
-		List<Deal> highDeals = dealRepository.findAllByPriorityAndUserPlanPlanType(Priority.HIGH, PlanType.GOLD);
-		System.out.println("High Deals :::: "+highDeals);
+		List<Deal> platinumDeals = new ArrayList<>();
+		List<Deal> goldDeals = new ArrayList<>();
+		List<Deal> silverDeals = new ArrayList<>();
 		
-		if(highDeals.size() < ADVERTISTMENT_MAX_COUNT){
-			List<Deal> mediumDeals = dealRepository.findAllByPriorityAndUserPlanPlanType(Priority.MEDIUM, PlanType.PLATINUM);
-			System.out.println("Medium Deals :::: "+mediumDeals);
-			for (Deal deal : mediumDeals) {
-				if(highDeals.size() < ADVERTISTMENT_MAX_COUNT){
-					highDeals.add(deal);
-				}else{
-					break;
-				}
-			}
+		platinumDeals = dealRepository.findAllByUserPlanPlanType(PlanType.PLATINUM);
+		
+		if(platinumDeals.size() == 0 ){
+			goldDeals = dealRepository.findAllByUserPlanPlanType(PlanType.GOLD);
+			platinumDeals = goldDeals;
 		}
-		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, highDeals);
+		
+		if(platinumDeals.size() == 0 && goldDeals.size() == 0){
+			silverDeals = dealRepository.findAllByUserPlanPlanType(PlanType.SILVER);
+			platinumDeals = silverDeals;
+		}
+		List<DealVO> dealVOs = mergeDealVOs(platinumDeals);
+		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, dealVOs);
 		return status;
 	}
+	
+	public Status findAllBySubCat(Long subCatId){
+		List<Deal> deals = dealRepository.findAllBySubCategoryId(subCatId);
+		List<DealVO> dealVOs = mergeDealVOs(deals);
+		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, dealVOs);
+		return status;
+	}
+	
+	private List<DealVO> mergeDealVOs(List<Deal> deals){
+		List<DealVO> dealVOs = new ArrayList<>();
+		for (Deal deal : deals) {
+			DealVO dealVO = App.setDealVO(deal);
+			List<UserDetail> userDetails = (List<UserDetail>) userDetailService.findAllByUserId(deal.getUser().getId()).getData();
+			UserDetail userDetail = userDetails.size() > 0 ? userDetails.get(0) : null;
+			UserVO user = App.setUserVo(deal.getUser(), userDetail , null);
+			dealVO.setUser(user);
+			
+			List<String> imgUrls = dealRepository.findImgUrlByUserId(user.getId());
+			user.setImageUrls(imgUrls);
+			dealVOs.add(dealVO);
+		}
+		return dealVOs;
+	} 
 	
 }

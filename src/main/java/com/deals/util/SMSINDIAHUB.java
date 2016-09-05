@@ -51,7 +51,9 @@ public class SMSINDIAHUB {
 	}
 	
 	public static void main(String[] args) {
-		String response = SMSSender("gopinath90", "eTHICALhACKER#90", "9637752262", "message", "WEBSMS", "0");
+		String response = SMSSender("shahidmcm", "!33D!nF0tech@", "9637752262", "Hi How are you?", "WEBSMS", "0");
+//		String response = SMSSender("shahidmcm", "!33D!nF0tech@", "9637752262", "Hi How are you?", "ZEPFND", "0");
+
 		System.out.println(response);
 	} 
 

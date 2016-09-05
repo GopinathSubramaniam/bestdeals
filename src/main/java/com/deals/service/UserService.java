@@ -8,16 +8,19 @@ import org.springframework.stereotype.Service;
 import com.deals.enums.AuthType;
 import com.deals.enums.EmailType;
 import com.deals.enums.UserType;
+import com.deals.model.Deal;
 import com.deals.model.EMail;
 import com.deals.model.EmailDetail;
 import com.deals.model.OTP;
 import com.deals.model.User;
 import com.deals.model.UserDetail;
+import com.deals.repository.DealRepository;
 import com.deals.repository.OTPRepository;
 import com.deals.repository.UserDetailRepository;
 import com.deals.repository.UserRepository;
 import com.deals.util.App;
 import com.deals.util.Status;
+import com.deals.vo.UserVO;
 
 
 @Service
@@ -36,6 +39,9 @@ public class UserService {
 	
 	@Autowired
 	private MailService mailService;
+	
+	@Autowired
+	private DealRepository dealRepository;
 	
 	public Status create(User user){
 		Object obj = null;
@@ -80,10 +86,13 @@ public class UserService {
 		return status;
 	}
 	
-	public Status getUser(Long id){
+	public Status findUser(Long id){
 		if(id != null && id !=0){
 			User user = userRepository.findOne(id);
-			status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, user);
+			List<Deal> deals = dealRepository.findAllByUserId(user.getId());
+			List<UserDetail > userDetails = userDetailRepository.findAllByUserId(user.getId());
+			UserVO userVO = App.setUserVo(user, userDetails.get(0), deals);
+			status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, userVO);
 		}else{
 			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_FAIL, null);
 		}

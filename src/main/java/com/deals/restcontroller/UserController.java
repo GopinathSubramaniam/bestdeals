@@ -47,7 +47,7 @@ public class UserController {
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public Status get(@PathVariable Long id){
-		Status status = userService.getUser(id);
+		Status status = userService.findUser(id);
 		System.out.println("getUser Status :::: "+status);
 		return status;
 	}

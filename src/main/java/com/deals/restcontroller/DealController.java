@@ -25,4 +25,9 @@ public class DealController {
 	public Status findAll(){
 		return dealService.findAll();
 	} 
+	
+	@RequestMapping(value="/findAllBySubCat/{subCatId}", method= RequestMethod.GET)
+	public Status findAllBySubCat(@PathVariable Long subCatId){
+		return dealService.findAllBySubCat(subCatId);
+	} 
 }
