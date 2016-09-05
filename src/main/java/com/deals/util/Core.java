@@ -1,4 +1,4 @@
-package com.deals.util;
+/*package com.deals.util;
 
 public class Core {
 
@@ -11,3 +11,4 @@ public class Core {
 		}
 	}
 }
+*/
