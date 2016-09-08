@@ -56,7 +56,7 @@ var Plan = (function(){
 	
 	var findAllFranchise = function(id){
 		$('#planId').val(id);
-		App.GetRequest(App.URL().BASE+App.URL().USER+'findAllFranchise').then(function(res){
+		App.GetRequest(App.URL().BASE+App.URL().USER+'findAllByUserType/MERCHANT').then(function(res){
 			if(res.statusCode == '200'){
 				$('#inputAssignPlan').html('');
 				$('#inputAssignPlan').append('<option value="">--- Select ---</option>');
@@ -70,7 +70,7 @@ var Plan = (function(){
 	var assignPlanToUser = function(userId, planId){
 		App.GetRequest(URL+userId+'/'+planId).then(function(res){
 			if(res.statusCode == '200'){
-				$('#assignSuccessMsg').html('Plan assigned to franchise successfully').fadeOut(10000);
+				$('#assignSuccessMsg').html('Plan assigned to merchant successfully').fadeOut(10000);
 			}else{
 				$('#assignErrorMsg').html(App.getMessage(res)).fadeOut(10000);
 			}

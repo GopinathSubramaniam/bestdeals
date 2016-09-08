@@ -22,7 +22,6 @@
                         <th>Email</th>
                         <th>Mobile</th>
                         <th>SalesManager Name</th>
-                        <th>Company Name</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -32,10 +31,9 @@
                     		<td th:text="${salesman.email}"></td>
                     		<td th:text="${salesman.mobile}"></td>
                     		<td th:text="${salesman.salesManager} != null ? ${salesman.salesManager.name} : ''"></td>
-                    		<td th:text="${salesman.company} != null ? ${salesman.company.name} : ''"></td>
                     		<td>
                     			<button title="Delete" class="btn btn-xs btn-danger" th:onclick="'Salesman.deleteSalesman('+${salesman.id}+')'"><i class="fa fa-fw fa-trash"></i>Delete</button>
-								<button title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#modal" th:onclick="'Salesman.findSalesman('+${salesman.id}+')'"><i class="fa fa-fw fa-edit"></i>Edit</button>
+								<button title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#editModal" th:onclick="'Salesman.findSalesmanById('+${salesman.id}+')'"><i class="fa fa-fw fa-edit"></i>Edit</button>
                     		</td>
                     	</tr>
                     </tbody>
@@ -48,20 +46,63 @@
 	<script src="scripts/services/salesman.js"></script>
 	
 	<!-- Edit user model start -->
-	<div id="modal" class="modal">
+	<div id="editModal" class="modal">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Edit User</h4>
+            <h4 class="modal-title">Update Salesman Details</h4>
           </div>
+          <form id="editSaleForm" class="form-horizontal" action="javascript:void(0);" method="post" th:onsubmit="'Salesman.update(this);'">
           <div class="modal-body">
-    		<p>One fine body&hellip;</p>
+	        <div class="box-body">
+	         <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">Name</label>
+	            <div class="col-sm-10">
+	            	<input type="hidden" name="id" class="form-control" id="editId"/>
+	              	<input type="text" name="name" class="form-control" id="editName" placeholder="Name"/>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+	            <div class="col-sm-10">
+	              <input type="email" name="email" class="form-control" id="editEmail" placeholder="Email"/>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">Mobile</label>
+	            <div class="col-sm-10">
+	              <input type="text" name="mobile" class="form-control" id="editMobile" placeholder="Mobile"/>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">Sales Manager</label>
+	            <div class="col-sm-10">
+	            	<select id="editSalesManager" name="salesManager" class="form-control" >
+	            		<option value="">--- Select ---</option>
+	            		<option th:each="salesManager : ${salesManagers}" th:value="${salesManager.id}" th:text="${salesManager.name}"></option>
+	            	</select>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+	            <div class="col-sm-10">
+	              <input type="text" name="password" class="form-control" id="editPassword" placeholder="Password"/>
+	            </div>
+	          </div>
+	        </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+          	<span class="form-group has-success pull-left">
+              <label class="control-label" for="inputSuccess" id="successMsg"></label>
+            </span>
+            <span class="form-group has-error pull-left">
+              <label class="control-label" for="inputError" id="errorMsg"></label>
+            </span>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Update</button>
           </div>
+          </form>	
         </div>
       </div>
     </div>
@@ -95,15 +136,6 @@
 	            <div class="col-sm-10">
 	              <input type="text" name="mobile" class="form-control" id="inputMobile" placeholder="Mobile"/>
 	              <input type="hidden" name="userType" class="form-control" id="userType" placeholder="UserType" value="PUBLIC"/>
-	            </div>
-	          </div>
-	          <div class="form-group">
-	            <label for="inputEmail3" class="col-sm-2 control-label">Company</label>
-	            <div class="col-sm-10">
-	            	<select id="inputCompany" name="company" class="form-control">
-	            		<option value="">--- Select ---</option>
-	            		<option th:each="company: ${companies}" th:value="${company.id}" th:text="${company.name}"></option>
-	            	</select>
 	            </div>
 	          </div>
 	          <div class="form-group">

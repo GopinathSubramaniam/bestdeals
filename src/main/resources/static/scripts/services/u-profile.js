@@ -1,6 +1,6 @@
 'use strict';
 
-var User = (function(){
+var UserProfile = (function(){
 	var URL = App.URL().BASE+App.URL().USER;
 	
 	var findUserById = function(userId){

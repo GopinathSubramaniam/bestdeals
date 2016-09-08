@@ -28,9 +28,6 @@ public class SalesManager extends BaseEntity{
 	private String password;
 	
 	@ManyToOne
-	private Company company;
-	
-	@ManyToOne
 	private User user;
 
 }

@@ -47,6 +47,9 @@ public class App {
 	public static String MSG_USER_NOT_AUTH = "User not authenticated";
 	public static String MSG_USER_NOT_REGISTERED = "Mobile number is not registered";
 	public static String MSG_USER_INCORRECT_PASSWORD = "Invalid password";
+	public static String MSG_USER_EXISTS = "User already exists";
+	
+	public static String COUNTRY_CODE_IN = "91";
 	
 	private static Status status = new Status();
 	
@@ -93,6 +96,8 @@ public class App {
 			userVO.setName(user.getName());
 			userVO.setMobile(user.getMobile());
 			userVO.setEmail(user.getEmail());
+			userVO.setUserType(user.getUserType());
+			userVO.setPassword(user.getPassword());
 		}
 		if(userDetail !=null){
 			userVO.setUserDetailId(userDetail.getId());

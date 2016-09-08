@@ -17,6 +17,21 @@ var Salesman = (function(){
 			}
 		});
 	};
+	
+	var update = function(){
+		var obj = App.serializeObject('editSaleForm');
+		
+		obj.salesManager = {'id':parseFloat(obj.salesManager)};
+		obj.user = {'id':sessionStorage.getItem('userId')};
+		App.PutRequest(URL, obj).then(function(res){
+			if(res.statusCode == '200'){
+				window.location.reload();
+			}else{
+				$('#errorMsg').html('<i class="fa fa-times"></i> Error in creating user. Please try again later.').fadeIn().fadeOut(5000);
+			}
+		});
+	};
+	
 	var deleteSalesman = function(id){
 		$.ajax({
 			url: URL+id,
@@ -27,10 +42,31 @@ var Salesman = (function(){
 			$('#errorMsg').html('<i class="fa fa-times"></i> Error in creating user. Please try again later.').fadeIn().fadeOut(5000);
 		});
 	};
+	var findSalesmanById = function(id){
+		$.ajax({
+			url: URL+id,
+			method: App.method.GET,
+		}).done(function(res){
+			var obj = res.data;
+			
+			$('#editId').val(obj.id);
+			$('#editName').val(obj.name);
+			$('#editEmail').val(obj.email);
+			$('#editMobile').val(obj.mobile);
+			$('#editSalesManager').val(obj.salesManager.id);
+			$('#editPassword').val(obj.password);
+		}).error(function(error){
+			$('#errorMsg').html('<i class="fa fa-times"></i> Error in creating user. Please try again later.').fadeIn().fadeOut(5000);
+		});
+		
+		
+	};
 	
 	return {
 		create: create,
-		deleteSalesman: deleteSalesman
+		update: update,
+		deleteSalesman: deleteSalesman,
+		findSalesmanById: findSalesmanById
 	}
 	
 })();

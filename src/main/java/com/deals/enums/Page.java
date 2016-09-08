@@ -5,5 +5,7 @@ public enum Page {
 	USER,
 	SALE,
 	SALES_MANAGER,
-	PLAN
+	PLAN,
+	CATEGORY,
+	SUB_CATEGORY
 }

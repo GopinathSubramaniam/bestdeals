@@ -34,4 +34,8 @@ public class SubCategoryService {
 		return status;
 	}
 	
+	public Status findAll(){
+		return App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, subCategoryRepository.findAll());
+	}
+	
 }

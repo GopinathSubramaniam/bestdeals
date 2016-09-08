@@ -33,4 +33,9 @@ public class CategoryService {
 		return status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, categories);
 	}
 	
+	public Status delete(Long id){
+		categoryRepository.delete(id);
+		return status = App.getResponse(App.CODE_OK, App.STATUS_DELETE, App.MSG_DELETE, null);
+	}
+	
 }

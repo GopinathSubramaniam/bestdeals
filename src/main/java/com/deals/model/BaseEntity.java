@@ -26,7 +26,7 @@ public class BaseEntity implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
-	private Date createDate;
+	private Date createdDate;
 	private Date changedDate;
 	private String createdBy;
 	private String changedBy;
@@ -39,7 +39,7 @@ public class BaseEntity implements Serializable {
 	
 	@PrePersist
 	public void create(){
-		this.createDate = new Date();
+		this.createdDate = new Date();
 		this.changedDate = new Date();
 	}
 	

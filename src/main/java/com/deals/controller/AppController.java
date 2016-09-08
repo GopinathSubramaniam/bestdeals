@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.deals.enums.Page;
 import com.deals.model.User;
 import com.deals.service.AppService;
+import com.deals.service.CategoryService;
 import com.deals.service.CompanyService;
 import com.deals.service.LoginService;
 import com.deals.service.PlanService;
 import com.deals.service.SalesmanService;
+import com.deals.service.SubCategoryService;
 import com.deals.service.UserService;
 import com.deals.util.App;
 import com.deals.util.Status;
@@ -24,6 +26,8 @@ import com.deals.util.Status;
 @Controller
 public class AppController {
 
+	private HttpSession session = null;
+	
 	@Autowired
 	private AppService appService;
 	
@@ -42,16 +46,58 @@ public class AppController {
 	@Autowired
 	private PlanService planService;
 	
+	@Autowired
+	private CategoryService categoryService;
+	
+	@Autowired
+	private SubCategoryService subcategoryService;
+
+	/*
+	 * Client Routing START 
+	 * 
+	 */
 	@RequestMapping(value="/")
+	public String loginForCustomer(Model model){
+		model.addAttribute("message", "Login in BestDeals");
+		return "u-login";
+	}
+	
+	@RequestMapping(value="/greetings")
+	public String userLandingPage(Model model){
+		model.addAttribute("message", "Welcome to BestDeals !!!");
+		return "u-greetings";
+	}
+
+	@RequestMapping(value="/profile")
+	public String profile(Model model, HttpServletRequest req){
+		session = req.getSession();
+		System.out.println("UserId ::: "+session.getAttribute("userId"));
+		Long userId = Long.parseLong(session.getAttribute("userId").toString());
+		model.addAttribute("message", "Welcome to BestDeals !!!");
+		model.addAttribute("user", userService.findUser(userId).getData());
+		return "u-profile";
+	}
+
+
+	/*
+	 * Client Routing END 
+	 * 
+	 */	
+	
+	@RequestMapping(value="/admin")
 	public String login(Model model){
 		model.addAttribute("message", "Login in BestDeals");
 		return "login";
 	}
-
+	
 	@RequestMapping(value="/login")
 	public String dologin(Model model, User user, HttpServletRequest req){
 		user = (User)loginService.login(user).getData();
 		if(user != null){
+			session = req.getSession();
+			session.setAttribute("userId", user.getId());
+			session.setAttribute("username", user.getName());
+			
 			model.addAttribute("message", "Welcome to BestDeals!!!");
 			model.addAttribute("username", user.getName());
 			return "greetings";
@@ -86,7 +132,7 @@ public class AppController {
 		model.addAttribute("popupTitle", "Creaet New SalesMan");
 		model.addAttribute("salesmans", salesmanService.findAllSalesMan().getData());
 		model.addAttribute("companies", companyService.findAll().getData());
-		model.addAttribute("salesManagers", salesmanService.findAllSalesManagerByCompanyId(new Long(1)).getData());
+		model.addAttribute("salesManagers", salesmanService.findAllSalesManager().getData());
 		
 		model.addAttribute("tab", Page.SALE.toString());
 		return "salesman";
@@ -97,7 +143,6 @@ public class AppController {
 		
 		model.addAttribute("title", "SalesManager List");
 		model.addAttribute("popupTitle", "Creaet New SalesManager");
-		model.addAttribute("companies", companyService.findAll().getData());
 		model.addAttribute("salesManagers", salesmanService.findAllSalesManager().getData());
 		model.addAttribute("tab", Page.SALES_MANAGER.toString());
 		return "salesmanager";
@@ -126,9 +171,28 @@ public class AppController {
 		model.addAttribute("popupTitle", "Create New Plan");
 		model.addAttribute("plans", planService.findAll().getData());
 		model.addAttribute("planTypes", App.getPlanTypes());
-		model.addAttribute("companies", companyService.findAll().getData());
 		
 		return "plan";
 	}
 	
+	@RequestMapping(value="/category")
+	public String category(Model model){
+		model.addAttribute("tab", Page.CATEGORY.toString());
+		model.addAttribute("title", "Category And SubCategory List");
+		model.addAttribute("addNewBtnText", "Add New Category");
+		model.addAttribute("popupTitle", "Create New Category");
+		model.addAttribute("categories", categoryService.findAll().getData());
+		model.addAttribute("subcategories", subcategoryService.findAll().getData());
+		return "category";
+	}
+	
+	@RequestMapping(value="/subcategory")
+	public String subcategory(Model model){
+		model.addAttribute("tab", Page.SUB_CATEGORY.toString());
+		model.addAttribute("title", "Sub Category List");
+		model.addAttribute("addNewBtnText", "Add New SubCategory");
+		model.addAttribute("popupTitle", "Create New SubCategory");
+		model.addAttribute("subcategories", subcategoryService.findAll().getData());
+		return "category";
+	}
 }

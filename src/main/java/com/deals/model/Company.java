@@ -30,16 +30,10 @@ public class Company extends BaseEntity{
 	private CompanyType companyType;
 	
 	@ManyToOne
-	private User user;
-	
-	@ManyToOne
 	private City city;
 	
 	@ManyToOne
-	private State state;
-	
-	@ManyToOne
-	private Country country;
+	private User user;
 	
 	
 }

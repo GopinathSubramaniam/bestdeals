@@ -24,6 +24,11 @@ public class SalesmanController {
 		return salesmanService.create(salesman);
 	}
 	
+	@RequestMapping(value="/", method=RequestMethod.PUT, produces={"application/json"})
+	public Status update(@RequestBody Salesman salesman){
+		return salesmanService.create(salesman);
+	}
+	
 	@RequestMapping(value="/{salesmanId}", method=RequestMethod.GET)
 	public Status findById(@PathVariable Long salesmanId){
 		return salesmanService.findSalesManById(salesmanId);

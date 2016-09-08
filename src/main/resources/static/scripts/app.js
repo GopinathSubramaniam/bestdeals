@@ -16,7 +16,9 @@ var App = (function(){
 		obj.LOGIN = '/rest/login/';
 		obj.USER = '/rest/user/';
 		obj.SALE = '/rest/salesman/';
-		obj.PLAN = '/rest/plan/'
+		obj.PLAN = '/rest/plan/';
+		obj.CATEGORY = '/rest/category/';
+		obj.SUB_CATEGORY = '/rest/subcat/';
 		return obj;
 	};
 	var PostRequest = function(url, data){
@@ -31,7 +33,7 @@ var App = (function(){
 			defer.resolve(response);
 		}).error(function(error){
 			console.log('PostRequest Error :::: ', error);
-			defer.resolve(response);
+			defer.resolve(error);
 		});
 		return defer.promise();
 	};
@@ -85,6 +87,14 @@ var App = (function(){
 	var getMessage = function(res){
 		 return (res.responseJSON != undefined ? res.responseJSON.error : res.message);
 	};
+	var isAuthenticated = function(){
+		var auth = {status: false, message: 'User is authenticated'};
+		if(sessionStorage.getItem('userId') !='' && sessionStorage.getItem('userId') != null){
+			auth.status = true;
+			auth.message = 'User is not authenticated';
+		} 
+		return auth;
+	};
 	
 	return {
 		URL: URL,
@@ -94,7 +104,8 @@ var App = (function(){
 		PostRequest: PostRequest,
 		PutRequest: PutRequest,
 		GetRequest: GetRequest,
-		DeleteRequest: DeleteRequest
+		DeleteRequest: DeleteRequest,
+		isAuthenticated: isAuthenticated
 	};
 	
 })();

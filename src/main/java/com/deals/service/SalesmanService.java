@@ -40,8 +40,13 @@ public class SalesmanService {
 		return status;
 	}
 
-	public Status findAllSalesManagerByCompanyId(Long comapnyId) {
-		List<SalesManager> salesmans = salesManagerRepository.findAllByCompanyId(comapnyId);
+	public Status findAllSalesManager(){
+		return App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, salesManagerRepository.findAll());
+	}
+	
+	
+	public Status findAllSalesManagerByUserId(Long userId) {
+		List<SalesManager> salesmans = salesManagerRepository.findAllByUserId(userId);
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, salesmans);
 		return status;
 	}
@@ -80,13 +85,5 @@ public class SalesmanService {
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, salesmans);
 		return status;
 	}
-	
-	public Status findAllSalesManager(){
-		List<SalesManager> salesManagers = salesManagerRepository.findAll();
-		System.out.println("Sales Managers :::: "+salesManagers);
-		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, salesManagers);
-		return status;
-	}
-	
 	
 }

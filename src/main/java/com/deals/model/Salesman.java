@@ -24,9 +24,6 @@ public class Salesman extends BaseEntity{
 	private User user;
 	
 	@ManyToOne
-	private Company company;
-	
-	@ManyToOne
 	private SalesManager salesManager;
 	
 }

@@ -2,6 +2,7 @@ package com.deals.vo;
 
 import java.util.List;
 
+import com.deals.enums.UserType;
 import com.deals.model.Deal;
 
 import groovy.transform.ToString;
@@ -16,6 +17,8 @@ public class UserVO {
 	private Long id;
 	private Long userDetailId;
 	private String name;
+	private UserType userType;
+	private String password;
 	private String email;
 	private String mobile;
 	private String address1;

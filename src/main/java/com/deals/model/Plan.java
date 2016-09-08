@@ -3,7 +3,6 @@ package com.deals.model;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.ManyToOne;
 
 import com.deals.enums.PlanType;
 
@@ -25,9 +24,5 @@ public class Plan  extends BaseEntity{
 	
 	@Enumerated(EnumType.STRING)
 	private PlanType planType;
-	
-	@ManyToOne
-	private Company company;
-	
 	
 }

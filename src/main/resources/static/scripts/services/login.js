@@ -12,7 +12,11 @@ var Login = (function(){
 				window.sessionStorage.setItem('email', response.data.email);
 				window.sessionStorage.setItem('userType', response.data.userType);
 				window.sessionStorage.setItem('userId', response.data.id);
-				window.location.href='home';
+				if(response.data.userType == 'ADMIN'){
+					window.location.href='home';
+				}else{
+					window.location.href='greetings';
+				}
 			}else{
 				$('.message').html('<span class="error">Invalid Username and Password</span>').fadeIn(3000).fadeOut(5000);
 			}

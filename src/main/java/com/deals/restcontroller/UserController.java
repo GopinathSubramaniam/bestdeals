@@ -20,9 +20,24 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	@RequestMapping(value="/sendOTP/{mobNumber}", method=RequestMethod.GET)
+	public Status sendOTP(@PathVariable String mobNumber){
+		return userService.sendOTP(mobNumber);
+	}
+	
+	@RequestMapping(value="/verifyOTP/{mobileNumber}/{oneTimePassword}", method=RequestMethod.GET)
+	public Status verifyOTP(@PathVariable String mobileNumber, @PathVariable String oneTimePassword){
+		return userService.verifyOTP(mobileNumber, oneTimePassword);
+	}
+	
 	@RequestMapping(value="/", method=RequestMethod.POST, produces={"application/json"})
 	public Status create(@RequestBody User user){
 		return userService.create(user);
+	}
+	
+	@RequestMapping(value="/", method=RequestMethod.PUT, produces={"application/json"})
+	public Status update(@RequestBody User user){
+		return userService.update(user);
 	}
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
@@ -35,9 +50,9 @@ public class UserController {
 		return userService.findAll();
 	}
 	
-	@RequestMapping(value="/findAllFranchise", method=RequestMethod.GET)
-	public Status findAllFranchise(){
-		return userService.findAllFranchise();
+	@RequestMapping(value="/findAllByUserType/{userType}", method=RequestMethod.GET)
+	public Status findAllByUserType(@PathVariable UserType userType){
+		return userService.findAllByType(userType);
 	}
 	
 	@RequestMapping(value="/saveUserDetail", method=RequestMethod.POST, produces={"application/json"})
@@ -52,10 +67,10 @@ public class UserController {
 		return status;
 	}
 	
-	@RequestMapping(value="/verify/{codeOTP}/{loginId}", method=RequestMethod.GET)
+	/*@RequestMapping(value="/verify/{codeOTP}/{loginId}", method=RequestMethod.GET)
 	public Status verifyOTP(@PathVariable String codeOTP, @PathVariable Long loginId){
 		return userService.verifyOTP(codeOTP, loginId);
-	}
+	}*/
 	
 	@RequestMapping(value="/findByUserType/{userType}", method=RequestMethod.GET)
 	public Status findUsersByUserType(@PathVariable UserType userType){

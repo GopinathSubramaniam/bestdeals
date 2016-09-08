@@ -23,6 +23,11 @@ public class LoginController {
 		return loginService.login(user);
 	}
 	
+	@RequestMapping(value="/loginClient", method= RequestMethod.POST, produces={"application/json"})
+	public Status loginForClient(@RequestBody User user){
+		return loginService.login(user);
+	}
+	
 	@RequestMapping(value="/mobileLogin", method= RequestMethod.POST, produces={"application/json"})
 	public Status mobileLogin(@RequestBody User user){
 		return loginService.mobileLogin(user);

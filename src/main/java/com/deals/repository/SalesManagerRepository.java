@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.deals.model.SalesManager;
 
 public interface SalesManagerRepository extends JpaRepository<SalesManager, Long>{
-	public List<SalesManager> findAllByCompanyId(Long id);
+	public List<SalesManager> findAllByUserId(Long id);
 }
