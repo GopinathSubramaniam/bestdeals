@@ -85,7 +85,7 @@ public class AppController {
 	@RequestMapping(value="/profile")
 	public String profile(Model model, HttpServletRequest req){
 		session = req.getSession();
-		
+		boolean displayAdvertisement = false;
 		Long userId = Long.parseLong(req.getParameter("userId").toString());
 		UserVO userVO = (UserVO)userService.findUser(userId).getData();
 		Plan plan = (Plan)planService.findOne(userVO.getPlanId()).getData();
@@ -94,8 +94,9 @@ public class AppController {
 		List<State> states = stateRepository.findAll();
 		
 		System.out.println("Deals ::: "+deals);
-		
-		boolean displayAdvertisement = plan.getPlanType().equals(PlanType.FREE) ? false : true;
+		if(plan != null){
+			displayAdvertisement = plan.getPlanType().equals(PlanType.FREE) ? false : true;
+		}
 		model.addAttribute("user", userVO);
 		model.addAttribute("deals", deals);
 		model.addAttribute("plan", plan);

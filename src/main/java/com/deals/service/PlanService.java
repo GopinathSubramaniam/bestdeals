@@ -41,7 +41,11 @@ public class PlanService {
 	}
 	
 	public Status findOne(Long id){
-		Plan plan = planRepository.findOne(id);
+		System.out.println("FindPlan PlanId ::: "+id);
+		Plan plan = null;
+		if(id !=null){
+			plan = planRepository.findOne(id);
+		}
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, plan);
 		return status;
 	}
