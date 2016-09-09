@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.deals.enums.DealType;
+import com.deals.enums.Priority;
 import com.deals.model.City;
 import com.deals.model.Deal;
 import com.deals.model.SubCategory;
@@ -52,7 +53,9 @@ public class DealController {
 		deal.setContact(jsonDeal.getString("contact"));
 		deal.setPlaceName(jsonDeal.getString("placeName"));
 		deal.setType(DealType.ADVERTISTMENT);
+		deal.setPriority(Priority.HIGH);
 		deal.setUser(user);
+		deal.setSubCategory(subCat);
 		
 		return dealService.create(deal);
 	}
