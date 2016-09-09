@@ -1,4 +1,4 @@
-package com.deals.util;
+/*package com.deals.util;
 
 import org.json.JSONObject;
 
@@ -11,3 +11,4 @@ public class Core {
         System.out.println("val ::: "+  code);
 	}
 }
+*/
