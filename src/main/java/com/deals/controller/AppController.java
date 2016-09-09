@@ -11,10 +11,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.deals.enums.Page;
+import com.deals.enums.PlanType;
+import com.deals.model.Category;
+import com.deals.model.Deal;
+import com.deals.model.Plan;
+import com.deals.model.State;
 import com.deals.model.User;
+import com.deals.repository.StateRepository;
 import com.deals.service.AppService;
 import com.deals.service.CategoryService;
 import com.deals.service.CompanyService;
+import com.deals.service.DealService;
 import com.deals.service.LoginService;
 import com.deals.service.PlanService;
 import com.deals.service.SalesmanService;
@@ -22,10 +29,11 @@ import com.deals.service.SubCategoryService;
 import com.deals.service.UserService;
 import com.deals.util.App;
 import com.deals.util.Status;
+import com.deals.vo.UserVO;
 
 @Controller
 public class AppController {
-
+	
 	private HttpSession session = null;
 	
 	@Autowired
@@ -51,6 +59,12 @@ public class AppController {
 	
 	@Autowired
 	private SubCategoryService subcategoryService;
+	
+	@Autowired
+	private DealService dealService;
+	
+	@Autowired
+	private StateRepository stateRepository;
 
 	/*
 	 * Client Routing START 
@@ -71,10 +85,23 @@ public class AppController {
 	@RequestMapping(value="/profile")
 	public String profile(Model model, HttpServletRequest req){
 		session = req.getSession();
-		System.out.println("UserId ::: "+session.getAttribute("userId"));
-		Long userId = Long.parseLong(session.getAttribute("userId").toString());
-		model.addAttribute("message", "Welcome to BestDeals !!!");
-		model.addAttribute("user", userService.findUser(userId).getData());
+		
+		Long userId = Long.parseLong(req.getParameter("userId").toString());
+		UserVO userVO = (UserVO)userService.findUser(userId).getData();
+		Plan plan = (Plan)planService.findOne(userVO.getPlanId()).getData();
+		List<Deal> deals = (List<Deal>)dealService.findAllByUserId(userId).getData();
+		List<Category> categories = (List<Category>)categoryService.findAll().getData();
+		List<State> states = stateRepository.findAll();
+		
+		System.out.println("Deals ::: "+deals);
+		
+		boolean displayAdvertisement = plan.getPlanType().equals(PlanType.FREE) ? false : true;
+		model.addAttribute("user", userVO);
+		model.addAttribute("deals", deals);
+		model.addAttribute("plan", plan);
+		model.addAttribute("categories", categories);
+		model.addAttribute("states", states);
+		model.addAttribute("displayAdvertisement", displayAdvertisement);
 		return "u-profile";
 	}
 

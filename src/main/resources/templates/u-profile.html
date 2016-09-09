@@ -8,13 +8,13 @@
 	<div class="container-fluid content-wrapper">
 		<div class="row">
 			<section class="content">
-				<div class="col-lg-12 col-xs-12" th:text="${message}">
+				<div class="col-lg-12 col-xs-12">
 					<h3>User Details</h3>
 					<div class="box">
 						<div class="form-group">
 			            	<label for="inputEmail3" class="col-sm-2 control-label">Name</label>
 			            	<div class="col-sm-10">
-			              		<label class="form-label" id="labelName" th:text="${user.name}"></label>
+			              		<label id="labelName" th:text="${name}"></label>
 			            	</div>
 			          	</div>
 			          	<div class="form-group">
@@ -30,13 +30,6 @@
 			            	</div>
 			          	</div>
 			          	<div class="form-group">
-			            	<label for="inputEmail3" class="col-sm-2 control-label">Auth Type</label>
-			            	<div class="col-sm-10">
-			              		<label class="form-label" id="labelAuthType" th:text="${user.authType}"></label>
-			            	</div>
-			          	</div>
-			          	
-			          	<div class="form-group">
 			            	<label for="inputEmail3" class="col-sm-2 control-label">Profile Created Date</label>
 			            	<div class="col-sm-10">
 			              		<label class="form-label" id="labelProfileCreateDate" th:text="${user.createdDate}"></label>
@@ -50,15 +43,45 @@
 			          	<div class="form-group">
 			            	<label for="inputEmail3" class="col-sm-2 control-label">Name</label>
 			            	<div class="col-sm-10">
-			              		<label class="form-label" id="inputname"></label>
+			              		<label class="form-label" id="inputname" th:text="${plan} != null ? ${plan.name} : ''"></label>
 			            	</div>
 			          	</div>
 			          	<div class="form-group">
 			            	<label for="inputEmail3" class="col-sm-2 control-label">Description</label>
 			            	<div class="col-sm-10">
-			              		<label class="form-label" id="inputname"></label>
+			              		<label class="form-label" id="inputname" th:text="${plan} !=null ? ${plan.description}: ''"></label>
 			            	</div>
 			          	</div>
+					</div>
+				</div>
+				<div class="col-lg-12 col-xs-12" th:if="${displayAdvertisement}">
+					<h3>Advertisements</h3>
+					<button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#advertisementModal">Create New</button>
+					<div class="box">
+	          	 		<table id="userTable" class="table table-bordered table-hover">
+						 	<thead>
+		                      <tr>
+		                        <th>Created Date</th>
+		                        <th>Name</th>
+		                        <th>Image</th>
+		                        <th>Description</th>
+		                        <th>Place Name</th>
+		                      </tr>
+		                    </thead>
+		                    <tbody>
+		                    	<tr th:each="deal : ${deals}">
+		                    		<td th:text="${deal.createdDate}"></td>
+		                    		<td th:text="${deal.name}"></td>
+		                    		<td style="width: 16%;height: 10%;"><a th:href="${deal.imgUrl}" target="_blank" title="Open image in new window"><img th:src="${deal.imgUrl}" style="width: 87%; height: 15%;"/></a></td>
+		                    		<td th:text="${deal.description}"></td>
+		                    		<td th:text="${deal.placeName}"></td>
+		                    		<td>
+		                    			<button title="Delete" class="btn btn-xs btn-danger" th:onclick="'Profile.deleteDeal('+${deal.id}+')'"><i class="fa fa-fw fa-trash"></i>Delete</button>
+										<button title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#advertisementModal" th:onclick="'Profile.findDeal('+${deal.id}+')'"><i class="fa fa-fw fa-edit"></i>Edit</button>
+		                    		</td>
+		                    	</tr>
+		                    </tbody>
+						 </table>
 					</div>
 				</div>
 			</section>	
@@ -67,5 +90,101 @@
 	<div th:include="footer"></div>
 	<div th:include="base-js"></div>
 	<script type="text/javascript" src="scripts/services/u-profile.js"></script>
+	<script type="text/javascript" src="scripts/services/deal.js"></script>
+	
+	<!--  Create Advertisement Modal START -->
+	<div id="advertisementModal" class="modal">
+     <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="modalTitle">Create New Advertisement</h4>
+          </div>
+          <form id="newAdvertisementform" class="form-horizontal" action="javascript:void(0);" method="post" th:onsubmit="'Deal.create(this);'">
+          <div class="modal-body">
+	        <div class="box-body">
+	         <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">Category</label>
+	            <div class="col-sm-10">
+	            	<select id="inputCategory" name="category" class="form-control" onchange="App.findAllSubCateByState($('#inputCategory').val())">
+	            		<option value="">--- Select ---</option>
+	            		<option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+	            	</select>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">Sub Category</label>
+	            <div class="col-sm-10">
+	            	<select id="inputSubCategory" name="subCategory" class="form-control">
+	            		<option value="">--- Select ---</option>
+	            	</select>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">State</label>
+	            <div class="col-sm-10">
+	            	<select id="inputState" name="state" class="form-control" onchange="App.findAllCityByState($('#inputState').val())">
+	            		<option value="">--- Select ---</option>
+	            		<option th:each="state : ${states}" th:value="${state.id}" th:text="${state.name}"></option>
+	            	</select>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">City</label>
+	            <div class="col-sm-10">
+	            	<select id="inputCity" name="city" class="form-control">
+						<option value="">--- Select ---</option>		            		
+	            	</select>
+	            </div>
+	          </div>
+	        
+	         <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">Place Name</label>
+	            <div class="col-sm-10">
+	              <input type="text" name="placeName" class="form-control" id="inputPlaceName" placeholder="Place Name"/>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">Name</label>
+	            <div class="col-sm-10">
+	              <input type="text" name="name" class="form-control" id="inputName" placeholder="Name"/>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">Description</label>
+	            <div class="col-sm-10">
+	              <textarea name="description" class="form-control" id="inputdescription" placeholder="Description"></textarea>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">Contact</label>
+	            <div class="col-sm-10">
+	              <textarea name="contact" class="form-control" id="inputContact" placeholder="Contact"></textarea>
+	            </div>
+	          </div>
+	           <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">Image</label>
+	            <div class="col-sm-10">
+	              <input type="file" name="file" class="form-control" id="file"/>
+	            </div>
+	          </div>
+	        </div>
+          </div>
+          
+          <div class="modal-footer">
+          	<span class="form-group has-success pull-left">
+              <label class="control-label" for="inputSuccess" id="successMsg"></label>
+            </span>
+            <span class="form-group has-error pull-left">
+              <label class="control-label" for="inputError" id="errorMsg"></label>
+            </span>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" id="modalSubmitBtn">Save</button>
+          </div>
+          </form>	
+        </div>
+      </div>
+    </div>
+	<!--  Create Advertisement Modal END -->
 </body>
 </html>

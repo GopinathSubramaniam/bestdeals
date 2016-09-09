@@ -98,6 +98,8 @@ public class App {
 			userVO.setEmail(user.getEmail());
 			userVO.setUserType(user.getUserType());
 			userVO.setPassword(user.getPassword());
+			userVO.setCreatedDate(user.getCreatedDate().toString());
+			userVO.setPlanId(user.getPlan().getId());
 		}
 		if(userDetail !=null){
 			userVO.setUserDetailId(userDetail.getId());

@@ -17,8 +17,10 @@ var App = (function(){
 		obj.USER = '/rest/user/';
 		obj.SALE = '/rest/salesman/';
 		obj.PLAN = '/rest/plan/';
+		obj.DEAL = '/rest/deal/';
 		obj.CATEGORY = '/rest/category/';
 		obj.SUB_CATEGORY = '/rest/subcat/';
+		obj.APP = '/rest/base/';
 		return obj;
 	};
 	var PostRequest = function(url, data){
@@ -28,6 +30,23 @@ var App = (function(){
 			method: App.method.POST,
 			contentType: 'application/json',
 			data: JSON.stringify(data)
+		}).done(function(response){
+			console.log('PostRequest Done :::: ', response);
+			defer.resolve(response);
+		}).error(function(error){
+			console.log('PostRequest Error :::: ', error);
+			defer.resolve(error);
+		});
+		return defer.promise();
+	};
+	var PostFormData = function(url, data){
+		var defer = $.Deferred();
+		$.ajax({
+			url: url,
+			method: App.method.POST,
+			processData: false,
+			contentType: false,
+			data: data
 		}).done(function(response){
 			console.log('PostRequest Done :::: ', response);
 			defer.resolve(response);
@@ -95,6 +114,33 @@ var App = (function(){
 		} 
 		return auth;
 	};
+	var findAllCityByState = function(stateId){
+		$('#inputCity').html('');
+		if(stateId){
+			var url = App.URL().BASE+App.URL().APP+'findAllCityByState/'+stateId;
+			GetRequest(url).then(function(res){
+				res.data.forEach(function(obj, i){
+					$('#inputCity').append('<option value='+obj.id+'>'+obj.name+'</option>');
+				});
+			});
+		}else{
+			$('#inputCity').html('<option>-- Select --</option>');
+		}
+	};
+	
+	var findAllSubCateByState = function(categoryId){
+		$('#inputSubCategory').html('');
+		if(categoryId){
+			var url = App.URL().BASE+App.URL().SUB_CATEGORY+categoryId;
+			GetRequest(url).then(function(res){
+				res.data.forEach(function(obj, i){
+					$('#inputSubCategory').append('<option value='+obj.id+'>'+obj.name+'</option>');
+				});
+			});
+		}else{
+			$('#inputSubCategory').html('<option>-- Select --</option>');
+		}
+	};
 	
 	return {
 		URL: URL,
@@ -102,15 +148,19 @@ var App = (function(){
 		serializeObject: serializeObject,
 		getMessage: getMessage,
 		PostRequest: PostRequest,
+		PostFormData: PostFormData,
 		PutRequest: PutRequest,
 		GetRequest: GetRequest,
 		DeleteRequest: DeleteRequest,
-		isAuthenticated: isAuthenticated
+		isAuthenticated: isAuthenticated,
+		findAllCityByState: findAllCityByState,
+		findAllSubCateByState: findAllSubCateByState
 	};
 	
 })();
 
 $('#username').html(sessionStorage.getItem('username'));
+$('#userProfile').attr('href', 'profile?userId='+sessionStorage.getItem('userId'));
 
 $('.sidebar-menu li').click(function(ev){
 	console.log('>>>> Side bar clicked >>>');

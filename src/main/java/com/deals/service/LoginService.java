@@ -21,9 +21,6 @@ public class LoginService {
 		if(user != null){
 			User existUser = userRepository.findByEmailAndPassword(user.getEmail(), user.getPassword());
 			System.out.println("User :::: "+user);
-			System.out.println("ExistUser Type :::: "+existUser.getUserType());
-			System.out.println("User Type :::: "+user.getUserType());
-			
 			if(existUser!=null && user.getUserType().equals(existUser.getUserType())){
 				if(!existUser.getAuthType().equals(AuthType.OK)){
 					status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_USER_NOT_AUTH, null);

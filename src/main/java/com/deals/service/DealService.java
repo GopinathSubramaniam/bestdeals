@@ -26,6 +26,12 @@ public class DealService {
 	@Autowired
 	private UserDetailService userDetailService;
 	
+	public Status create(Deal deal){
+		deal = dealRepository.saveAndFlush(deal);
+		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, deal);
+		return status;
+	}
+	
 	public Status findAllByUserId(Long userId){
 		List<Deal> deals = dealRepository.findAllByUserId(userId);
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, deals);

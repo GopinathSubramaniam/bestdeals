@@ -15,6 +15,7 @@ import lombok.Setter;
 public class UserVO {
 
 	private Long id;
+	private String createdDate;
 	private Long userDetailId;
 	private String name;
 	private UserType userType;
@@ -38,6 +39,7 @@ public class UserVO {
 	private String cityName;
 	private String stateName;
 	
+	private Long planId;
 	
 	
 }

@@ -1,16 +1,22 @@
 package com.deals.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.deals.model.AdminDetail;
 import com.deals.repository.PlanRepository;
 import com.deals.repository.SalesManagerRepository;
 import com.deals.repository.SalesmanRepository;
 import com.deals.repository.UserRepository;
+import com.deals.util.App;
 
 @Service
 public class AppService {
@@ -26,6 +32,25 @@ public class AppService {
 	
 	@Autowired
 	private PlanRepository planRepository;
+	
+	@Value("${img.copy.path}")
+	private String imgCopyPath;
+	
+	@Value("${img.server.path}")
+	private String imgServerPath;
+	
+	public String copyFile(MultipartFile file){
+		String fileName = null; 
+		try {
+			fileName = App.generateKey(6)+"_"+file.getOriginalFilename();
+			File outFile = new File(imgCopyPath+fileName);
+			
+			FileCopyUtils.copy(file.getBytes(), outFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return imgServerPath+fileName;
+	}
 	
 	
 	public List<AdminDetail> getAdminDetail(){

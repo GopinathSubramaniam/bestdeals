@@ -23,6 +23,7 @@ public class Deal  extends BaseEntity{
 	private String name;
 	private String imgUrl;
 	private String description;
+	private String contact;
 	
 	@Enumerated(EnumType.STRING)
 	private DealType type;
