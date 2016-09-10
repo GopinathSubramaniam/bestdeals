@@ -19,6 +19,11 @@ var User = (function(){
 	
 	var create = function(){
 		var userObj = App.serializeObject('userRegisterform');
+		if(userObj.plan){
+			userObj.plan = {id: parseInt(userObj.plan)};
+		}else{
+			userObj.plan = null;
+		}
 		App.PostRequest(URL, userObj).then(function(res){
 			console.log('User Create ::: ', userObj);
 			if(res.statusCode == '500'){

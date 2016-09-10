@@ -182,6 +182,7 @@ public class AppController {
 		Status status = userService.findAll();
 		
 		model.addAttribute("users", status.getData());
+		model.addAttribute("plans", planService.findAll().getData());
 		model.addAttribute("title", "Users List");
 		model.addAttribute("popupTitle", "Create New User");
 		model.addAttribute("tab", Page.USER.toString());
