@@ -86,26 +86,34 @@ public class AppController {
 	public String profile(Model model, HttpServletRequest req){
 		session = req.getSession();
 		boolean displayAdvertisement = false;
+		List<Plan> plans = (List<Plan>)planService.findAll().getData();
 		Long userId = Long.parseLong(req.getParameter("userId").toString());
 		UserVO userVO = (UserVO)userService.findUser(userId).getData();
 		Plan plan = (Plan)planService.findOne(userVO.getPlanId()).getData();
-		List<Deal> deals = (List<Deal>)dealService.findAllByUserId(userId).getData();
-		List<Category> categories = (List<Category>)categoryService.findAll().getData();
-		List<State> states = stateRepository.findAll();
-		
-		System.out.println("Deals ::: "+deals);
 		if(plan != null){
 			displayAdvertisement = plan.getPlanType().equals(PlanType.FREE) ? false : true;
 		}
+		model.addAttribute("tab", Page.USERPROFILE.toString());
 		model.addAttribute("user", userVO);
-		model.addAttribute("deals", deals);
 		model.addAttribute("plan", plan);
-		model.addAttribute("categories", categories);
-		model.addAttribute("states", states);
+		model.addAttribute("plans", plans);
 		model.addAttribute("displayAdvertisement", displayAdvertisement);
 		return "u-profile";
 	}
 
+	@RequestMapping("/advertisement")
+	public String advertisement(Model model, HttpServletRequest req){
+		Long userId = Long.parseLong(req.getParameter("userId").toString());
+		List<Deal> deals = (List<Deal>)dealService.findAllByUserId(userId).getData();
+		List<Category> categories = (List<Category>)categoryService.findAll().getData();
+		List<State> states = stateRepository.findAll();
+		model.addAttribute("tab", Page.ADVERTISEMENT.toString());
+		model.addAttribute("deals", deals);
+		model.addAttribute("states", states);
+		model.addAttribute("categories", categories);
+		
+		return "u-advertisement";
+	}
 
 	/*
 	 * Client Routing END 
@@ -145,9 +153,18 @@ public class AppController {
 		return "login";
 	}
 	
+	@RequestMapping(value="/out")
+	public String out(HttpServletRequest req){
+		HttpSession session = req.getSession();
+		if(session != null){
+			session.invalidate();
+		}
+		return "u-login";
+	}
+	
 	@RequestMapping(value="/home")
 	public String home(Model model){
-		model.addAttribute("tab", "DASHBOARD");
+		model.addAttribute("tab", Page.DASHBOARD.toString());
 		model.addAttribute("message", "Welcome to BestDeals API Section!!!");
 		model.addAttribute("details", appService.getAdminDetail());
 		return "greetings";

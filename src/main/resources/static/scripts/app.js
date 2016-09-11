@@ -160,7 +160,9 @@ var App = (function(){
 })();
 
 $('#username').html(sessionStorage.getItem('username'));
-$('#userProfile').attr('href', 'profile?userId='+sessionStorage.getItem('userId'));
+
+$('.userProfile').attr('href', 'profile?userId='+sessionStorage.getItem('userId'));
+$('.advertisement').attr('href', 'advertisement?userId='+sessionStorage.getItem('userId'));
 
 $('.sidebar-menu li').click(function(ev){
 	console.log('>>>> Side bar clicked >>>');

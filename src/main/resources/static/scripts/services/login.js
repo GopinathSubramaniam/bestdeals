@@ -34,9 +34,23 @@ var Login = (function(){
 		});
 	};
 	
+	var doLogoutForUser = function(){
+		var getUrl = URL+'out/'+sessionStorage.getItem('userId');
+		App.GetRequest(getUrl).then(function(response){
+			if(response.statusMsg == 'OK'){
+				sessionStorage.clear();
+				window.location.href = 'out';
+			}else{
+				alert('Error in logout');
+			}
+		});
+	};
+	
+	
 	return {
 		doLogin: doLogin,
-		doLogout: doLogout
+		doLogout: doLogout,
+		doLogoutForUser: doLogoutForUser
 	}
 	
 })();

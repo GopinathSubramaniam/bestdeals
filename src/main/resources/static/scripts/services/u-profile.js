@@ -48,11 +48,24 @@ var UserProfile = (function(){
 			window.location.reload();
 		});
 	};
+	var changePlan = function(){
+		
+		var elem = $('input[type="radio"]:checked');
+		if(elem){
+			var planId = elem.val();
+			var userId = sessionStorage.getItem('userId');
+			var url = App.URL().BASE+App.URL().PLAN+userId+'/'+planId;
+			App.GetRequest(url).then(function(res){
+				window.location.reload();
+			});	
+		}
+	};
 	
 	return {
 		create: create,
 		update: update,
 		findUserById: findUserById,
-		deleteUser: deleteUser
+		deleteUser: deleteUser,
+		changePlan: changePlan
 	}
 })();
