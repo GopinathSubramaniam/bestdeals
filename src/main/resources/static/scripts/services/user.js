@@ -14,6 +14,7 @@ var User = (function(){
 			$('#editMobile').val(obj.mobile);
 			$('#editUserType').val(obj.userType);
 			$('#editPassword').val(obj.password);
+			$('#editPlan').val(obj.planId);
 		});
 	};
 	

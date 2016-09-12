@@ -25,7 +25,7 @@ var Plan = (function(){
 			$('#editname').val(plan.name);
 			$('#editamount').val(plan.amount);
 			$('#editdescription').val(plan.description);
-			$('#editPlanType').val(plan.planType);
+			$('#editPlan').val(plan.planType);
 			$('#editCompany').val(plan.company.id);
 		});
 	};

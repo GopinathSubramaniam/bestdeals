@@ -21,7 +21,7 @@
                         <th>Amount</th>
                         <th>Description</th>
                         <th>Plan Type</th>
-                        <th>Action</th>
+<!--                         <th>Action</th> -->
                       </tr>
                     </thead>
                     <tbody>
@@ -31,11 +31,11 @@
                     		<td th:text="${plan.amount}"></td>
                     		<td th:text="${plan.description}"></td>
                     		<td th:text="${plan.planType}"></td>
-                    		<td>
-                    			<button title="Delete" class="btn btn-xs btn-danger" th:onclick="'Plan.deletePlan('+${plan.id}+')'"><i class="fa fa-fw fa-trash"></i>Delete</button>
-								<button title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#planUpdateModal" th:onclick="'Plan.findPlan('+${plan.id}+')'"><i class="fa fa-fw fa-edit"></i>Edit</button>
-								<button title="Assign to User" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#assignToModal" th:onclick="'Plan.findAllFranchise('+${plan.id}+')'"><i class="fa fa-fw fa-user"></i>Assign To Merchant</button>
-                    		</td>
+<!--                     		<td> -->
+<!--                     			<button title="Delete" class="btn btn-xs btn-danger" th:onclick="'Plan.deletePlan('+${plan.id}+')'"><i class="fa fa-fw fa-trash"></i>Delete</button> -->
+<!-- 								<button title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#planUpdateModal" th:onclick="'Plan.findPlan('+${plan.id}+')'"><i class="fa fa-fw fa-edit"></i>Edit</button> -->
+<!-- 								<button title="Assign to User" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#assignToModal" th:onclick="'Plan.findAllFranchise('+${plan.id}+')'"><i class="fa fa-fw fa-user"></i>Assign To Merchant</button> -->
+<!--                     		</td> -->
                     	</tr>
                     </tbody>
 				 </table>
