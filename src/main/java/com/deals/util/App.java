@@ -128,10 +128,12 @@ public class App {
 			}
 		}
 		List<String> imgUrls = new ArrayList<String>();
-		for (Deal deal : deals) {
-			System.out.println("Deal ::: "+deal);
-			System.out.println("Deal Image Url ::: "+deal.getImgUrl());
-			imgUrls.add(deal.getImgUrl());
+		if(deals != null ){
+			for (Deal deal : deals) {
+				System.out.println("Deal ::: "+deal);
+				System.out.println("Deal Image Url ::: "+deal.getImgUrl());
+				imgUrls.add(deal.getImgUrl());
+			}
 		}
 		userVO.setImageUrls(imgUrls);
 		userVO.setDeals(deals);
