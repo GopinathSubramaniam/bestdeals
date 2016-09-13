@@ -15,6 +15,17 @@ public class EMail {
 	private String senderName;
 	private EmailDetail emailDetail;
 	private String templateName;
-	
 	private EmailType emailType;
+
+	public EMail(){}
+	public EMail(String senderEmail, String senderName, EmailDetail emailDetail, String templateName,
+			EmailType emailType) {
+		super();
+		this.senderEmail = senderEmail;
+		this.senderName = senderName;
+		this.emailDetail = emailDetail;
+		this.templateName = templateName;
+		this.emailType = emailType;
+	}
+	
 }

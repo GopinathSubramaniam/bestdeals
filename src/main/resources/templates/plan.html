@@ -16,7 +16,7 @@
 				 <table id="userTable" class="table table-bordered table-hover">
 				 	<thead>
                       <tr>
-                        <th>Created Date</th>
+<!--                         <th>Created Date</th> -->
                         <th>Name</th>
                         <th>Amount</th>
                         <th>Description</th>
@@ -26,7 +26,7 @@
                     </thead>
                     <tbody>
                     	<tr th:each="plan : ${plans}">
-                    		<td th:text="${plan.createdDate}"></td>
+<!--                     		<td th:text="${plan.createdDate}"></td> -->
                     		<td th:text="${plan.name}"></td>
                     		<td th:text="${plan.amount}"></td>
                     		<td th:text="${plan.description}"></td>

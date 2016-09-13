@@ -38,4 +38,8 @@ public class CategoryService {
 		return status = App.getResponse(App.CODE_OK, App.STATUS_DELETE, App.MSG_DELETE, null);
 	}
 	
+	public Status findOne(Long id){
+		return status = App.getResponse(App.CODE_OK, App.MSG_OK, App.MSG_OK, categoryRepository.findOne(id));
+	}
+	
 }

@@ -33,12 +33,15 @@ public class MailService {
 	public Status sendMail(EMail eMail){
 		System.out.println("Started");
 		try {
+			// Send mail to these people START
 			List<InternetAddress> toAddresses = Lists.newArrayList();   
 			toAddresses.add(new InternetAddress(eMail.getEmailDetail().getReceiverMail(), eMail.getEmailDetail().getReceiverName()));
 			InternetAddress fromAddress = new InternetAddress(eMail.getSenderEmail(), eMail.getSenderName());
+			// Send mail to these people END
+			
 			final Email email = EmailImpl.builder().from(fromAddress).to(toAddresses).subject(eMail.getEmailDetail().getSubject()).body("").encoding(Charset.forName("UTF-8")).build();
 			final Map<String, Object> modelObject = new HashMap<>();
-	        modelObject.put("message", eMail.getEmailDetail().getMessage());
+			modelObject.put("message", eMail.getEmailDetail().getMessage());
 	                
 	        emailService.send(email, eMail.getTemplateName(), modelObject);
 			System.out.println("Done");

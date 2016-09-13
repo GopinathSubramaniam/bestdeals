@@ -7,14 +7,19 @@ import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.stereotype.Service;
+
+import com.deals.enums.EmailType;
 import com.deals.model.Deal;
+import com.deals.model.EMail;
+import com.deals.model.EmailDetail;
 import com.deals.model.User;
 import com.deals.model.UserDetail;
 import com.deals.vo.DealVO;
 import com.deals.vo.UserVO;
 
 //import com.way2sms.SMS;
-
+@Service
 public class App {
 	
 	public static String CODE_OK = "200";
@@ -48,6 +53,7 @@ public class App {
 	public static String MSG_USER_NOT_REGISTERED = "Mobile number is not registered";
 	public static String MSG_USER_INCORRECT_PASSWORD = "Invalid password";
 	public static String MSG_USER_EXISTS = "User already exists";
+	public static String MSG_USER_INVALID_EMAIL = "Invalid Email";
 	
 	public static String COUNTRY_CODE_IN = "91";
 	
@@ -78,6 +84,16 @@ public class App {
 		userTypes.add("PUBLIC");
 		userTypes.add("MERCHANT");
 		return userTypes;
+	}
+	
+	public static EMail setEmailObject(String templateName, EmailDetail emailDetail){
+		EMail eMail = new EMail();
+		eMail.setEmailType(EmailType.PASSWORD);
+		eMail.setSenderEmail("gomyshoppy@gmail.com");
+		eMail.setSenderName("GoMyShoppy");
+		eMail.setTemplateName(templateName);
+		eMail.setEmailDetail(emailDetail);
+		return eMail;
 	}
 	
 	public static Status getResponse(String statusCode, String statusMsg, String message,  Object data ){

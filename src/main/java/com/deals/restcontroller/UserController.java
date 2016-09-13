@@ -77,4 +77,11 @@ public class UserController {
 		return userService.findUsersByUserType(userType);
 	}
 	
+	@RequestMapping(value="/forgotPassword/{emailAddress}", method=RequestMethod.GET)
+	public Status forgotPassword(@PathVariable("emailAddress") String emailAddress){
+		System.out.println("Email Address ::::: "+emailAddress);
+		return userService.forgotPassword(emailAddress);
+	}
+	
+	
 }

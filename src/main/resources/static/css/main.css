@@ -7,3 +7,8 @@
 	}	
 }
 
+.cat-max-height{
+	max-height: 720px; 
+	overflow: auto;
+}
+

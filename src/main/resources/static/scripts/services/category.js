@@ -22,6 +22,10 @@ var Category = (function(){
 			method: App.method.GET,
 		}).done(function(res){
 			console.log('findCategoryById Res ::: ', res);
+			$('#inputid').val(res.data.id);
+			$('#inputname').val(res.data.name);
+			$('#inputDescription').val(res.data.description);
+			
 		}).error(function(error){
 			$('#errorMsg').html('<i class="fa fa-times"></i> Error in creating user. Please try again later.').fadeIn().fadeOut(5000);
 		});

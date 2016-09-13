@@ -11,4 +11,5 @@ public class BestDealsApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BestDealsApplication.class, args);
 	}
+	
 }

@@ -28,6 +28,11 @@ public class CategoryController {
 		return categoryService.findAll();
 	}
 	
+	@RequestMapping(value="/{id}", method= RequestMethod.GET)
+	public Status findById(@PathVariable Long id){
+		return categoryService.findOne(id);
+	}
+	
 	@RequestMapping(value="/{id}", method= RequestMethod.DELETE)
 	public Status delete(@PathVariable Long id){
 		return categoryService.delete(id);

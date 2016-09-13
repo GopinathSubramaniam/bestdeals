@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.deals.enums.AuthType;
 import com.deals.enums.UserType;
 import com.deals.model.Deal;
+import com.deals.model.EMail;
+import com.deals.model.EmailDetail;
 import com.deals.model.OTP;
 import com.deals.model.User;
 import com.deals.model.UserDetail;
@@ -206,13 +208,35 @@ public class UserService {
 	
 	public Status findAll(){
 		List<User> users = userRepository.findAll();
-		Status status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, users);
+		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, users);
 		return status;
 	}
 	
 	public Status findAllFranchise(){
 		List<User> users = userRepository.findAllByUserType(UserType.FRANCHISE);
-		Status status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, users);
+		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, users);
+		return status;
+	}
+	
+	public Status forgotPassword(String email){
+		System.out.println("Email :::: "+email);
+		if(!email.contains(".com")){
+			email = email+".com";
+		}
+		
+		User user = userRepository.findByEmail(email);
+		if(user != null ){
+			EmailDetail emailDetail = new EmailDetail();
+			emailDetail.setSubject("Password Request");
+			emailDetail.setReceiverName(user.getName());
+			emailDetail.setReceiverMail(user.getEmail());
+			emailDetail.setMessage("Your password is "+user.getPassword());
+			EMail eMail = App.setEmailObject("welcome.html",emailDetail);
+			mailService.sendMail(eMail);
+			status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_MAIL_SENT, eMail.getEmailDetail());
+		}else{
+			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_USER_INVALID_EMAIL, null);
+		}
 		return status;
 	}
 	
