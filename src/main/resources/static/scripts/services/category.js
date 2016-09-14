@@ -55,10 +55,18 @@ var Category = (function(){
 	};
 	var findSubCategoryById = function(id){
 		$.ajax({
-			url: SUB_CAT_URL+id,
+			url: SUB_CAT_URL+'findOne/'+id,
 			method: App.method.GET,
 		}).done(function(res){
 			console.log('findCategoryById Res ::: ', res);
+			var obj = res.data;
+			if(obj != null){
+				$('#inputSubcatId').val(obj.id);
+				$('#inputSubcatName').val(obj.name);
+				$('#inputSubcatDescription').val(obj.description);
+				$('#inputSubcatCategory').val(obj.category.id);
+			}
+			
 		}).error(function(error){
 			$('#errorMsg').html('<i class="fa fa-times"></i> Error in creating user. Please try again later.').fadeIn().fadeOut(5000);
 		});

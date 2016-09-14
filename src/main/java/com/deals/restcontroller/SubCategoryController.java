@@ -28,4 +28,10 @@ public class SubCategoryController {
 		return subCategoryService.findByCategoryId(catId);
 	}
 	
+	@RequestMapping(value = "/findOne/{subcatId}", method=RequestMethod.GET)	
+	public Status findOne(@PathVariable Long subcatId){
+		return subCategoryService.findOne(subcatId);
+	}
+	
+	
 }

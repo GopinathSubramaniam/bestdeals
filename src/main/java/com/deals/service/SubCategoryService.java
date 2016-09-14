@@ -34,6 +34,12 @@ public class SubCategoryService {
 		return status;
 	}
 	
+	public Status findOne(Long subCatId){
+		SubCategory subCategory = subCategoryRepository.findOne(subCatId);
+		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, subCategory);
+		return status;
+	}
+	
 	public Status findAll(){
 		return App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, subCategoryRepository.findAll());
 	}
