@@ -36,9 +36,13 @@ var Category = (function(){
 			url: CAT_URL+id,
 			method: App.method.DELETE,
 		}).done(function(res){
-			window.location.reload();
+			if(res.statusCode == 200)
+				window.location.reload();
+			else
+				$('#catMsgId').html('<i class="fa fa-times"></i> Error in deleting user. Please try again later.').fadeIn().fadeOut(20000);
 		}).error(function(error){
-			$('#errorMsg').html('<i class="fa fa-times"></i> Error in creating user. Please try again later.').fadeIn().fadeOut(5000);
+			var errObj = JSON.parse(error.responseText);
+			$('#catMsgId').html('<i class="fa fa-times"></i>'+errObj.error+'.'+errObj.message).fadeIn().fadeOut(20000);
 		});
 	};
 	
@@ -77,9 +81,13 @@ var Category = (function(){
 			url: SUB_CAT_URL+id,
 			method: App.method.DELETE,
 		}).done(function(res){
-			window.location.reload();
+			if(res.statusCode == 200)
+				window.location.reload();
+			else
+				$('#subcatMsgId').html('<i class="fa fa-times"></i> Error in deleting user. Please try again later.').fadeIn().fadeOut(20000);
 		}).error(function(error){
-			$('#errorMsg').html('<i class="fa fa-times"></i> Error in creating user. Please try again later.').fadeIn().fadeOut(5000);
+			var errObj = JSON.parse(error.responseText);
+			$('#subcatMsgId').html('<i class="fa fa-times"></i>'+errObj.error+'.'+errObj.message).fadeIn().fadeOut(20000);
 		});
 	};
 	

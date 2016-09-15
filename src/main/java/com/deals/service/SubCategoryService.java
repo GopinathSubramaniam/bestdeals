@@ -44,4 +44,9 @@ public class SubCategoryService {
 		return App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, subCategoryRepository.findAll());
 	}
 	
+	public Status delete(Long subcatId){
+		subCategoryRepository.delete(subcatId);
+		return App.getResponse(App.CODE_OK, App.STATUS_DELETE, App.MSG_DELETE, null);
+	}
+	
 }

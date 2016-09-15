@@ -32,6 +32,12 @@ public class DealService {
 		return status;
 	}
 	
+	public Status findOne(Long id){
+		Deal deal = dealRepository.findOne(id);
+		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, deal);
+		return status;
+	}
+	
 	public Status findAllByUserId(Long userId){
 		List<Deal> deals = dealRepository.findAllByUserId(userId);
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, deals);
@@ -81,5 +87,10 @@ public class DealService {
 		}
 		return dealVOs;
 	} 
+	
+	public Status delete(Long id){
+		dealRepository.delete(id);
+		return App.getResponse(App.CODE_OK, App.STATUS_DELETE, App.STATUS_DELETE, null);
+	}
 	
 }

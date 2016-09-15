@@ -30,11 +30,12 @@ public class DealController {
 	private AppService appService;
 	
 	@RequestMapping(value="/", method= RequestMethod.POST, consumes = "multipart/form-data", produces = { "application/json", "application/xml" })
-	public Status create(@RequestParam("file") MultipartFile file, @RequestParam("deal") String stringDeal){
+	public Status create(@RequestParam("file") MultipartFile file, @RequestParam("deal") String stringDeal) throws Exception{
 		JSONObject jsonDeal = new JSONObject(stringDeal);
-		System.out.println("File ::: "+file.getOriginalFilename());
-		System.out.println("File ::: "+jsonDeal.getString("name"));
-		String fileUrl = appService.copyFile(file);
+		String fileUrl = "";
+		if(!(file.getOriginalFilename().contains("null.txt"))){
+			fileUrl = appService.copyFile(file);
+		}
 		
 		User user = new User();
 		user.setId(Long.parseLong(jsonDeal.getString("user")));
@@ -45,10 +46,14 @@ public class DealController {
 		SubCategory subCat = new SubCategory();
 		subCat.setId(Long.parseLong(jsonDeal.getString("subCategory")));
 		
+		String dealId = jsonDeal.getString("id");
+		
 		Deal deal = new Deal();
+		if(dealId != null){
+			deal = (Deal)dealService.findOne(Long.parseLong(dealId)).getData();
+		}
 		deal.setName(jsonDeal.getString("name"));
 		deal.setDescription(jsonDeal.getString("name"));
-		deal.setImgUrl(fileUrl);
 		deal.setCity(city);
 		deal.setContact(jsonDeal.getString("contact"));
 		deal.setPlaceName(jsonDeal.getString("placeName"));
@@ -56,10 +61,15 @@ public class DealController {
 		deal.setPriority(Priority.HIGH);
 		deal.setUser(user);
 		deal.setSubCategory(subCat);
+		if(fileUrl != "") deal.setImgUrl(fileUrl);
 		
 		return dealService.create(deal);
 	}
 	
+	@RequestMapping(value="/findOne/{id}", method= RequestMethod.GET)
+	public Status findOne(@PathVariable Long id){
+		return dealService.findOne(id);
+	} 
 	
 	@RequestMapping(value="/{userId}", method= RequestMethod.GET)
 	public Status findAllByUserId(@PathVariable Long userId){
@@ -74,6 +84,11 @@ public class DealController {
 	@RequestMapping(value="/findAllBySubCat/{subCatId}", method= RequestMethod.GET)
 	public Status findAllBySubCat(@PathVariable Long subCatId){
 		return dealService.findAllBySubCat(subCatId);
+	} 
+	
+	@RequestMapping(value="/{id}", method= RequestMethod.DELETE)
+	public Status delete(@PathVariable Long id){
+		return dealService.delete(id);
 	} 
 	
 	

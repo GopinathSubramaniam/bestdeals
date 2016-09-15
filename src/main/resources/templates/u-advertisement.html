@@ -15,7 +15,7 @@
 	          	 		<table id="userTable" class="table table-bordered table-hover">
 						 	<thead>
 		                      <tr>
-		                        <th>Created Date</th>
+		                        <th>Updated Date</th>
 		                        <th>Name</th>
 		                        <th>Image</th>
 		                        <th>Description</th>
@@ -25,14 +25,14 @@
 		                    </thead>
 		                    <tbody>
 		                    	<tr th:each="deal : ${deals}">
-		                    		<td th:text="${deal.createdDate}"></td>
+		                    		<td th:text="${deal.changedDate}"></td>
 		                    		<td th:text="${deal.name}"></td>
 		                    		<td style="width: 16%;height: 10%;"><a th:href="${deal.imgUrl}" target="_blank" title="Open image in new window"><img th:src="${deal.imgUrl}" style="width: 87%; height: 15%;"/></a></td>
 		                    		<td th:text="${deal.description}"></td>
 		                    		<td th:text="${deal.placeName}"></td>
 		                    		<td>
-		                    			<button title="Delete" class="btn btn-xs btn-danger" th:onclick="'Profile.deleteDeal('+${deal.id}+')'"><i class="fa fa-fw fa-trash"></i>Delete</button>
-										<button title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#advertisementModal" th:onclick="'Profile.findDeal('+${deal.id}+')'"><i class="fa fa-fw fa-edit"></i>Edit</button>
+		                    			<button title="Delete" class="btn btn-xs btn-danger" th:onclick="'Deal.deleteDeal('+${deal.id}+')'"><i class="fa fa-fw fa-trash"></i>Delete</button>
+										<button title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#advertisementModal" th:onclick="'Deal.findById('+${deal.id}+')'"><i class="fa fa-fw fa-edit"></i>Edit</button>
 		                    		</td>
 		                    	</tr>
 		                    </tbody>
@@ -96,6 +96,8 @@
 	            <label for="inputEmail3" class="col-sm-2 control-label">Place Name</label>
 	            <div class="col-sm-10">
 	              <input type="text" name="placeName" class="form-control" id="inputPlaceName" placeholder="Place Name"/>
+	              <input type="hidden" name="id" class="form-control" id="advId"/>
+	              <input type="hidden" name="createdDate" class="form-control" id="inputCreatedDate"/>
 	            </div>
 	          </div>
 	          <div class="form-group">
@@ -120,6 +122,7 @@
 	            <label for="inputEmail3" class="col-sm-2 control-label">Image</label>
 	            <div class="col-sm-10">
 	              <input type="file" name="file" class="form-control" id="file"/>
+	              <img alt="" src="" id="fileImage" class="hidden" style="width: 50%;height: 50%;"/>
 	            </div>
 	          </div>
 	        </div>

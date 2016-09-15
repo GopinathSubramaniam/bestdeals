@@ -33,5 +33,12 @@ public class SubCategoryController {
 		return subCategoryService.findOne(subcatId);
 	}
 	
+	@RequestMapping(value = "/{subcatId}", method=RequestMethod.DELETE)	
+	public Status delete(@PathVariable Long subcatId){
+		return subCategoryService.delete(subcatId);
+	}
+	
+	
+	
 	
 }
