@@ -1,4 +1,4 @@
-package com.deals.util;
+/*package com.deals.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,3 +17,4 @@ public class Core {
 		}
 	}
 }
+*/
