@@ -31,7 +31,7 @@
 		                    		<td th:text="${deal.description}"></td>
 		                    		<td th:text="${deal.placeName}"></td>
 		                    		<td>
-		                    			<button title="Delete" class="btn btn-xs btn-danger" th:onclick="'Deal.deleteDeal('+${deal.id}+')'"><i class="fa fa-fw fa-trash"></i>Delete</button>
+		                    			<a title="Delete" class="btn btn-xs btn-danger" th:href="'deleteDeal?id='+${deal.id}"><i class="fa fa-fw fa-trash"></i>Delete</a>
 										<button title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#advertisementModal" th:onclick="'Deal.findById('+${deal.id}+')'"><i class="fa fa-fw fa-edit"></i>Edit</button>
 		                    		</td>
 		                    	</tr>
@@ -54,7 +54,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="modalTitle">Create New Advertisement</h4>
           </div>
-          <form id="newAdvertisementform" class="form-horizontal" action="javascript:void(0);" method="post" th:onsubmit="'Deal.create(this);'">
+          <form id="newAdvertisementform" class="form-horizontal" action="createDeal" method="post" enctype="multipart/form-data">
           <div class="modal-body">
 	        <div class="box-body">
 	         <div class="form-group">

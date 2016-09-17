@@ -61,6 +61,13 @@ var UserProfile = (function(){
 		}
 	};
 	
+	$('#changePlan').attr('href', 'updatePlan?pid='+ $('input[type="radio"]:checked').val());
+	$('#accordion input[type="radio"]').click(function(ev){
+		console.log('ev :: ', ev);
+		$('#changePlan').attr('href', 'updatePlan?pid='+ev.currentTarget.value);
+	});
+	
+	
 	return {
 		create: create,
 		update: update,

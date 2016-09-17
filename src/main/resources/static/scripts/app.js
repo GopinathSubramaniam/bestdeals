@@ -2,6 +2,7 @@
 
 var App = (function(){
 	
+
 	var serializeObject = function(formName){
 		var arrayObj = $('#'+formName).serializeArray();
 		var obj = new Object();
@@ -141,6 +142,39 @@ var App = (function(){
 			$('#inputSubCategory').html('<option>-- Select --</option>');
 		}
 	};
+	var getAdvRules = function(){
+		var advRules = sessionStorage.getItem('planRule');
+		if(advRules !== null){
+			advRules = JSON.parse(advRules);
+		}
+		return advRules;
+	};
+	
+	var displayAdvTab = function(){
+		var advRules = getAdvRules();
+		if(advRules !== null && advRules.max_adv_count == 0){
+			$('.sidebar .advertisement').parent().addClass('hidden');
+		}
+	};
+	
+	// START
+	$('#username').html(sessionStorage.getItem('username'));
+
+//	$('.userProfile').attr('href', 'profile?userId='+sessionStorage.getItem('userId'));
+//	$('.advertisement').attr('href', 'advertisement?userId='+sessionStorage.getItem('userId'));
+
+	$('.sidebar-menu li').click(function(ev){
+		console.log('>>>> Side bar clicked >>>');
+		var elems = $('.sidebar-menu li');
+		$.each(elems, function(i, elem){
+			elem.className = '';
+		});
+		ev.currentTarget.className = 'active';
+	});
+	
+	displayAdvTab(); // Hide advertisement tab for non admin ppl
+	// END
+	
 	
 	return {
 		URL: URL,
@@ -154,21 +188,10 @@ var App = (function(){
 		DeleteRequest: DeleteRequest,
 		isAuthenticated: isAuthenticated,
 		findAllCityByState: findAllCityByState,
-		findAllSubCateByState: findAllSubCateByState
+		findAllSubCateByState: findAllSubCateByState,
+		getAdvRules: getAdvRules,
+		displayAdvTab: displayAdvTab
 	};
+
 	
 })();
-
-$('#username').html(sessionStorage.getItem('username'));
-
-$('.userProfile').attr('href', 'profile?userId='+sessionStorage.getItem('userId'));
-$('.advertisement').attr('href', 'advertisement?userId='+sessionStorage.getItem('userId'));
-
-$('.sidebar-menu li').click(function(ev){
-	console.log('>>>> Side bar clicked >>>');
-	var elems = $('.sidebar-menu li');
-	$.each(elems, function(i, elem){
-		elem.className = '';
-	});
-	ev.currentTarget.className = 'active';
-});

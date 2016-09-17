@@ -152,6 +152,9 @@ public class UserService {
 			existingUser.setEmail(user.getEmail());
 			existingUser.setUserType(user.getUserType());
 			existingUser.setMobile(user.getMobile());
+			if(user.getPlan() != null){
+				existingUser.setPlan(user.getPlan());
+			}
 			
 			user = userRepository.saveAndFlush(existingUser);
 			status = App.getResponse(App.CODE_OK, App.STATUS_UPDATE, App.MSG_UPDATE, user);
@@ -238,6 +241,13 @@ public class UserService {
 			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_USER_INVALID_EMAIL, null);
 		}
 		return status;
+	}
+	
+	public Status like(Long likeCount, Long userId){
+		UserDetail userDetail = userDetailRepository.findByUserId(userId);
+		userDetail.setLikes(likeCount);
+		userDetail.setUser(null);
+		return App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, userDetail);
 	}
 	
 }

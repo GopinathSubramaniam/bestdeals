@@ -57,7 +57,7 @@ public class DealController {
 		deal.setCity(city);
 		deal.setContact(jsonDeal.getString("contact"));
 		deal.setPlaceName(jsonDeal.getString("placeName"));
-		deal.setType(DealType.ADVERTISTMENT);
+		deal.setType(DealType.ADVERTISEMENT);
 		deal.setPriority(Priority.HIGH);
 		deal.setUser(user);
 		deal.setSubCategory(subCat);

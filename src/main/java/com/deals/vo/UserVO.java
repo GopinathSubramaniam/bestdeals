@@ -27,8 +27,8 @@ public class UserVO {
 	private String address3;
 	private List<String> phoneNumbers;
 	private String timings;
-	private Integer likes;
-	private Integer views;
+	private Long likes;
+	private Long views;
 	private String latitude;
 	private String longitude;
 	private List<Deal> deals;

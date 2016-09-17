@@ -3,19 +3,26 @@ package com.deals.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.deals.enums.DealType;
 import com.deals.enums.Page;
 import com.deals.enums.PlanType;
+import com.deals.enums.Priority;
+import com.deals.enums.UserType;
 import com.deals.model.Category;
+import com.deals.model.City;
 import com.deals.model.Deal;
 import com.deals.model.Plan;
 import com.deals.model.State;
+import com.deals.model.SubCategory;
 import com.deals.model.User;
 import com.deals.repository.StateRepository;
 import com.deals.service.AppService;
@@ -34,7 +41,9 @@ import com.deals.vo.UserVO;
 @Controller
 public class AppController {
 	
-	private HttpSession session = null;
+	
+	@Autowired
+	private HttpSession session;
 	
 	@Autowired
 	private AppService appService;
@@ -66,6 +75,46 @@ public class AppController {
 	@Autowired
 	private StateRepository stateRepository;
 
+	@RequestMapping(value="/login")
+	public String dologin(Model model, User user){
+		user = (User)loginService.login(user).getData();
+		String page = "u-login";
+		
+		if(user != null){
+			boolean isAdmin = user.getUserType().name().equals(UserType.ADMIN);
+			session.setAttribute("userId", user.getId());
+			session.setAttribute("username", user.getName());
+			System.out.println("Logged In Plan ::: "+user.getPlan());
+			if(user.getPlan() != null){
+				session.setAttribute("planType", user.getPlan().getPlanType());
+			}
+			model.addAttribute("message", "Welcome to BestDeals!!!");
+			model.addAttribute("username", user.getName());
+			if(!isAdmin) page = "redirect:greetings";
+		}else{
+			model.addAttribute("message", "Login in BestDeals");
+			model.addAttribute("errorMsg", "Invalid username and password");
+		}
+		return page;
+	}
+	
+	@RequestMapping(value="/logout")
+	public String logout(HttpServletRequest req){
+		if(session != null){
+			session.invalidate();
+		}
+		return "login";
+	}
+	
+	@RequestMapping(value="/out")
+	public String out(){
+		if(session != null){
+			session.invalidate();
+		}
+		return "u-login";
+	}
+	
+	
 	/*
 	 * Client Routing START 
 	 * 
@@ -78,16 +127,16 @@ public class AppController {
 	
 	@RequestMapping(value="/greetings")
 	public String userLandingPage(Model model){
+		System.out.println("Session UserType ::::: "+session.getAttribute("planType"));
 		model.addAttribute("message", "Welcome to BestDeals !!!");
 		return "u-greetings";
 	}
 
 	@RequestMapping(value="/profile")
-	public String profile(Model model, HttpServletRequest req){
-		session = req.getSession();
+	public String profile(Model model){
 		boolean displayAdvertisement = false;
 		List<Plan> plans = (List<Plan>)planService.findAll().getData();
-		Long userId = Long.parseLong(req.getParameter("userId").toString());
+		Long userId = Long.parseLong(session.getAttribute("userId").toString());
 		UserVO userVO = (UserVO)userService.findUser(userId).getData();
 		Plan plan = (Plan)planService.findOne(userVO.getPlanId()).getData();
 		if(plan != null){
@@ -102,17 +151,19 @@ public class AppController {
 	}
 
 	@RequestMapping("/advertisement")
-	public String advertisement(Model model, HttpServletRequest req){
-		Long userId = Long.parseLong(req.getParameter("userId").toString());
-		List<Deal> deals = (List<Deal>)dealService.findAllByUserId(userId).getData();
-		List<Category> categories = (List<Category>)categoryService.findAll().getData();
-		List<State> states = stateRepository.findAll();
-		model.addAttribute("tab", Page.ADVERTISEMENT.toString());
-		model.addAttribute("deals", deals);
-		model.addAttribute("states", states);
-		model.addAttribute("categories", categories);
-		
+	public String advertisement(HttpServletRequest req, Model model){
+		model = getAdvertisementModel(model);
 		return "u-advertisement";
+	}
+	
+	@RequestMapping("/updatePlan")
+	public String updatePlan(HttpServletRequest req, Model model){
+		Long userId = (Long) App.getSessionVal(session, "userId");
+		Long planId = Long.parseLong(req.getParameter("pid"));
+		System.out.println("UserId = "+userId);
+		System.out.println("PlanId = "+planId);
+		planService.assignPlanToUser(userId, planId);
+		return "redirect:profile";
 	}
 
 	/*
@@ -124,42 +175,6 @@ public class AppController {
 	public String login(Model model){
 		model.addAttribute("message", "Login in BestDeals");
 		return "login";
-	}
-	
-	@RequestMapping(value="/login")
-	public String dologin(Model model, User user, HttpServletRequest req){
-		user = (User)loginService.login(user).getData();
-		if(user != null){
-			session = req.getSession();
-			session.setAttribute("userId", user.getId());
-			session.setAttribute("username", user.getName());
-			
-			model.addAttribute("message", "Welcome to BestDeals!!!");
-			model.addAttribute("username", user.getName());
-			return "greetings";
-		}else{
-			model.addAttribute("message", "Login in BestDeals");
-			model.addAttribute("errorMsg", "Invalid username and password");
-			return "login";
-		}
-	}
-	
-	@RequestMapping(value="/logout")
-	public String logout(HttpServletRequest req){
-		HttpSession session = req.getSession();
-		if(session != null){
-			session.invalidate();
-		}
-		return "login";
-	}
-	
-	@RequestMapping(value="/out")
-	public String out(HttpServletRequest req){
-		HttpSession session = req.getSession();
-		if(session != null){
-			session.invalidate();
-		}
-		return "u-login";
 	}
 	
 	@RequestMapping(value="/home")
@@ -241,4 +256,76 @@ public class AppController {
 		model.addAttribute("subcategories", subcategoryService.findAll().getData());
 		return "category";
 	}
+	
+	@RequestMapping(value="/deleteDeal")
+	public String deleteDeal(Model model, HttpServletRequest req){
+		Long dealId = req.getParameter("id") != null ? Long.parseLong(req.getParameter("id")) : 0;
+		dealService.delete(dealId);
+		return "redirect:advertisement";
+	}
+	
+	@RequestMapping(value="/createDeal")
+	public String createDeal(HttpServletRequest req, HttpServletResponse res){
+		try {
+			Deal deal = new Deal();
+			String id = req.getParameter("id");
+			Long userId = Long.parseLong(session.getAttribute("userId").toString());
+			Long subCatId = Long.parseLong(req.getParameter("subCategory"));
+			Long cityId = Long.parseLong(req.getParameter("city"));
+			String contact = req.getParameter("contact");
+			String description = req.getParameter("description");
+			String name = req.getParameter("name");
+			String placeName = req.getParameter("placeName");
+			
+			Part part = req.getPart("file");
+			System.out.println("Part File :::: "+part.getSize());
+			
+			if(id != null && id != ""){
+				deal = (Deal)dealService.findOne(Long.parseLong(id)).getData();
+			}
+			
+			if(part != null && part.getSize() > 0){
+				String uploadedImgUrl = appService.copyFileInputstream(part, res);
+				System.out.println("File Url ::: "+uploadedImgUrl);
+				// Delete old image
+				if(deal.getImgUrl() != null && deal.getImgUrl() != ""){
+					System.out.println("Delete Image ::: "+deal.getImgUrl());
+					appService.deleteFileFromServer(deal.getImgUrl());
+				}
+				
+				deal.setImgUrl(uploadedImgUrl);
+			}
+			
+			deal.setCity(new City(cityId));
+			deal.setContact(contact);
+			deal.setDescription(description);
+			deal.setName(name);
+			deal.setPlaceName(placeName);
+			deal.setPriority(Priority.HIGH);
+			deal.setSubCategory(new SubCategory(subCatId));
+			deal.setType(DealType.ADVERTISEMENT);
+			deal.setUser(new User(userId));
+			
+			dealService.create(deal);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		return "redirect:advertisement";
+	}
+	
+	
+	private Model getAdvertisementModel(Model model){
+		Long userId = Long.parseLong(session.getAttribute("userId").toString());
+		List<Deal> deals = (List<Deal>)dealService.findAllByUserId(userId).getData();
+		List<Category> categories = (List<Category>)categoryService.findAll().getData();
+		List<State> states = stateRepository.findAll();
+		model.addAttribute("tab", Page.ADVERTISEMENT.toString());
+		model.addAttribute("deals", deals);
+		model.addAttribute("states", states);
+		model.addAttribute("categories", categories);
+		return model;
+	}
+	
+	
+	
 }

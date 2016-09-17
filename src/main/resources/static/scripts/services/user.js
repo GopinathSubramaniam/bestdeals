@@ -38,6 +38,11 @@ var User = (function(){
 	
 	var update = function(){
 		var userObj = App.serializeObject('editUserform');
+		if(userObj.plan){
+			userObj.plan = {'id': userObj.plan};
+		}else{
+			userObj.plan = null;
+		}
 		App.PutRequest(URL, userObj).then(function(res){
 			console.log('User Create ::: ', userObj);
 			if(res.statusCode == '500'){

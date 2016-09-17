@@ -27,8 +27,8 @@ public class UserDetail {
 	private String latitude;
 	private String longitude;
 	private String timings;
-	private Integer likes;
-	private Integer views;
+	private Long likes;
+	private Long views;
 	private String phoneNumbers;
 	private String placeName;
 	
@@ -38,10 +38,4 @@ public class UserDetail {
 	@ManyToOne
 	private City city;
 	
-	@ManyToOne
-	private State state;
-	
-	@ManyToOne
-	private Country country;
-
 }

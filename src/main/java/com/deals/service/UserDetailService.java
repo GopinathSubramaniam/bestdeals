@@ -34,4 +34,10 @@ public class UserDetailService {
 		return status;
 	}
 	
+	public Status findLikeCityAndPlaceName(String cityName, String placeName){
+		UserDetail userDetail = userDetailRepository.findByPlaceNameLikeAndCityNameLike(placeName, cityName);
+		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, userDetail);
+		return status;
+	}
+	
 }

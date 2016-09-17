@@ -25,5 +25,13 @@ public class SubCategory {
 	
 	@ManyToOne
 	private Category category;
+	
+	public SubCategory(){}
+	
+	public SubCategory(Long id){
+		super();
+		this.id = id;
+	}
+	
 
 }

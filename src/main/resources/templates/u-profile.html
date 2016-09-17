@@ -62,20 +62,20 @@
 			                <div class="box-body">
 			                	<table>
 			                		<tr>
-			                			<td>Plan Name</td><td th:text="${p.name}"></td>
+			                			<td>Name</td><td th:text="${p.name}"></td>
 			                		</tr>
 			                		<tr>
-			                			<td>Plan Type</td><td th:text="${p.planType}"></td>
+			                			<td>Type</td><td th:text="${p.planType}"></td>
 			                		</tr>
 			                		<tr>
-			                			<td>Plan Description</td><td th:text="${p.description}"></td>
+			                			<td>Description</td><td th:text="${p.description}"></td>
 			                		</tr>
 			                	</table>
 			                </div>
 			              </div>
 			            </div>
 			          </div>
-						<button class="btn btn-primary pull-right" id="changePlan" onclick="UserProfile.changePlan()">Change Plan</button>
+						<a class="btn btn-primary pull-right" id="changePlan" href="updatePlan">Change Plan</a>
 			        </div><!-- /.box-body -->
 				</div>
 			</section>	

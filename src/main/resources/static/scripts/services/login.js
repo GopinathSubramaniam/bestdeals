@@ -7,12 +7,20 @@ var Login = (function(){
 		var obj = App.serializeObject('loginform');
 		App.PostRequest(URL, obj).then(function(response){
 			if(response.statusMsg == 'OK'){
-				window.sessionStorage.setItem('username', response.data.name);
-				window.sessionStorage.setItem('loginState', response.data.loginState);
-				window.sessionStorage.setItem('email', response.data.email);
-				window.sessionStorage.setItem('userType', response.data.userType);
-				window.sessionStorage.setItem('userId', response.data.id);
-				if(response.data.userType == 'ADMIN'){
+				var obj = response.data;
+				var userType = obj.userType;
+				if(userType == 'MERCHANT' && obj.plan != null){
+					window.sessionStorage.setItem('planId', obj.plan.id);
+					window.sessionStorage.setItem('planRule', obj.plan.rules);
+				}
+				
+				window.sessionStorage.setItem('username', obj.name);
+				window.sessionStorage.setItem('loginState', obj.loginState);
+				window.sessionStorage.setItem('email', obj.email);
+				window.sessionStorage.setItem('userType', userType);
+				window.sessionStorage.setItem('userId', obj.id);
+				if(userType == 'ADMIN'){
+					window.sessionStorage.setItem('isAdmin', true);
 					window.location.href='home';
 				}else{
 					window.location.href='greetings';

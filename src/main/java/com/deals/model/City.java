@@ -21,4 +21,13 @@ public class City {
 	@ManyToOne
 	private State state;
 	
+	
+	public City(){
+		
+	}
+	public City(Long id){
+		super();
+		this.id = id;
+	}
+	
 }

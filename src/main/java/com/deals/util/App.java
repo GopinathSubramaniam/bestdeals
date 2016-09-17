@@ -204,6 +204,18 @@ public class App {
 		
 	}
 	
+	public static Object getSessionVal(HttpSession session, String key){
+		Object val = session.getAttribute(key);
+		if(val != null){
+			String  strVal = val.toString();
+			val = strVal;
+			if(key.equals("userId")){
+				val = Long.parseLong(strVal);
+			}
+		}
+		return val;
+	}
+	
 	/*public static void main(String[] args){
 		String response = sendSMS();
 		System.out.println("Response::: "+response);

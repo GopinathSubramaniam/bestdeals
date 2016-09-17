@@ -83,5 +83,9 @@ public class UserController {
 		return userService.forgotPassword(emailAddress);
 	}
 	
+	@RequestMapping(value="/like/{likeCount}/{userId}", method=RequestMethod.GET)
+	public Status like(@PathVariable Long likeCount, @PathVariable Long userId){
+		return userService.like(likeCount, userId);
+	}
 	
 }

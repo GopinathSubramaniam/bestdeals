@@ -53,4 +53,13 @@ public class User extends BaseEntity{
 		String uuid = UUID.randomUUID().toString();
 		this.token = uuid;
 	}
+	
+	public User(){}
+	
+	public User(Long id){
+		super();
+		this.setId(id);
+	}
+	
+	
 }

@@ -21,6 +21,7 @@ public class Plan  extends BaseEntity{
 	private String name;
 	private Double amount;
 	private String description;
+	private String rules;
 	
 	@Enumerated(EnumType.STRING)
 	private PlanType planType;

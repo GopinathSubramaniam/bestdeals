@@ -11,7 +11,7 @@ import com.deals.service.UserDetailService;
 import com.deals.util.Status;
 
 @RestController
-@RequestMapping("/userDetail")
+@RequestMapping("/rest/userDetail")
 public class UserDetailController {
 
 	
@@ -26,6 +26,11 @@ public class UserDetailController {
 	@RequestMapping(value="/findAllByUserId/{userId}", method=RequestMethod.GET)
 	public Status findAllByUserId(@PathVariable Long userId){
 		return userDetailService.findAllByUserId(userId);
+	}
+	
+	@RequestMapping(value="/findLikeCityAndPlaceName/{cityName}/{placeName}", method=RequestMethod.GET)
+	public Status findLikeCityAndPlaceName( @PathVariable String cityName, @PathVariable String placeName){
+		return userDetailService.findLikeCityAndPlaceName(cityName, placeName);
 	}
 	
 }
