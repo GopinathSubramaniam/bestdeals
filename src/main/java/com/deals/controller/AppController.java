@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +25,7 @@ import com.deals.model.Plan;
 import com.deals.model.State;
 import com.deals.model.SubCategory;
 import com.deals.model.User;
+import com.deals.repository.DealRepository;
 import com.deals.repository.StateRepository;
 import com.deals.service.AppService;
 import com.deals.service.CategoryService;
@@ -74,6 +76,9 @@ public class AppController {
 	
 	@Autowired
 	private StateRepository stateRepository;
+	
+	@Autowired
+	private DealRepository dealRepository;
 
 	@RequestMapping(value="/login")
 	public String dologin(Model model, User user){
@@ -136,7 +141,7 @@ public class AppController {
 	public String profile(Model model){
 		boolean displayAdvertisement = false;
 		List<Plan> plans = (List<Plan>)planService.findAll().getData();
-		Long userId = Long.parseLong(session.getAttribute("userId").toString());
+		Long userId = (Long) getSessionVal("userId");
 		UserVO userVO = (UserVO)userService.findUser(userId).getData();
 		Plan plan = (Plan)planService.findOne(userVO.getPlanId()).getData();
 		if(plan != null){
@@ -152,13 +157,19 @@ public class AppController {
 
 	@RequestMapping("/advertisement")
 	public String advertisement(HttpServletRequest req, Model model){
+		String isError = req.getParameter("error");
+		if(isError != null && isError.equals("0")){
+			model.addAttribute("message", "Please update your plan to create advertisement");
+		}else if(isError != null && isError.equals("1")){
+			model.addAttribute("message", "You limit exceed");
+		}
 		model = getAdvertisementModel(model);
 		return "u-advertisement";
 	}
 	
 	@RequestMapping("/updatePlan")
 	public String updatePlan(HttpServletRequest req, Model model){
-		Long userId = (Long) App.getSessionVal(session, "userId");
+		Long userId = (Long) getSessionVal("userId");
 		Long planId = Long.parseLong(req.getParameter("pid"));
 		System.out.println("UserId = "+userId);
 		System.out.println("PlanId = "+planId);
@@ -265,57 +276,76 @@ public class AppController {
 	}
 	
 	@RequestMapping(value="/createDeal")
-	public String createDeal(HttpServletRequest req, HttpServletResponse res){
+	public String createDeal(HttpServletRequest req, HttpServletResponse res, Model model){
+		
+		String page = "redirect:advertisement";
+		
 		try {
-			Deal deal = new Deal();
-			String id = req.getParameter("id");
-			Long userId = Long.parseLong(session.getAttribute("userId").toString());
-			Long subCatId = Long.parseLong(req.getParameter("subCategory"));
-			Long cityId = Long.parseLong(req.getParameter("city"));
-			String contact = req.getParameter("contact");
-			String description = req.getParameter("description");
-			String name = req.getParameter("name");
-			String placeName = req.getParameter("placeName");
+			Long userId = (Long) getSessionVal("userId");
+			User user = userService.findOne(userId);
+			JSONObject rule = null;
+			boolean isAllowedToCreateDeal = false;
 			
-			Part part = req.getPart("file");
-			System.out.println("Part File :::: "+part.getSize());
-			
-			if(id != null && id != ""){
-				deal = (Deal)dealService.findOne(Long.parseLong(id)).getData();
+			if(user != null && user.getPlan() != null && user.getPlan().getAmount() > 0){
+				rule = new JSONObject(user.getPlan().getRules()); 
+				if(rule.getInt("max_adv_count") > 0 && rule.getInt("max_adv_count") > dealRepository.countByUserId(userId)){
+					isAllowedToCreateDeal = true;
+				}
 			}
 			
-			if(part != null && part.getSize() > 0){
-				String uploadedImgUrl = appService.copyFileInputstream(part, res);
-				System.out.println("File Url ::: "+uploadedImgUrl);
-				// Delete old image
-				if(deal.getImgUrl() != null && deal.getImgUrl() != ""){
-					System.out.println("Delete Image ::: "+deal.getImgUrl());
-					appService.deleteFileFromServer(deal.getImgUrl());
+			if(isAllowedToCreateDeal){
+				Deal deal = new Deal();
+				String id = req.getParameter("id");
+				Long subCatId = Long.parseLong(req.getParameter("subCategory"));
+				Long cityId = Long.parseLong(req.getParameter("city"));
+				String contact = req.getParameter("contact");
+				String description = req.getParameter("description");
+				String name = req.getParameter("name");
+				String placeName = req.getParameter("placeName");
+				
+				Part part = req.getPart("file");
+				System.out.println("Part File :::: "+part.getSize());
+				
+				if(id != null && id != ""){
+					deal = (Deal)dealService.findOne(Long.parseLong(id)).getData();
 				}
 				
-				deal.setImgUrl(uploadedImgUrl);
+				if(part != null && part.getSize() > 0){
+					String uploadedImgUrl = appService.copyFileInputstream(part, res);
+					System.out.println("File Url ::: "+uploadedImgUrl);
+					// Delete old image
+					if(deal.getImgUrl() != null && deal.getImgUrl() != ""){
+						System.out.println("Delete Image ::: "+deal.getImgUrl());
+						appService.deleteFileFromServer(deal.getImgUrl());
+					}
+					
+					deal.setImgUrl(uploadedImgUrl);
+				}
+				
+				deal.setCity(new City(cityId));
+				deal.setContact(contact);
+				deal.setDescription(description);
+				deal.setName(name);
+				deal.setPlaceName(placeName);
+				deal.setPriority(Priority.HIGH);
+				deal.setSubCategory(new SubCategory(subCatId));
+				deal.setType(DealType.ADVERTISEMENT);
+				deal.setUser(new User(userId));
+				
+				dealService.create(deal);
+			}else{
+				page = user.getPlan() == null ? page+"?error=0" : page+"?error=1";
 			}
 			
-			deal.setCity(new City(cityId));
-			deal.setContact(contact);
-			deal.setDescription(description);
-			deal.setName(name);
-			deal.setPlaceName(placeName);
-			deal.setPriority(Priority.HIGH);
-			deal.setSubCategory(new SubCategory(subCatId));
-			deal.setType(DealType.ADVERTISEMENT);
-			deal.setUser(new User(userId));
-			
-			dealService.create(deal);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
-		return "redirect:advertisement";
+		return page;
 	}
 	
 	
 	private Model getAdvertisementModel(Model model){
-		Long userId = Long.parseLong(session.getAttribute("userId").toString());
+		Long userId = (Long) getSessionVal("userId");
 		List<Deal> deals = (List<Deal>)dealService.findAllByUserId(userId).getData();
 		List<Category> categories = (List<Category>)categoryService.findAll().getData();
 		List<State> states = stateRepository.findAll();
@@ -326,6 +356,16 @@ public class AppController {
 		return model;
 	}
 	
-	
+	public Object getSessionVal(String key){
+		Object val = session.getAttribute(key);
+		if(val != null){
+			String  strVal = val.toString();
+			val = strVal;
+			if(key.equals("userId")){
+				val = Long.parseLong(strVal);
+			}
+		}
+		return val;
+	}
 	
 }

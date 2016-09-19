@@ -19,5 +19,7 @@ public interface DealRepository extends JpaRepository<Deal, Long>{
 	@Query("select imgUrl from Deal d where d.user.id = ?")
 	public List<String> findImgUrlByUserId(Long id);
 	
+	public Integer countByUserId(Long id);
+	
 	
 }

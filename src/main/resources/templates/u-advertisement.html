@@ -10,7 +10,17 @@
 			<section class="content">
 				<div class="col-lg-12 col-xs-12">
 					<h3>Advertisements</h3>
-					<button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#advertisementModal">Create New</button>
+					<div class="row" style="margin-left: 0%; margin-right: 0%;">
+						<div>
+							<span class="form-group has-error">
+								<b><h5 class="control-label box-title message has-error" for="inputError"><b th:text="${message}"></b></h5></b>
+							</span>
+						</div>
+						<div>
+							<button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#advertisementModal">Create New</button>
+						</div>
+					</div>
+					
 					<div class="box" style="max-height:710px; overflow: auto;">
 	          	 		<table id="userTable" class="table table-bordered table-hover">
 						 	<thead>

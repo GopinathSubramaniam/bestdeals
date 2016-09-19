@@ -113,6 +113,10 @@ public class UserService {
 		return status;
 	}
 	
+	public User findOne(Long id){
+		return userRepository.findOne(id);
+	}
+	
 	public Status findUser(Long id){
 		if(id != null && id !=0){
 			User user = userRepository.findOne(id);
