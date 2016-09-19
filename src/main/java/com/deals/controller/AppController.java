@@ -314,10 +314,10 @@ public class AppController {
 					String uploadedImgUrl = appService.copyFileInputstream(part, res);
 					System.out.println("File Url ::: "+uploadedImgUrl);
 					// Delete old image
-					if(deal.getImgUrl() != null && deal.getImgUrl() != ""){
+					/*if(deal.getImgUrl() != null && deal.getImgUrl() != ""){
 						System.out.println("Delete Image ::: "+deal.getImgUrl());
 						appService.deleteFileFromServer(deal.getImgUrl());
-					}
+					}*/
 					
 					deal.setImgUrl(uploadedImgUrl);
 				}
