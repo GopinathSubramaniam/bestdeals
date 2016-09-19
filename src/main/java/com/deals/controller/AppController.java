@@ -305,8 +305,8 @@ public class AppController {
 				
 				Part part = req.getPart("file");
 				System.out.println("Part File :::: "+part.getSize());
-				
-				if(id != null && id != ""){
+				System.out.println("Id ::: "+id);
+				if(id != null && !(id.isEmpty())){
 					deal = (Deal)dealService.findOne(Long.parseLong(id)).getData();
 				}
 				
