@@ -134,6 +134,7 @@ public class AppController {
 	public String userLandingPage(Model model){
 		System.out.println("Session UserType ::::: "+session.getAttribute("planType"));
 		model.addAttribute("message", "Welcome to BestDeals !!!");
+		model.addAttribute("userName", getSessionVal("username"));
 		return "u-greetings";
 	}
 
@@ -152,6 +153,7 @@ public class AppController {
 		model.addAttribute("plan", plan);
 		model.addAttribute("plans", plans);
 		model.addAttribute("displayAdvertisement", displayAdvertisement);
+		model.addAttribute("userName", getSessionVal("username"));
 		return "u-profile";
 	}
 
@@ -164,6 +166,7 @@ public class AppController {
 			model.addAttribute("message", "You limit exceed");
 		}
 		model = getAdvertisementModel(model);
+		model.addAttribute("userName", getSessionVal("username"));
 		return "u-advertisement";
 	}
 	
@@ -176,6 +179,12 @@ public class AppController {
 		planService.assignPlanToUser(userId, planId);
 		return "redirect:profile";
 	}
+	
+	@RequestMapping("/error")
+	public String error(){
+		return "error";
+	}
+	
 
 	/*
 	 * Client Routing END 
@@ -367,5 +376,6 @@ public class AppController {
 		}
 		return val;
 	}
+	
 	
 }

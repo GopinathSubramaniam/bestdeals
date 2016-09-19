@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="ISO-8859-1"/>
+	<title>Login</title>
+	<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="css/font-awesome.min.css"/>
+	<link rel="stylesheet" href="dist/css/AdminLTE.min.css"/>
+  	<link rel="stylesheet" href="dist/css/skins/_all-skins.min.css"/>
+	<link rel="stylesheet" href="plugins/iCheck/flat/blue.css"/>
+ 	<link rel="stylesheet" href="plugins/morris/morris.css"/>
+	
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+	<div class="wrapper">
+		<header class="main-header">
+        <a href="index2.html" class="logo">
+          <span class="logo-mini"><b>G</b>MS</span>
+          <span class="logo-lg"><b>Go</b>MyShoppy</span>
+        </a>
+        <nav class="navbar navbar-static-top" role="navigation">
+          <a href="#" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+          </a>
+        </nav>
+      </header>	
+	</div>
+	<div class="container">
+		<div align="center">
+			<h3>Your session has been invalidated. Please <a href="/BestDeals/">Login</a> again.</h3>
+		</div>
+	</div>
+	<div th:include="footer"></div>
+ 	<script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
+ 	<script src="scripts/app.js"></script>
+	<script type="text/javascript" src="scripts/services/login.js"></script>
+</body>
+</html>
