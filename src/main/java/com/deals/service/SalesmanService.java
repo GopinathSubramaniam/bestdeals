@@ -26,7 +26,15 @@ public class SalesmanService {
 
 	public Status create(Salesman salesman) {
 		if (salesman != null) {
-			salesman = salesmanRepository.saveAndFlush(salesman);
+			Salesman existingSalesManObj = null;
+			if(salesman.getId() != null && salesman.getId() > 0){
+				existingSalesManObj = salesmanRepository.findOne(salesman.getId());
+				existingSalesManObj.setEmail(salesman.getEmail());
+				existingSalesManObj.setMobile(salesman.getMobile());
+				existingSalesManObj.setName(salesman.getName());
+				existingSalesManObj.setPassword(salesman.getPassword());
+			}
+			salesman = salesmanRepository.saveAndFlush(existingSalesManObj);
 			status = App.getResponse(App.CODE_OK, App.STATUS_CREATE, App.MSG_CREATE, salesman);
 		} else {
 			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_FAIL, null);
@@ -53,7 +61,15 @@ public class SalesmanService {
 	
 	public Status createSalesManager(SalesManager salesManager){
 		if(salesManager != null){
-			salesManager = salesManagerRepository.saveAndFlush(salesManager);
+			SalesManager salesManagerObj = null;
+			if(salesManager.getId() != null && salesManager.getId() > 0){
+				salesManagerObj = salesManagerRepository.findOne(salesManager.getId());
+				salesManagerObj.setEmail(salesManager.getEmail());
+				salesManagerObj.setMobile(salesManager.getMobile());
+				salesManagerObj.setName(salesManager.getName());
+				salesManagerObj.setPassword(salesManager.getPassword());
+			}
+			salesManager = salesManagerRepository.saveAndFlush(salesManagerObj);
 			status = App.getResponse(App.CODE_OK, App.STATUS_CREATE, App.MSG_CREATE, salesManager);
 		}else{
 			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_FAIL, salesManager);
