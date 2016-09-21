@@ -54,4 +54,13 @@ public class SalesmanController {
 		return salesmanService.createSalesManager(salesManager);
 	}
 	
+	@RequestMapping(value="/findSalesManagerById/{managerId}", method=RequestMethod.GET)
+	public Status findSalesManagerById(@PathVariable Long managerId){
+		return salesmanService.findSalesManagerById(managerId);
+	}
+	
+	@RequestMapping(value="/deleteSalesManager/{managerId}", method=RequestMethod.DELETE)
+	public Status deleteSalesManager(@PathVariable Long managerId){
+		return salesmanService.deleteSalesManagerById(managerId);
+	}
 }

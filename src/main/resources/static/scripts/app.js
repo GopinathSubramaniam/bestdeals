@@ -99,7 +99,8 @@ var App = (function(){
 			defer.resolve(response);
 		}).error(function(error){
 			console.log('DeleteRequest Error :::: ', error);
-			defer.resolve(response);
+			var errObj = error.responseText != null && error.responseText != '' ? JSON.parse(error.responseText) : {status: 500};
+			defer.resolve(errObj);
 		});
 		return defer.promise();
 	};
@@ -157,6 +158,66 @@ var App = (function(){
 		}
 	};
 	
+	var bindValidation = function(formId, fields, fn){
+		$(function(){
+			$('#'+formId).bootstrapValidator({
+				message: 'Please enter a value',
+				feedbackIcons : {
+					valid : 'glyphicon glyphicon-ok',
+					invalid : 'glyphicon glyphicon-remove',
+					validating : 'glyphicon glyphicon-refresh'
+				},
+				fields: fields
+			}).on('success.form.bv', function(e){
+				e.preventDefault();
+				var $form = $(e.target);
+				var bv = $form.data('bootstrapValidator');
+				fn();
+			});
+		});
+	};
+	var validateRules = {
+		name : {
+			validators : {
+				notEmpty : {
+					mesage : 'The name is required and can\'t be empty'
+				},
+				stringLength : {
+					min : 4,
+					message : 'The name must be more than 4 characters'
+				}
+			}
+		},
+		email : {
+			validators : {
+				notEmpty : {
+					message : 'The email address is required and can\'t be empty'
+				},
+				emailAddress : {
+					message : 'The input is not a valid email address'
+				}
+			}
+		},
+		mobile : {
+			validators : {
+				notEmpty : {
+					message : 'The mobile is required and can\'t be empty'
+				},
+				regexp : {
+					regexp : /^[0-9]+$/,
+					message : 'The mobile can have only number '
+				}
+			}
+		},
+		password : {
+			validators : {
+				notEmpty : {
+					message : 'The password is required'
+				}
+			}
+		}
+	};
+	
 	// START
 	$('#username').html(sessionStorage.getItem('username'));
 
@@ -190,7 +251,9 @@ var App = (function(){
 		findAllCityByState: findAllCityByState,
 		findAllSubCateByState: findAllSubCateByState,
 		getAdvRules: getAdvRules,
-		displayAdvTab: displayAdvTab
+		displayAdvTab: displayAdvTab,
+		bindValidation: bindValidation,
+		validateRules: validateRules
 	};
 
 	

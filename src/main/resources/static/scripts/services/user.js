@@ -1,8 +1,21 @@
-'use strict';
+'usr strict';
 
 var User = (function(){
-	var URL = App.URL().BASE+App.URL().USER;
 	
+	var fields = {
+		name : App.validateRules.name,
+		email : App.validateRules.email,
+		mobile : App.validateRules.mobile,
+		userType : App.validateRules.password,
+		plan : App.validateRules.password,
+		password : App.validateRules.password
+	};
+	App.bindValidation('userRegisterform', fields, function(){
+		 var userObj = App.serializeObject('userRegisterform');
+		 User.create(userObj);
+	});
+	
+	var URL = App.URL().BASE+App.URL().USER;
 	var findUserById = function(userId){
 		console.log('UserId :::: ', userId);
 		App.GetRequest(URL+userId).then(function(res){
@@ -18,8 +31,7 @@ var User = (function(){
 		});
 	};
 	
-	var create = function(){
-		var userObj = App.serializeObject('userRegisterform');
+	var create = function(userObj){
 		if(userObj.plan){
 			userObj.plan = {id: parseInt(userObj.plan)};
 		}else{
@@ -28,11 +40,10 @@ var User = (function(){
 		App.PostRequest(URL, userObj).then(function(res){
 			console.log('User Create ::: ', userObj);
 			if(res.statusCode == '500'){
-				$('#errorMsg').html(res.message).fadeOut(10000);
+				$('#errorMsg').html(res.message).fadeOut(20000);
 			}else{
 				window.location.reload();
 			}
-//			$('#errorMsg').html('<i class="fa fa-times"></i> Error in creating user. Please try again later.').fadeIn().fadeOut(5000);
 		});
 	};
 	
@@ -46,7 +57,7 @@ var User = (function(){
 		App.PutRequest(URL, userObj).then(function(res){
 			console.log('User Create ::: ', userObj);
 			if(res.statusCode == '500'){
-				$('#errorMsg').html(res.message).fadeOut(10000);
+				$('#updateErrorMsg').html(res.message).fadeOut(10000);
 			}else{
 				window.location.reload();
 			}
@@ -67,3 +78,4 @@ var User = (function(){
 		deleteUser: deleteUser
 	}
 })();
+

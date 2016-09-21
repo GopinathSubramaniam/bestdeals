@@ -80,6 +80,13 @@ public class SalesmanService {
 		return status;
 	}
 	
+	public Status deleteSalesManagerById(Long salesmanagerId){
+		SalesManager salesManager = salesManagerRepository.findOne(salesmanagerId);
+		salesManagerRepository.delete(salesManager);
+		status = App.getResponse(App.CODE_OK, App.STATUS_DELETE, App.MSG_DELETE, salesManager);
+		return status;
+	}
+	
 	public Status findAllSalesMan(){
 		List<Salesman> salesmans = salesmanRepository.findAll();
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, salesmans);
