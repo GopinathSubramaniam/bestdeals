@@ -6,9 +6,9 @@ var User = (function(){
 		name : App.validateRules.name,
 		email : App.validateRules.email,
 		mobile : App.validateRules.mobile,
-		userType : App.validateRules.password,
-		plan : App.validateRules.password,
-		password : App.validateRules.password
+		userType : App.validateRules.name,
+		plan : App.validateRules.name,
+		password : App.validateRules.name
 	};
 	App.bindValidation('userRegisterform', fields, function(){
 		 var userObj = App.serializeObject('userRegisterform');

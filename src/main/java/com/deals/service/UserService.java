@@ -249,8 +249,10 @@ public class UserService {
 	
 	public Status like(Long likeCount, Long userId){
 		UserDetail userDetail = userDetailRepository.findByUserId(userId);
-		userDetail.setLikes(likeCount);
-		userDetail.setUser(null);
+		if(userDetail != null){
+			userDetail.setLikes(userDetail.getLikes()+1);
+			userDetail.setUser(null);
+		}
 		return App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, userDetail);
 	}
 	
