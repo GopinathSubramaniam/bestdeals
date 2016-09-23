@@ -145,6 +145,9 @@ public class AppController {
 		Long userId = (Long) getSessionVal("userId");
 		UserVO userVO = (UserVO)userService.findUser(userId).getData();
 		Plan plan = (Plan)planService.findOne(userVO.getPlanId()).getData();
+		boolean displayMap = plan.getPlanType().equals(PlanType.PLATINUM);
+		System.out.println("plan.getPlanType() ::::: "+plan.getPlanType());
+		System.out.println("DisplayMap ::::: "+displayMap);
 		if(plan != null){
 			displayAdvertisement = plan.getPlanType().equals(PlanType.FREE) ? false : true;
 		}
@@ -154,6 +157,8 @@ public class AppController {
 		model.addAttribute("plans", plans);
 		model.addAttribute("displayAdvertisement", displayAdvertisement);
 		model.addAttribute("userName", getSessionVal("username"));
+		model.addAttribute("displayMap", displayMap);
+		
 		return "u-profile";
 	}
 

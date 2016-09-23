@@ -1,7 +1,6 @@
 'use strict';
 
 var App = (function(){
-	
 
 	var serializeObject = function(formName){
 		var arrayObj = $('#'+formName).serializeArray();
@@ -167,6 +166,7 @@ var App = (function(){
 					invalid : 'glyphicon glyphicon-remove',
 					validating : 'glyphicon glyphicon-refresh'
 				},
+				excluded: [':disabled'],
 				fields: fields
 			}).on('success.form.bv', function(e){
 				e.preventDefault();
@@ -234,6 +234,13 @@ var App = (function(){
 	});
 	
 	displayAdvTab(); // Hide advertisement tab for non admin ppl
+	
+	 $('body').on('hidden.bs.modal', '.modal', function () {
+		 console.log('called hidden.bs.modal :::: ', this);
+		 $(this).find('form')[0].reset();
+		// $(this).find('form')[0].validator('destroy').validator();
+      });
+	 
 	// END
 	
 	
@@ -255,6 +262,21 @@ var App = (function(){
 		bindValidation: bindValidation,
 		validateRules: validateRules
 	};
-
-	
 })();
+
+
+function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+	 directionsService.route({
+		 origin: document.getElementById('start').value,
+		 destination: document.getElementById('end').value,
+		 travelMode: google.maps.TravelMode.DRIVING
+	 }, function(response, status) {
+		 if (status === google.maps.DirectionsStatus.OK) {
+			 directionsDisplay.setDirections(response);
+			 console.log('Distance : ', response.routes[0].legs[0].distance.text);
+		 } else {
+			 window.alert('Directions request failed due to ' + status);
+		 }
+	 });
+}
+
