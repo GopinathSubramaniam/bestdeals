@@ -80,14 +80,15 @@ var UserProfile = (function(){
 function initMap() {
 	var lat = $('#latitude').val();
 	var lng = $('#longitude').val();
-	
-    var uluru = {lat: parseFloat(lat), lng: parseFloat(lng)};
-    var map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 18,
-      center: uluru
-    });
-    var marker = new google.maps.Marker({
-      position: uluru,
-      map: map
-    });
+	if(lat && lng){
+		var uluru = {lat: parseFloat(lat), lng: parseFloat(lng)};
+		var map = new google.maps.Map(document.getElementById('map'), {
+			zoom: 18,
+			center: uluru
+		});
+		var marker = new google.maps.Marker({
+			position: uluru,
+			map: map
+		});
+	}
   }

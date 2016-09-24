@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,7 +30,9 @@ import com.deals.util.App;
 
 @Service
 public class AppService {
-
+	
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -87,10 +91,10 @@ public class AppService {
 	public String deleteFileFromServer(String pathName){
 		String res = "FAILED";
 		String deletePath = (imgCopyPath+getImageNameFromUrl(pathName)).trim();
-		System.out.println("Delete path :::: "+deletePath);
+		log.info("Delete path :::: "+deletePath);
 		try {
 			FileUtils.forceDeleteOnExit(new File(deletePath));
-			System.out.println("File Deleted successfully");
+			log.info("File Deleted successfully");
 			res = "SUCCEED";
 		} catch (IOException e) {
 			res = "Error in deleting. Please try again later";

@@ -2,6 +2,8 @@ package com.deals.restcontroller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +19,7 @@ import com.deals.util.Status;
 @RestController
 @RequestMapping(value="/rest/base/")
 public class BaseController {
-	
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	private static Status status =  new Status();
 	
 	@Autowired
@@ -29,7 +31,7 @@ public class BaseController {
 	@RequestMapping(value="/findAllCityByState/{stateId}", method = RequestMethod.GET)
 	public Status findAllCityByState(@PathVariable Long stateId){
 		List<City> cities = cityRepository.findAllByStateId(stateId);
-		System.out.println("Cities ::: "+cities);
+		log.info("Cities ::: "+cities);
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, cities);
 		return status;
 	}

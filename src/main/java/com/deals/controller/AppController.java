@@ -8,6 +8,8 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,6 +45,7 @@ import com.deals.vo.UserVO;
 @Controller
 public class AppController {
 	
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	private HttpSession session;
@@ -89,7 +92,7 @@ public class AppController {
 			boolean isAdmin = user.getUserType().name().equals(UserType.ADMIN);
 			session.setAttribute("userId", user.getId());
 			session.setAttribute("username", user.getName());
-			System.out.println("Logged In Plan ::: "+user.getPlan());
+			log.info("Logged In Plan ::: "+user.getPlan());
 			if(user.getPlan() != null){
 				session.setAttribute("planType", user.getPlan().getPlanType());
 			}
@@ -132,7 +135,7 @@ public class AppController {
 	
 	@RequestMapping(value="/greetings")
 	public String userLandingPage(Model model){
-		System.out.println("Session UserType ::::: "+session.getAttribute("planType"));
+		log.info("Session UserType ::::: "+session.getAttribute("planType"));
 		model.addAttribute("message", "Welcome to BestDeals !!!");
 		model.addAttribute("userName", getSessionVal("username"));
 		return "u-greetings";
@@ -141,15 +144,20 @@ public class AppController {
 	@RequestMapping(value="/profile")
 	public String profile(Model model){
 		boolean displayAdvertisement = false;
+		boolean displayMap = false;
+		
 		List<Plan> plans = (List<Plan>)planService.findAll().getData();
 		Long userId = (Long) getSessionVal("userId");
 		UserVO userVO = (UserVO)userService.findUser(userId).getData();
 		Plan plan = (Plan)planService.findOne(userVO.getPlanId()).getData();
-		boolean displayMap = plan.getPlanType().equals(PlanType.PLATINUM);
-		System.out.println("plan.getPlanType() ::::: "+plan.getPlanType());
-		System.out.println("DisplayMap ::::: "+displayMap);
+		if(plan != null ){
+			
+		}
 		if(plan != null){
-			displayAdvertisement = plan.getPlanType().equals(PlanType.FREE) ? false : true;
+			displayAdvertisement = !(plan.getPlanType().equals(PlanType.FREE));
+			displayMap = plan.getPlanType().equals(PlanType.PLATINUM);
+			log.info("plan.getPlanType() ::::: "+plan.getPlanType());
+			log.info("DisplayMap ::::: "+displayMap);
 		}
 		model.addAttribute("tab", Page.USERPROFILE.toString());
 		model.addAttribute("user", userVO);
@@ -179,8 +187,8 @@ public class AppController {
 	public String updatePlan(HttpServletRequest req, Model model){
 		Long userId = (Long) getSessionVal("userId");
 		Long planId = Long.parseLong(req.getParameter("pid"));
-		System.out.println("UserId = "+userId);
-		System.out.println("PlanId = "+planId);
+		log.info("UserId = "+userId);
+		log.info("PlanId = "+planId);
 		planService.assignPlanToUser(userId, planId);
 		return "redirect:profile";
 	}
@@ -318,18 +326,18 @@ public class AppController {
 				String placeName = req.getParameter("placeName");
 				
 				Part part = req.getPart("file");
-				System.out.println("Part File :::: "+part.getSize());
-				System.out.println("Id ::: "+id);
+				log.info("Part File :::: "+part.getSize());
+				log.info("Id ::: "+id);
 				if(id != null && !(id.isEmpty())){
 					deal = (Deal)dealService.findOne(Long.parseLong(id)).getData();
 				}
 				
 				if(part != null && part.getSize() > 0){
 					String uploadedImgUrl = appService.copyFileInputstream(part, res);
-					System.out.println("File Url ::: "+uploadedImgUrl);
+					log.info("File Url ::: "+uploadedImgUrl);
 					// Delete old image
 					/*if(deal.getImgUrl() != null && deal.getImgUrl() != ""){
-						System.out.println("Delete Image ::: "+deal.getImgUrl());
+						log.info("Delete Image ::: "+deal.getImgUrl());
 						appService.deleteFileFromServer(deal.getImgUrl());
 					}*/
 					

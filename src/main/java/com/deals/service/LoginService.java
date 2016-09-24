@@ -1,5 +1,7 @@
 package com.deals.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,15 +14,15 @@ import com.deals.util.Status;
 
 @Service
 public class LoginService {
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	private static Status status =  new Status();
-	
 	@Autowired
 	private UserRepository userRepository;
 	
 	public Status login(User user){
 		if(user != null){
-			User existUser = userRepository.findByEmailAndPassword(user.getEmail(), user.getPassword());
-			System.out.println("User :::: "+user);
+			User existUser = userRepository.findByMobileAndPassword(user.getMobile(), user.getPassword());
+			log.info("User :::: "+user);
 			if(existUser!=null && user.getUserType().equals(existUser.getUserType())){
 				if(!existUser.getAuthType().equals(AuthType.OK)){
 					status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_USER_NOT_AUTH, null);

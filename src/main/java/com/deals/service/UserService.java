@@ -3,6 +3,8 @@ package com.deals.service;
 import java.util.List;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +13,13 @@ import com.deals.enums.UserType;
 import com.deals.model.Deal;
 import com.deals.model.EMail;
 import com.deals.model.EmailDetail;
+import com.deals.model.LikeView;
 import com.deals.model.OTP;
 import com.deals.model.User;
 import com.deals.model.UserDetail;
 import com.deals.otp.SendOTPClient;
 import com.deals.repository.DealRepository;
+import com.deals.repository.LikeViewRepository;
 import com.deals.repository.OTPRepository;
 import com.deals.repository.UserDetailRepository;
 import com.deals.repository.UserRepository;
@@ -26,7 +30,7 @@ import com.deals.vo.UserVO;
 
 @Service
 public class UserService {
-	
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	private static Status status =  new Status();
 	
 	@Autowired
@@ -47,15 +51,25 @@ public class UserService {
 	@Autowired
 	private SendOTPClient sendOTPClient;
 	
+	@Autowired
+	private LikeViewRepository likeViewRepository;
+	
 	
 	public Status sendOTP(String mobNumber){
-		JSONObject oneTimePasswordJson = sendOTPClient.sendOTP(App.COUNTRY_CODE_IN, mobNumber);
-		status = App.getResponse(App.CODE_OK, App.STATUS_CREATE, App.MSG_CREATE, oneTimePasswordJson.toString());
+		
+		User user = userRepository.findByMobile(mobNumber);
+		if(user == null){
+			JSONObject oneTimePasswordJson = sendOTPClient.sendOTP(App.COUNTRY_CODE_IN, mobNumber);
+			status = App.getResponse(App.CODE_OK, App.STATUS_CREATE, App.MSG_CREATE, oneTimePasswordJson.toString());
+		}else{
+			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_USER_EXISTS, mobNumber);
+		}
+		
 		return status;
 	}
 	
 	public Status verifyOTP(String mobileNumber, String oneTimePassword){
-		System.out.println("OneTimePassword ::: "+oneTimePassword);
+		log.info("OneTimePassword ::: "+oneTimePassword);
 		boolean b = sendOTPClient.verifyOTP(mobileNumber, oneTimePassword);
 		status = App.getResponse(App.CODE_OK, App.STATUS_CREATE, App.MSG_CREATE, b);
 		return status;
@@ -63,50 +77,25 @@ public class UserService {
 	
 	
 	public Status create(User user){
-//		Object obj = null;
 		User userExist = null;
 		if(user != null){
 			if(user.getMobile() != null){
 				userExist = userRepository.findByMobileOrEmail(user.getMobile(), user.getEmail());
 			}
-			
 			if(userExist != null && userExist.getId() != null){
 				status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_USER_EXISTS, null);
 			}else{
-				// User creation START
 				user.setAuthType(AuthType.OK);
 				user = userRepository.saveAndFlush(user);
-				// User creation END
 				
-				// Creating OTP START
-				/*String oneTimePassword = sendOTPClient.sendOTP(App.COUNTRY_CODE_IN, user.getMobile());//App.generateKey(6);
-				OTP otp = new OTP();
-				otp.setOtpCode(oneTimePassword);
-				otp.setUser(user);
-				otpRepository.saveAndFlush(otp);*/
-				// Creating OTP END
+				UserDetail userDetail = new UserDetail();
+				userDetail.setLikes(new Long(0));
+				userDetail.setViews(new Long(0));
+				userDetail.setUser(user);
+				userDetailRepository.saveAndFlush(userDetail);
 				
-				// Sending OPT to users EmailId START
-				/*EMail eMail = new EMail();
-				eMail.setTemplateName("welcome.html");
-				EmailDetail emailDetail = new EmailDetail();
-				emailDetail.setReceiverMail(user.getEmail());
-				emailDetail.setReceiverName(user.getName());
-				emailDetail.setSubject("OTP From BestDeals");
-				emailDetail.setMessage("Use this OPT for login : "+oneTimePassword);
-				
-				eMail.setEmailDetail(emailDetail);
-				eMail.setEmailType(EmailType.OTP);
-				Status mailStatus = mailService.sendMail(eMail);
-				if(mailStatus.getStatusCode().equals(App.CODE_FAIL)){
-					obj = mailStatus;
-				}else{
-					user.setPassword(null);
-					obj = user;
-				}	*/
 				status = App.getResponse(App.CODE_OK, App.STATUS_CREATE, App.MSG_CREATE, user);
 			}
-			// Sending OPT to users EmailId END
 		}else{
 			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_FAIL, user);
 		}
@@ -122,8 +111,8 @@ public class UserService {
 			User user = userRepository.findOne(id);
 			List<Deal> deals = dealRepository.findAllByUserId(user.getId());
 			List<UserDetail > userDetails = userDetailRepository.findAllByUserId(user.getId());
-			System.out.println("User Details ::: "+userDetails);
-			System.out.println("User ::: "+user);
+			log.info("User Details ::: "+userDetails);
+			log.info("User ::: "+user);
 			UserVO userVO = App.setUserVo(user, userDetails.size() > 0 ? userDetails.get(0): null, deals);
 			status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, userVO);
 		}else{
@@ -185,27 +174,6 @@ public class UserService {
 		}
 		return status;
 	}
-
-	/*public Status verifyOTP(String codeOTP, Long userId){
-		OTP otpObj = otpRepository.findByUserId(userId);
-		if(sendOTPClient.verifyOTP(codeOTP) && otpObj.getOtpCode().equals(codeOTP)){
-			
-			otpObj.setOtpCode(codeOTP);
-			otpObj.getUser().setAuthType(AuthType.OK);
-			otpObj.getUser().setPassword(codeOTP);
-			otpRepository.saveAndFlush(otpObj);
-			
-			User user = userRepository.findOne(userId);
-			user.setAuthType(AuthType.OK);
-			user.setPassword(codeOTP);
-			userRepository.saveAndFlush(user);
-			
-			status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, otpObj.getUser());
-		}else{
-			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_FAIL, App.MSG_INVALID_KEY);
-		}
-		return status;
-	}*/
 	
 	public Status findUsersByUserType(UserType userType){
 		List<User> users = userRepository.findAllByUserType(userType);
@@ -226,7 +194,7 @@ public class UserService {
 	}
 	
 	public Status forgotPassword(String email){
-		System.out.println("Email :::: "+email);
+		log.info("Email :::: "+email);
 		if(!email.contains(".com")){
 			email = email+".com";
 		}
@@ -247,13 +215,26 @@ public class UserService {
 		return status;
 	}
 	
-	public Status like(Long likeCount, Long userId){
-		UserDetail userDetail = userDetailRepository.findByUserId(userId);
-		if(userDetail != null){
-			userDetail.setLikes(userDetail.getLikes()+1);
-			userDetail.setUser(null);
+	public Status likeOrView(Long userId, Long merchantId, String type){
+		type = type.equalsIgnoreCase("like") ? "LIKE" : "VIEW";
+		LikeView likeView = likeViewRepository.findByUserIdAndMerchantIdAndType(userId, merchantId, type);
+		if(likeView == null){
+			UserDetail merchantDetail = userDetailRepository.findByUserId(merchantId);
+			if(type.equals("LIKE")){
+				merchantDetail.setLikes(merchantDetail.getLikes()+1);
+			}else{
+				merchantDetail.setViews(merchantDetail.getViews()+1);
+			}
+			userDetailRepository.saveAndFlush(merchantDetail);
+			
+			likeView = new LikeView();
+			likeView.setUserId(userId);
+			likeView.setMerchantId(merchantId);	
+			
+			likeView.setType(type);
+			likeViewRepository.saveAndFlush(likeView);
 		}
-		return App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, userDetail);
+		return App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, App.MSG_OK);
 	}
 	
 }

@@ -9,6 +9,8 @@ import java.util.Map;
 import javax.mail.internet.InternetAddress;
 
 import org.assertj.core.util.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +25,7 @@ import it.ozimov.springboot.templating.mail.service.exception.CannotSendEmailExc
 
 @Service
 public class MailService {
-
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	private static Status status = new Status();
 	
 	@Autowired
@@ -31,7 +33,7 @@ public class MailService {
 	
 	
 	public Status sendMail(EMail eMail){
-		System.out.println("Started");
+		log.info("Started");
 		try {
 			// Send mail to these people START
 			List<InternetAddress> toAddresses = Lists.newArrayList();   
@@ -44,7 +46,7 @@ public class MailService {
 			modelObject.put("message", eMail.getEmailDetail().getMessage());
 	                
 	        emailService.send(email, eMail.getTemplateName(), modelObject);
-			System.out.println("Done");
+			log.info("Done");
 			status = App.getResponse(App.CODE_OK, App.STATUS_CREATE, App.MSG_MAIL_SENT, null);
 		} catch (UnsupportedEncodingException e) {
 			status = App.getResponse(App.CODE_FAIL, App.STATUS_CREATE, e.getMessage(), null);

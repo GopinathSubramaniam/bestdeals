@@ -85,11 +85,11 @@
 						<a class="btn btn-primary pull-right" id="changePlan" href="updatePlan">Change Plan</a>
 			        </div><!-- /.box-body -->
 				</div>
-				<div class="col-lg-12 col-xs-12">
+				<div class="col-lg-12 col-xs-12" th:if="${displayMap}" >
 					<input type="hidden" id="latitude" th:value="${user.latitude}"/>
 					<input type="hidden" id="longitude" th:value="${user.longitude}"/>
 					<h3>Your Shop Location</h3>
-					<div th:if="${displayMap}" id="map"></div>
+					<div id="map"></div>
 				</div>
 			</section>	
 		</div>
