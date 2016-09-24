@@ -219,7 +219,8 @@ var App = (function(){
 	};
 	
 	// START
-	$('#username').html(sessionStorage.getItem('username'));
+	var userName = sessionStorage.getItem('username');
+	if(userName) $('#username').html(sessionStorage.getItem('username'));
 
 //	$('.userProfile').attr('href', 'profile?userId='+sessionStorage.getItem('userId'));
 //	$('.advertisement').attr('href', 'advertisement?userId='+sessionStorage.getItem('userId'));
