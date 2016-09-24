@@ -1,5 +1,6 @@
 package com.deals.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.deals.model.Category;
 import com.deals.repository.CategoryRepository;
+import com.deals.repository.SubCategoryRepository;
 import com.deals.util.App;
 import com.deals.util.Status;
+import com.deals.vo.CategoryVo;
 
 @Service
 public class CategoryService {
@@ -17,6 +20,9 @@ public class CategoryService {
 	
 	@Autowired
 	private CategoryRepository categoryRepository;
+	
+	@Autowired
+	private SubCategoryRepository subCategoryRepository;
 	
 	public Status create(Category category){
 		if(category !=null){
@@ -30,7 +36,19 @@ public class CategoryService {
 	
 	public Status findAll(){
 		List<Category> categories = categoryRepository.findAll();
-		return status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, categories);
+		List<CategoryVo> filteredCategories = new ArrayList<CategoryVo>();
+		
+		for (Category category : categories) {
+			if(subCategoryRepository.findAllByCategoryId(category.getId()).size() > 0 ){
+				CategoryVo categoryVo = new CategoryVo();
+				categoryVo.setId(category.getId());
+				categoryVo.setName(category.getName());
+				categoryVo.setDescription(category.getDescription());
+				filteredCategories.add(categoryVo);
+			}
+		}
+		
+		return status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, filteredCategories);
 	}
 	
 	public Status delete(Long id){
