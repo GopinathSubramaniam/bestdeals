@@ -215,6 +215,13 @@ var App = (function(){
 					message : 'The password is required'
 				}
 			}
+		},
+		dropdown: {
+			validators : {
+				notEmpty : {
+					message : 'The value is required'
+				}
+			}
 		}
 	};
 	

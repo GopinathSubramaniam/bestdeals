@@ -6,8 +6,8 @@ var User = (function(){
 		name : App.validateRules.name,
 		email : App.validateRules.email,
 		mobile : App.validateRules.mobile,
-		userType : App.validateRules.name,
-		plan : App.validateRules.name,
+		userType : App.validateRules.dropdown,
+		plan : App.validateRules.dropdown,
 		password : App.validateRules.name
 	};
 	App.bindValidation('userRegisterform', fields, function(){
