@@ -81,6 +81,27 @@ public class DealController {
 		return dealService.findAll();
 	} 
 	
+	@RequestMapping(value="/search/{categoryName}/{subCatName}/{cityName}/{placeName}", method= RequestMethod.GET)
+	public Status findAll(@PathVariable String categoryName, @PathVariable String subCatName, @PathVariable String cityName, @PathVariable String placeName){
+	/*	Status status = null;
+		boolean isCateogryName = (categoryName != null && !categoryName.isEmpty()); 
+		boolean isSubCatName = (subCatName != null && !subCatName.isEmpty()); 
+		boolean isCityName = (cityName != null && !cityName.isEmpty()); 
+		boolean isPlaceName = (placeName != null && !placeName.isEmpty()); 
+		
+		if(isCateogryName && isSubCatName && isCityName && isPlaceName){
+			status = dealService.findAll(categoryName, subCatName, cityName, placeName);
+		}else if(isCateogryName && isSubCatName && isCityName){
+			
+		}else if(isCateogryName && isSubCatName && isCityName){
+			
+		}else if (isCateogryName){
+			findAllBySubCategoryCategoryNameOrSubCategoryNameOrCityNameOrPlaceNameAndUserPlanPlanType
+		}*/
+		
+		return dealService.findAll(categoryName, subCatName, cityName, placeName);
+	} 
+	
 	@RequestMapping(value="/findAllBySubCat/{subCatId}", method= RequestMethod.GET)
 	public Status findAllBySubCat(@PathVariable Long subCatId){
 		return dealService.findAllBySubCat(subCatId);

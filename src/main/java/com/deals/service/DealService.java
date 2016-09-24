@@ -18,7 +18,6 @@ import com.deals.vo.UserVO;
 @Service
 public class DealService {
 	private static Status status =  new Status();
-	private static Integer ADVERTISTMENT_MAX_COUNT = 15;
 	
 	@Autowired
 	private DealRepository dealRepository;
@@ -42,6 +41,29 @@ public class DealService {
 		List<Deal> deals = dealRepository.findAllByUserId(userId);
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, deals);
 		return status;
+	}
+	
+	public Status findAll(String categoryName, String subCatName, String cityName, String placeName){
+
+		List<Deal> platinumDeals = new ArrayList<>();
+		List<Deal> goldDeals = new ArrayList<>();
+		List<Deal> silverDeals = new ArrayList<>();
+		
+		platinumDeals = dealRepository.findAllBySubCategoryCategoryNameAndSubCategoryNameOrCityNameOrPlaceNameAndUserPlanPlanType(categoryName, subCatName, cityName, placeName, PlanType.PLATINUM);
+		
+		if(platinumDeals.size() == 0 ){
+			goldDeals = dealRepository.findAllBySubCategoryCategoryNameAndSubCategoryNameOrCityNameOrPlaceNameAndUserPlanPlanType(categoryName, subCatName, cityName, placeName, PlanType.GOLD);
+			platinumDeals = goldDeals;
+		}
+		
+		if(platinumDeals.size() == 0 && goldDeals.size() == 0){
+			silverDeals = dealRepository.findAllBySubCategoryCategoryNameAndSubCategoryNameOrCityNameOrPlaceNameAndUserPlanPlanType(categoryName, subCatName, cityName, placeName, PlanType.SILVER);
+			platinumDeals = silverDeals;
+		}
+		List<DealVO> dealVOs = mergeDealVOs(platinumDeals);
+		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, dealVOs);
+		return status;
+	
 	}
 	
 	public Status findAll(){
