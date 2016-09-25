@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.deals.model.City;
 import com.deals.repository.CityRepository;
-import com.deals.repository.StateRepository;
 import com.deals.util.App;
 import com.deals.util.Status;
 
@@ -21,9 +20,6 @@ import com.deals.util.Status;
 public class BaseController {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	private static Status status =  new Status();
-	
-	@Autowired
-	private StateRepository stateRepository;
 	
 	@Autowired
 	private CityRepository cityRepository;
@@ -35,6 +31,16 @@ public class BaseController {
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, cities);
 		return status;
 	}
+	
+	@RequestMapping(value="/findAllCities", method = RequestMethod.GET)
+	public Status findAllCities(){
+		List<City> cities = cityRepository.findAll();
+		log.info("Cities ::: "+cities);
+		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, cities);
+		return status;
+	}
+	
+	
 	
 	
 	
