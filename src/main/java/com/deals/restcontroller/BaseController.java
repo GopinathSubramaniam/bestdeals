@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.deals.model.City;
 import com.deals.repository.CityRepository;
+import com.deals.repository.UserDetailRepository;
 import com.deals.util.App;
 import com.deals.util.Status;
+import com.deals.vo.PlaceNameResponseVo;
 
 @RestController
 @RequestMapping(value="/rest/base/")
@@ -23,6 +25,9 @@ public class BaseController {
 	
 	@Autowired
 	private CityRepository cityRepository;
+	
+	@Autowired
+	private UserDetailRepository userDetailRepository;
 	
 	@RequestMapping(value="/findAllCityByState/{stateId}", method = RequestMethod.GET)
 	public Status findAllCityByState(@PathVariable Long stateId){
@@ -37,6 +42,17 @@ public class BaseController {
 		List<City> cities = cityRepository.findAll();
 		log.info("Cities ::: "+cities);
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, cities);
+		return status;
+	}
+	
+	@RequestMapping(value="/findAllPlaceNames/{cityId}", method = RequestMethod.GET)
+	public Status findAllPlaceNames(@PathVariable Long cityId){
+		List<String> placeNames = userDetailRepository.findAllPlaceNameByCityId(cityId);
+		PlaceNameResponseVo nameResponseVo = new PlaceNameResponseVo();
+		nameResponseVo.setCityId(cityId);
+		nameResponseVo.setPlaceNames(placeNames);
+		log.info("PlaceNameResponseVos ::: "+nameResponseVo);
+		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, nameResponseVo);
 		return status;
 	}
 	
