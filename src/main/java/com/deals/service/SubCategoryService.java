@@ -1,5 +1,6 @@
 package com.deals.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -8,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.deals.model.SubCategory;
+import com.deals.repository.DealRepository;
 import com.deals.repository.SubCategoryRepository;
 import com.deals.util.App;
 import com.deals.util.Status;
+import com.deals.vo.SubCategoryVo;
 
 @Service
 public class SubCategoryService {
@@ -19,6 +22,9 @@ public class SubCategoryService {
 	
 	@Autowired
 	private SubCategoryRepository subCategoryRepository;
+	
+	@Autowired
+	private DealRepository dealRepository;
 	
 	public Status create(SubCategory subCategory){
 		if(subCategory != null){
@@ -32,7 +38,18 @@ public class SubCategoryService {
 	
 	public Status findByCategoryId(Long catId){
 		List<SubCategory> subCategories = subCategoryRepository.findAllByCategoryId(catId);
-		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, subCategories);
+		List<SubCategoryVo> subCategorieVos = new ArrayList<SubCategoryVo>();
+		
+		for (SubCategory subCategory : subCategories) {
+			if(dealRepository.findAllBySubCategoryId(subCategory.getId()).size() > 0){
+				SubCategoryVo subCategoryVo = new SubCategoryVo();
+				subCategoryVo.setId(subCategory.getId());
+				subCategoryVo.setName(subCategory.getName());
+				subCategoryVo.setDescription(subCategory.getDescription());
+				subCategorieVos.add(subCategoryVo);	
+			}
+		}
+		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, subCategorieVos);
 		return status;
 	}
 	
