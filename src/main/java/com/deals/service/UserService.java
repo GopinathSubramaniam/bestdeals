@@ -14,13 +14,14 @@ import com.deals.model.Deal;
 import com.deals.model.EMail;
 import com.deals.model.EmailDetail;
 import com.deals.model.LikeView;
-import com.deals.model.OTP;
+import com.deals.model.SalesManager;
 import com.deals.model.User;
 import com.deals.model.UserDetail;
 import com.deals.otp.SendOTPClient;
 import com.deals.repository.DealRepository;
 import com.deals.repository.LikeViewRepository;
-import com.deals.repository.OTPRepository;
+import com.deals.repository.SalesManagerRepository;
+import com.deals.repository.SalesmanRepository;
 import com.deals.repository.UserDetailRepository;
 import com.deals.repository.UserRepository;
 import com.deals.util.App;
@@ -40,9 +41,6 @@ public class UserService {
 	private UserDetailRepository userDetailRepository;
 	
 	@Autowired
-	private OTPRepository otpRepository;
-	
-	@Autowired
 	private MailService mailService;
 	
 	@Autowired
@@ -52,8 +50,13 @@ public class UserService {
 	private SendOTPClient sendOTPClient;
 	
 	@Autowired
-	private LikeViewRepository likeViewRepository;
+	private SalesManagerRepository salesmanagerRepository;
 	
+	@Autowired
+	private SalesmanRepository salesmanRepository;
+	
+	@Autowired
+	private LikeViewRepository likeViewRepository;
 	
 	public Status sendOTP(String mobNumber){
 		
@@ -159,13 +162,17 @@ public class UserService {
 	
 	public Status delete(Long id){
 		if(id != null && id !=0){
-			OTP otp = otpRepository.findByUserId(id);
-			if(otp!=null){
-				otpRepository.delete(otp);
-			}
-			
 			User user = userRepository.findOne(id);
+			log.info("Delete User :: "+user);
 			if(user != null){
+				dealRepository.deleteByUserId(user.getId());
+				likeViewRepository.deleteAllByUserId(id);
+				List<SalesManager> salesManagers = salesmanagerRepository.findAllByUserId(user.getId());
+				for (SalesManager salesManager : salesManagers) {
+					salesmanRepository.deleteBySalesManagerId(salesManager.getId());
+					salesmanagerRepository.delete(salesManager.getId());
+				}
+				userDetailRepository.deleteByUserId(user.getId());
 				userRepository.delete(user);
 			}
 			status = App.getResponse(App.CODE_OK, App.STATUS_DELETE, App.MSG_DELETE, id);

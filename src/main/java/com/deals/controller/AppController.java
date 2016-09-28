@@ -150,9 +150,7 @@ public class AppController {
 		Long userId = (Long) getSessionVal("userId");
 		UserVO userVO = (UserVO)userService.findUser(userId).getData();
 		Plan plan = (Plan)planService.findOne(userVO.getPlanId()).getData();
-		if(plan != null ){
-			
-		}
+		
 		if(plan != null){
 			displayAdvertisement = !(plan.getPlanType().equals(PlanType.FREE));
 			displayMap = plan.getPlanType().equals(PlanType.PLATINUM);
@@ -190,7 +188,7 @@ public class AppController {
 		log.info("UserId = "+userId);
 		log.info("PlanId = "+planId);
 		planService.assignPlanToUser(userId, planId);
-		return "redirect:profile";
+		return "redirect:userplan";
 	}
 	
 	@RequestMapping("/error")
@@ -198,6 +196,27 @@ public class AppController {
 		return "error";
 	}
 	
+	/**
+	 * User Plan Page
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value="/userplan")
+	public String uplan(Model model){
+		Long userId = (Long) getSessionVal("userId");
+		UserVO userVO = (UserVO)userService.findUser(userId).getData();
+		List<Plan> plans = (List<Plan>)planService.findAll().getData();
+		System.out.println("Plan id ::: "+userVO.getPlanId());
+		Plan plan = (Plan)planService.findOne(userVO.getPlanId()).getData();
+		
+		model.addAttribute("tab", Page.USERPLAN.toString());
+		model.addAttribute("user", userVO);
+		model.addAttribute("plan", plan);
+		model.addAttribute("plans", plans);
+		model.addAttribute("userName", getSessionVal("username"));
+		
+		return "u-plan";
+	}
 
 	/*
 	 * Client Routing END 

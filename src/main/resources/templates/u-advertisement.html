@@ -20,33 +20,16 @@
 							<button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#advertisementModal">Create New</button>
 						</div>
 					</div>
-					
-					<div class="box" style="max-height:710px; overflow: auto;">
-	          	 		<table id="userTable" class="table table-bordered table-hover">
-						 	<thead>
-		                      <tr>
-		                        <th>Updated Date</th>
-		                        <th>Name</th>
-		                        <th>Image</th>
-		                        <th>Description</th>
-		                        <th>Place Name</th>
-	                         	<th>Action</th>
-		                      </tr>
-		                    </thead>
-		                    <tbody>
-		                    	<tr th:each="deal : ${deals}">
-		                    		<td th:text="${deal.changedDate}"></td>
-		                    		<td th:text="${deal.name}"></td>
-		                    		<td style="width: 16%;height: 10%;"><a th:href="${deal.imgUrl}" target="_blank" title="Open image in new window"><img th:src="${deal.imgUrl}" style="width: 87%; height: 15%;"/></a></td>
-		                    		<td th:text="${deal.description}"></td>
-		                    		<td th:text="${deal.placeName}"></td>
-		                    		<td>
-		                    			<a title="Delete" class="btn btn-xs btn-danger" th:href="'deleteDeal?id='+${deal.id}"><i class="fa fa-fw fa-trash"></i>Delete</a>
-										<button title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#advertisementModal" th:onclick="'Deal.findById('+${deal.id}+')'"><i class="fa fa-fw fa-edit"></i>Edit</button>
-		                    		</td>
-		                    	</tr>
-		                    </tbody>
-						 </table>
+					<div class="row">
+						<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" th:each="deal : ${deals}">
+						    <div class="hovereffect">
+						        <img class="img-responsive" th:src="${deal.imgUrl}" th:alt="${deal.name}" style="height: 210px;width: 100%;"/>
+						        <div class="overlay">
+						            <h4 th:text="${deal.name}"></h4>
+						            <a class="info" href="#">link here</a>
+						        </div>
+						    </div>
+						</div>
 					</div>
 				</div>
 			</section>

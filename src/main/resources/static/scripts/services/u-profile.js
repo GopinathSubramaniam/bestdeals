@@ -48,33 +48,14 @@ var UserProfile = (function(){
 			window.location.reload();
 		});
 	};
-	var changePlan = function(){
-		
-		var elem = $('input[type="radio"]:checked');
-		if(elem){
-			var planId = elem.val();
-			var userId = sessionStorage.getItem('userId');
-			var url = App.URL().BASE+App.URL().PLAN+userId+'/'+planId;
-			App.GetRequest(url).then(function(res){
-				window.location.reload();
-			});	
-		}
-	};
-	
-	$('#changePlan').attr('href', 'updatePlan?pid='+ $('input[type="radio"]:checked').val());
-	$('#accordion input[type="radio"]').click(function(ev){
-		console.log('ev :: ', ev);
-		$('#changePlan').attr('href', 'updatePlan?pid='+ev.currentTarget.value);
-	});
-	
 	
 	return {
 		create: create,
 		update: update,
 		findUserById: findUserById,
-		deleteUser: deleteUser,
-		changePlan: changePlan
+		deleteUser: deleteUser
 	}
+	
 })();
 
 function initMap() {
