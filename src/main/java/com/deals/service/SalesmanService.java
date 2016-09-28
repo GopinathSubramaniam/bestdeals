@@ -35,8 +35,9 @@ public class SalesmanService {
 				existingSalesManObj.setMobile(salesman.getMobile());
 				existingSalesManObj.setName(salesman.getName());
 				existingSalesManObj.setPassword(salesman.getPassword());
+				salesman = existingSalesManObj;
 			}
-			salesman = salesmanRepository.saveAndFlush(existingSalesManObj);
+			salesman = salesmanRepository.saveAndFlush(salesman);
 			status = App.getResponse(App.CODE_OK, App.STATUS_CREATE, App.MSG_CREATE, salesman);
 		} else {
 			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_FAIL, null);
@@ -62,6 +63,7 @@ public class SalesmanService {
 	}
 	
 	public Status createSalesManager(SalesManager salesManager){
+		log.info("Salesmanager getId :::: "+salesManager.getId());
 		if(salesManager != null){
 			SalesManager salesManagerObj = null;
 			if(salesManager.getId() != null && salesManager.getId() > 0){
@@ -70,12 +72,11 @@ public class SalesmanService {
 				salesManagerObj.setMobile(salesManager.getMobile());
 				salesManagerObj.setName(salesManager.getName());
 				salesManagerObj.setPassword(salesManager.getPassword());
+				salesManager = salesManagerObj;
 			}
-			salesManager = salesManagerRepository.saveAndFlush(salesManagerObj);
-			status = App.getResponse(App.CODE_OK, App.STATUS_CREATE, App.MSG_CREATE, salesManager);
-		}else{
-			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_FAIL, salesManager);
+			salesManager = salesManagerRepository.saveAndFlush(salesManager);
 		}
+		status = App.getResponse(App.CODE_OK, App.STATUS_CREATE, App.MSG_CREATE, salesManager);
 		return status;
 	}
 	

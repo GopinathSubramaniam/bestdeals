@@ -206,7 +206,8 @@ public class AppController {
 		Long userId = (Long) getSessionVal("userId");
 		UserVO userVO = (UserVO)userService.findUser(userId).getData();
 		List<Plan> plans = (List<Plan>)planService.findAll().getData();
-		System.out.println("Plan id ::: "+userVO.getPlanId());
+		log.info("Plan id ::: "+userVO.getPlanId());
+		log.info("Plans ::: "+plans.size());
 		Plan plan = (Plan)planService.findOne(userVO.getPlanId()).getData();
 		
 		model.addAttribute("tab", Page.USERPLAN.toString());

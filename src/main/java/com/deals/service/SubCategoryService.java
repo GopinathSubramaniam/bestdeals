@@ -39,15 +39,15 @@ public class SubCategoryService {
 	public Status findByCategoryId(Long catId){
 		List<SubCategory> subCategories = subCategoryRepository.findAllByCategoryId(catId);
 		List<SubCategoryVo> subCategorieVos = new ArrayList<SubCategoryVo>();
-		
+		log.info("SubCategories ::::: "+subCategories);
 		for (SubCategory subCategory : subCategories) {
-			if(dealRepository.findAllBySubCategoryId(subCategory.getId()).size() > 0){
+//			if(dealRepository.findAllBySubCategoryId(subCategory.getId()).size() > 0){
 				SubCategoryVo subCategoryVo = new SubCategoryVo();
 				subCategoryVo.setId(subCategory.getId());
 				subCategoryVo.setName(subCategory.getName());
 				subCategoryVo.setDescription(subCategory.getDescription());
 				subCategorieVos.add(subCategoryVo);	
-			}
+//			}
 		}
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, subCategorieVos);
 		return status;
