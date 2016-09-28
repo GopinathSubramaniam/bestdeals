@@ -1,5 +1,7 @@
 package com.deals.restcontroller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -81,23 +83,12 @@ public class DealController {
 		return dealService.findAll();
 	} 
 	
-	@RequestMapping(value="/search/{categoryName}/{subCatName}/{cityName}/{placeName}", method= RequestMethod.GET)
-	public Status findAll(@PathVariable String categoryName, @PathVariable String subCatName, @PathVariable String cityName, @PathVariable String placeName){
-	/*	Status status = null;
-		boolean isCateogryName = (categoryName != null && !categoryName.isEmpty()); 
-		boolean isSubCatName = (subCatName != null && !subCatName.isEmpty()); 
-		boolean isCityName = (cityName != null && !cityName.isEmpty()); 
-		boolean isPlaceName = (placeName != null && !placeName.isEmpty()); 
-		
-		if(isCateogryName && isSubCatName && isCityName && isPlaceName){
-			status = dealService.findAll(categoryName, subCatName, cityName, placeName);
-		}else if(isCateogryName && isSubCatName && isCityName){
-			
-		}else if(isCateogryName && isSubCatName && isCityName){
-			
-		}else if (isCateogryName){
-			findAllBySubCategoryCategoryNameOrSubCategoryNameOrCityNameOrPlaceNameAndUserPlanPlanType
-		}*/
+	@RequestMapping(value="/search", method= RequestMethod.GET)
+	public Status findAll(HttpServletRequest req){
+		String categoryName = req.getParameter("categoryName");
+		String subCatName = req.getParameter("subCatName");
+		String cityName = req.getParameter("cityName");
+		String placeName = req.getParameter("placeName");
 		
 		return dealService.findAll(categoryName, subCatName, cityName, placeName);
 	} 

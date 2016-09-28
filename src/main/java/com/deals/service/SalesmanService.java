@@ -99,9 +99,9 @@ public class SalesmanService {
 	}
 	
 	public Status deleteSalesManagerById(Long salesmanagerId){
-		SalesManager salesManager = salesManagerRepository.findOne(salesmanagerId);
-		salesManagerRepository.delete(salesManager);
-		status = App.getResponse(App.CODE_OK, App.STATUS_DELETE, App.MSG_DELETE, salesManager);
+		salesmanRepository.deleteBySalesManagerId(salesmanagerId);
+		salesManagerRepository.delete(salesmanagerId);
+		status = App.getResponse(App.CODE_OK, App.STATUS_DELETE, App.MSG_DELETE, null);
 		return status;
 	}
 	
