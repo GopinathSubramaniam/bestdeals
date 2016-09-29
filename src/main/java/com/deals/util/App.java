@@ -131,8 +131,10 @@ public class App {
 			userVO.setTimings(userDetail.getTimings());
 			userVO.setShopName(userDetail.getShopName());
 			userVO.setPlaceName(userDetail.getPlaceName());
-			userVO.setCityName(userDetail.getCity().getName());
-			userVO.setStateName(userDetail.getCity().getState().getName());
+			if(userDetail.getCity() != null ){
+				userVO.setCityName(userDetail.getCity().getName());
+				userVO.setStateName(userDetail.getCity().getState().getName());
+			}
 			
 			List<String> phoneNumbers = new ArrayList<>();
 			if(userDetail.getPhoneNumbers() != null){
