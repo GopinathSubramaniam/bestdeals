@@ -43,6 +43,27 @@ public class DealService {
 		return status;
 	}
 	
+	public Status searchGlobal(String searchKey){
+		List<Deal> platinumDeals = new ArrayList<>();
+		List<Deal> goldDeals = new ArrayList<>();
+		List<Deal> silverDeals = new ArrayList<>();
+		
+		platinumDeals = dealRepository.findAllBySubCategoryCategoryNameOrSubCategoryNameOrCityNameOrPlaceNameAndUserPlanPlanType(searchKey, searchKey, searchKey, searchKey, PlanType.PLATINUM);
+		
+		if(platinumDeals.size() == 0 ){
+			goldDeals = dealRepository.findAllBySubCategoryCategoryNameOrSubCategoryNameOrCityNameOrPlaceNameAndUserPlanPlanType(searchKey, searchKey, searchKey, searchKey, PlanType.GOLD);
+			platinumDeals = goldDeals;
+		}
+		
+		if(platinumDeals.size() == 0 && goldDeals.size() == 0){
+			silverDeals = dealRepository.findAllBySubCategoryCategoryNameOrSubCategoryNameOrCityNameOrPlaceNameAndUserPlanPlanType(searchKey, searchKey, searchKey, searchKey, PlanType.SILVER);
+			platinumDeals = silverDeals;
+		}
+		List<DealVO> dealVOs = mergeDealVOs(platinumDeals);
+		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, dealVOs);
+		return status;
+	}
+	
 	public Status findAll(String categoryName, String subCatName, String cityName, String placeName){
 
 		List<Deal> platinumDeals = new ArrayList<>();
