@@ -6,8 +6,6 @@ var Category = (function(){
 	
 	var create = function(){
 		var obj = App.serializeObject('newCategoryForm');
-		
-		obj.category = {'id':parseFloat(obj.category)};
 		App.PostRequest(CAT_URL, obj).then(function(res){
 			if(res.statusCode == '200'){
 				window.location.reload();
