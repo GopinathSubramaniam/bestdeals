@@ -39,13 +39,13 @@ public class CategoryService {
 		List<CategoryVo> filteredCategories = new ArrayList<CategoryVo>();
 		
 		for (Category category : categories) {
-//			if(subCategoryRepository.findAllByCategoryId(category.getId()).size() > 0 ){
+			if(subCategoryRepository.findAllByCategoryId(category.getId()).size() > 0 ){
 				CategoryVo categoryVo = new CategoryVo();
 				categoryVo.setId(category.getId());
 				categoryVo.setName(category.getName());
 				categoryVo.setDescription(category.getDescription());
 				filteredCategories.add(categoryVo);
-//			}
+			}
 		}
 		
 		return status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, filteredCategories);

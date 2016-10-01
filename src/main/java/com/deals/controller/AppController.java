@@ -27,8 +27,10 @@ import com.deals.model.Plan;
 import com.deals.model.State;
 import com.deals.model.SubCategory;
 import com.deals.model.User;
+import com.deals.repository.CategoryRepository;
 import com.deals.repository.DealRepository;
 import com.deals.repository.StateRepository;
+import com.deals.repository.SubCategoryRepository;
 import com.deals.service.AppService;
 import com.deals.service.CategoryService;
 import com.deals.service.CompanyService;
@@ -82,6 +84,12 @@ public class AppController {
 	
 	@Autowired
 	private DealRepository dealRepository;
+	
+	@Autowired
+	private CategoryRepository categoryRepository;
+	
+	@Autowired
+	private SubCategoryRepository subCategoryRepository;
 
 	@RequestMapping(value="/login")
 	public String dologin(Model model, User user){
@@ -295,8 +303,8 @@ public class AppController {
 		model.addAttribute("title", "Category And SubCategory List");
 		model.addAttribute("addNewBtnText", "Add New Category");
 		model.addAttribute("popupTitle", "Create New Category");
-		model.addAttribute("categories", categoryService.findAll().getData());
-		model.addAttribute("subcategories", subcategoryService.findAll().getData());
+		model.addAttribute("categories", categoryRepository.findAll());
+		model.addAttribute("subcategories", subCategoryRepository.findAll());
 		return "category";
 	}
 	
