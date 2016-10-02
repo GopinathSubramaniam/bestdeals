@@ -128,12 +128,12 @@ public class App {
 			userVO.setLongitude(userDetail.getLongitude());
 			userVO.setLikes(userDetail.getLikes());
 			userVO.setViews(userDetail.getViews());
-			userVO.setTimings(userDetail.getTimings());
+			userVO.setTimings(userDetail.getDescription());
 			userVO.setShopName(userDetail.getShopName());
 			userVO.setPlaceName(userDetail.getPlaceName());
-			if(userDetail.getCity() != null ){
-				userVO.setCityName(userDetail.getCity().getName());
-				userVO.setStateName(userDetail.getCity().getState().getName());
+			if(userDetail.getVillage() != null ){
+				userVO.setCityName(userDetail.getVillage().getTaluka().getCity().getName());
+				userVO.setStateName(userDetail.getVillage().getTaluka().getCity().getState().getName());
 			}
 			
 			List<String> phoneNumbers = new ArrayList<>();

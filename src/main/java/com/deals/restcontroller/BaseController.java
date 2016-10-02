@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.deals.model.City;
 import com.deals.repository.CityRepository;
+import com.deals.repository.TalukaRepository;
 import com.deals.repository.UserDetailRepository;
+import com.deals.repository.VillageRepository;
 import com.deals.util.App;
 import com.deals.util.Status;
 import com.deals.vo.PlaceNameResponseVo;
@@ -29,8 +31,14 @@ public class BaseController {
 	@Autowired
 	private UserDetailRepository userDetailRepository;
 	
-	@RequestMapping(value="/findAllCityByState/{stateId}", method = RequestMethod.GET)
-	public Status findAllCityByState(@PathVariable Long stateId){
+	@Autowired
+	private TalukaRepository talukaRepository;
+	
+	@Autowired
+	private VillageRepository villageRepository;
+	
+	@RequestMapping(value="/findAllCitiesByState/{stateId}", method = RequestMethod.GET)
+	public Status findAllCitiesByState(@PathVariable Long stateId){
 		List<City> cities = cityRepository.findAllByStateId(stateId);
 		log.info("Cities ::: "+cities);
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, cities);
@@ -47,7 +55,7 @@ public class BaseController {
 	
 	@RequestMapping(value="/findAllPlaceNames/{cityId}", method = RequestMethod.GET)
 	public Status findAllPlaceNames(@PathVariable Long cityId){
-		List<String> placeNames = userDetailRepository.findAllPlaceNameByCityId(cityId);
+		List<String> placeNames = userDetailRepository.findAllPlaceNameByVillageTalukaCityId(cityId);
 		PlaceNameResponseVo nameResponseVo = new PlaceNameResponseVo();
 		nameResponseVo.setCityId(cityId);
 		nameResponseVo.setPlaceNames(placeNames);
@@ -56,9 +64,20 @@ public class BaseController {
 		return status;
 	}
 	
+	@RequestMapping(value="/findAllCitiesByStateId/{stateId}", method = RequestMethod.GET)
+	public Status findAllCitiesByStateId(@PathVariable Long stateId){
+		return status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, cityRepository.findAllByStateId(stateId));
+	}
 	
+	@RequestMapping(value="/findAllTalukasByCityId/{cityId}", method = RequestMethod.GET)
+	public Status findAllTalukasByCityId(@PathVariable Long cityId){
+		return status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, talukaRepository.findAllByCityId(cityId));
+	}
 	
-	
+	@RequestMapping(value="/findAllVillagesByTalukaId/{talukaId}", method = RequestMethod.GET)
+	public Status findAllVillagesByTalukaId(@PathVariable Long talukaId){
+		return status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, villageRepository.findAllByTalukaId(talukaId));
+	}
 	
 
 }

@@ -222,7 +222,18 @@ var App = (function(){
 					message : 'The value is required'
 				}
 			}
-		}
+		},
+		confirmPassword: {
+            validators: {
+                notEmpty: {
+                    message: 'The confirm password is required and can\'t be empty'
+                },
+                identical: {
+                    field: 'password',
+                    message: 'The password and its confirm are not the same'
+                }
+            }
+        }
 	};
 	
 	// START

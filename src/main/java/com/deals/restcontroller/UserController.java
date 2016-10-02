@@ -7,11 +7,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.deals.enums.AuthType;
 import com.deals.enums.UserType;
 import com.deals.model.User;
 import com.deals.model.UserDetail;
+import com.deals.model.Village;
+import com.deals.repository.VillageRepository;
+import com.deals.service.UserDetailService;
 import com.deals.service.UserService;
 import com.deals.util.Status;
+import com.deals.vo.RegisterVo;
 
 @RestController
 @RequestMapping("/rest/user")
@@ -19,6 +24,12 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private UserDetailService userDetailService;
+	
+	@Autowired
+	private VillageRepository villageRepository;
 	
 	@RequestMapping(value="/sendOTP/{mobNumber}", method=RequestMethod.GET)
 	public Status sendOTP(@PathVariable String mobNumber){
@@ -29,6 +40,33 @@ public class UserController {
 	public Status verifyOTP(@PathVariable String mobileNumber, @PathVariable String oneTimePassword){
 		return userService.verifyOTP(mobileNumber, oneTimePassword);
 	}
+	
+	@RequestMapping(value="/register", method=RequestMethod.POST, produces={"application/json"})
+	public Status register(@RequestBody RegisterVo registerVo){
+		User user = new User();
+		user.setName(registerVo.getName());
+		user.setEmail(registerVo.getEmail());
+		user.setMobile(registerVo.getMobile());
+		user.setAuthType(AuthType.OK);
+		user.setPassword(registerVo.getPassword());
+		user.setUserType(registerVo.getUserType());
+		user = (User)userService.create(user).getData();
+		
+		UserDetail userDetail = new UserDetail();
+		userDetail.setAddress1(registerVo.getAddress1());
+		userDetail.setDescription(registerVo.getDescription());
+		userDetail.setLikes(new Long(0));
+		userDetail.setViews(new Long(0));
+		userDetail.setPhoneNumbers(registerVo.getPhoneNumbers());
+		userDetail.setPlaceName(registerVo.getPlaceName());
+		userDetail.setShopName(registerVo.getShopName());
+		userDetail.setUser(user);
+		
+		userDetail.setVillage(new Village(registerVo.getVillage()));
+
+		return userDetailService.create(userDetail);
+	}
+	
 	
 	@RequestMapping(value="/", method=RequestMethod.POST, produces={"application/json"})
 	public Status create(@RequestBody User user){

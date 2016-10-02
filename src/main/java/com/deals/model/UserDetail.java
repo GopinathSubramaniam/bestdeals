@@ -26,7 +26,7 @@ public class UserDetail {
 	private String address3;
 	private String latitude;
 	private String longitude;
-	private String timings;
+	private String description;
 	private Long likes;
 	private Long views;
 	private String phoneNumbers;
@@ -36,6 +36,6 @@ public class UserDetail {
 	private User user;
 	
 	@ManyToOne
-	private City city;
+	private Village village;
 	
 }

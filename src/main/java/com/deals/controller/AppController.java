@@ -26,11 +26,17 @@ import com.deals.model.Deal;
 import com.deals.model.Plan;
 import com.deals.model.State;
 import com.deals.model.SubCategory;
+import com.deals.model.Taluka;
 import com.deals.model.User;
+import com.deals.model.UserDetail;
+import com.deals.model.Village;
 import com.deals.repository.CategoryRepository;
+import com.deals.repository.CityRepository;
 import com.deals.repository.DealRepository;
 import com.deals.repository.StateRepository;
 import com.deals.repository.SubCategoryRepository;
+import com.deals.repository.TalukaRepository;
+import com.deals.repository.VillageRepository;
 import com.deals.service.AppService;
 import com.deals.service.CategoryService;
 import com.deals.service.CompanyService;
@@ -39,9 +45,11 @@ import com.deals.service.LoginService;
 import com.deals.service.PlanService;
 import com.deals.service.SalesmanService;
 import com.deals.service.SubCategoryService;
+import com.deals.service.UserDetailService;
 import com.deals.service.UserService;
 import com.deals.util.App;
 import com.deals.util.Status;
+import com.deals.vo.RegisterVo;
 import com.deals.vo.UserVO;
 
 @Controller
@@ -60,6 +68,9 @@ public class AppController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private UserDetailService userDetailService;
 	
 	@Autowired
 	private SalesmanService salesmanService;
@@ -90,7 +101,17 @@ public class AppController {
 	
 	@Autowired
 	private SubCategoryRepository subCategoryRepository;
+	
+	@Autowired
+	private CityRepository cityRepository;
+	
+	@Autowired
+	private TalukaRepository talukaRepository;
 
+	@Autowired
+	private VillageRepository villageRepository;
+	
+	
 	@RequestMapping(value="/login")
 	public String dologin(Model model, User user){
 		user = (User)loginService.login(user).getData();
@@ -227,6 +248,55 @@ public class AppController {
 		return "u-plan";
 	}
 
+	@RequestMapping(value="/registerPage")
+	public String registerPage(Model model){
+		List<State> states = stateRepository.findAll();
+		List<City> cities = cityRepository.findAllByStateId(states.get(0).getId());
+		List<Taluka> talukas = talukaRepository.findAllByCityId(cities.get(0).getId());
+		List<Village> villages = villageRepository.findAllByTalukaId(talukas.get(0).getId());
+		
+		model.addAttribute("states", states);
+		model.addAttribute("cities", cities);
+		model.addAttribute("talukas", talukas);
+		model.addAttribute("villages", villages);
+		
+		model.addAttribute("message", null);
+		return "u-register";
+	}
+	
+	@RequestMapping(value="/register")
+	public String register(HttpServletRequest req, Model model, RegisterVo register){
+		User user = new User();
+		user.setUserType(register.getUserType());
+		user.setName(register.getName());
+		user.setEmail(register.getEmail());
+		user.setMobile(register.getMobile());
+		user.setPassword(register.getPassword());
+		user = (User) userService.create(user).getData();
+		
+		UserDetail userDetail = new UserDetail();
+		userDetail.setAddress1(register.getAddress1());
+		userDetail.setDescription(register.getDescription());
+		userDetail.setLikes(new Long(0));
+		userDetail.setViews(new Long(0));
+		userDetail.setShopName(register.getShopName());
+		userDetail.setUser(user);
+		userDetail.setVillage(new Village(register.getVillage()));
+		userDetail = (UserDetail)userDetailService.create(userDetail).getData();
+		
+		model.addAttribute("states", stateRepository.findAll());
+		if(userDetail.getId() > 0){
+			model.addAttribute("message", "You have registered successfully.");
+			model.addAttribute("messageClass", "has-success");
+			model.addAttribute("icon", "fa fa-check");
+		}else{
+			model.addAttribute("message", "Registeration failed.");
+			model.addAttribute("messageClass", "has-error");
+			model.addAttribute("icon", "fa fa-times-circle-o");
+		}
+		return "u-register";
+	}
+	
 	/*
 	 * Client Routing END 
 	 * 
