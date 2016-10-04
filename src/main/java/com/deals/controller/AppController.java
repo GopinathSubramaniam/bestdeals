@@ -1,5 +1,6 @@
 package com.deals.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -250,22 +251,27 @@ public class AppController {
 
 	@RequestMapping(value="/registerPage")
 	public String registerPage(Model model){
-		List<City> cities = null;
-		List<Taluka> talukas = null;
-		List<Village> villages = null;
+		List<City> cities = new ArrayList<City>();
+		List<Taluka> talukas = new ArrayList<Taluka>();
+		List<Village> villages = new ArrayList<Village>();
 		List<State> states = stateRepository.findAll();
 		
-		if(states.size() > 0)
+		if(states.size() > 0){
+			model.addAttribute("states", states);
 			cities = cityRepository.findAllByStateId(states.get(0).getId());
-		if(cities.size() > 0)
+		}
+		if(cities.size() > 0){
+			model.addAttribute("cities", cities);
 			talukas = talukaRepository.findAllByCityId(cities.get(0).getId());
-		if(talukas.size() > 0)
+		}
+		if(talukas.size() > 0){
+			model.addAttribute("talukas", talukas);
 			villages = villageRepository.findAllByTalukaId(talukas.get(0).getId());
+		}
 		
-		model.addAttribute("states", states);
-		model.addAttribute("cities", cities);
-		model.addAttribute("talukas", talukas);
-		model.addAttribute("villages", villages);
+		if(villages.size() > 0){
+			model.addAttribute("villages", villages);
+		}
 		
 		model.addAttribute("message", null);
 		return "u-register";
