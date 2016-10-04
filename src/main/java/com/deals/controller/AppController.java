@@ -255,11 +255,11 @@ public class AppController {
 		List<Village> villages = null;
 		List<State> states = stateRepository.findAll();
 		
-		if(states.get(0) != null)
+		if(states.size() > 0)
 			cities = cityRepository.findAllByStateId(states.get(0).getId());
-		if(cities.get(0) != null)
+		if(cities.size() > 0)
 			talukas = talukaRepository.findAllByCityId(cities.get(0).getId());
-		if(talukas.get(0) != null )
+		if(talukas.size() > 0)
 			villages = villageRepository.findAllByTalukaId(talukas.get(0).getId());
 		
 		model.addAttribute("states", states);
