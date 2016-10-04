@@ -84,18 +84,18 @@ public class DealController {
 	} 
 	
 	@RequestMapping(value="/search", method= RequestMethod.GET)
-	public Status search(HttpServletRequest req){
-		String categoryName = req.getParameter("categoryName");
-		String subCatName = req.getParameter("subCatName");
-		String cityName = req.getParameter("cityName");
-		String placeName = req.getParameter("placeName");
-		
-		return dealService.findAll(categoryName, subCatName, cityName, placeName);
-	} 
-	
-	@RequestMapping(value="/searchglobal/{searchKey}", method= RequestMethod.GET)
-	public Status searchglobal(@PathVariable String searchKey, HttpServletRequest req){
-		return dealService.searchGlobal(searchKey);
+	public Status searchglobal(HttpServletRequest req){
+		String type = req.getParameter("type").toString();
+		if(type != null && type.toLowerCase().equals("global")){
+			String searchKey = req.getParameter("key").toString();
+			return dealService.searchGlobal(searchKey);
+		}else{
+			String categoryName = req.getParameter("cname");
+			String subCatName = req.getParameter("scname");
+			String cityName = req.getParameter("cityName");
+			String placeName = req.getParameter("placeName");
+			return dealService.findAll(categoryName, subCatName, cityName, placeName); 
+		}
 	} 
 	
 	@RequestMapping(value="/findAllBySubCat/{subCatId}", method= RequestMethod.GET)
