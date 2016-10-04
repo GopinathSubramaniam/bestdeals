@@ -50,21 +50,25 @@ public class UserController {
 		user.setAuthType(AuthType.OK);
 		user.setPassword(registerVo.getPassword());
 		user.setUserType(registerVo.getUserType());
-		user = (User)userService.create(user).getData();
 		
-		UserDetail userDetail = new UserDetail();
-		userDetail.setAddress1(registerVo.getAddress1());
-		userDetail.setDescription(registerVo.getDescription());
-		userDetail.setLikes(new Long(0));
-		userDetail.setViews(new Long(0));
-		userDetail.setPhoneNumbers(registerVo.getPhoneNumbers());
-		userDetail.setPlaceName(registerVo.getPlaceName());
-		userDetail.setShopName(registerVo.getShopName());
-		userDetail.setUser(user);
+		Status status = userService.create(user);
+		user = (User)status.getData();
 		
-		userDetail.setVillage(new Village(registerVo.getVillage()));
+		if(registerVo.getShopName() != null && registerVo.getAddress1() != null){
+			UserDetail userDetail = new UserDetail();
+			userDetail.setAddress1(registerVo.getAddress1());
+			userDetail.setDescription(registerVo.getDescription());
+			userDetail.setLikes(new Long(0));
+			userDetail.setViews(new Long(0));
+			userDetail.setPhoneNumbers(registerVo.getPhoneNumbers());
+			userDetail.setPlaceName(registerVo.getPlaceName());
+			userDetail.setShopName(registerVo.getShopName());
+			userDetail.setUser(user);
+			userDetail.setVillage(new Village(registerVo.getVillage()));
+			userDetailService.create(userDetail);
+		}
 
-		return userDetailService.create(userDetail);
+		return status;
 	}
 	
 	

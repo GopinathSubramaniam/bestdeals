@@ -1,8 +1,8 @@
 var Register = (function(){
 	var BASE = App.URL().BASE;
 	var URL = BASE+App.URL().APP;
-	
-	var fields = {
+	var currentType = '';
+	var merchantFields = {
 			userType : App.validateRules.dropdown,
 			name : App.validateRules.name,
 			email : App.validateRules.email,
@@ -19,8 +19,23 @@ var Register = (function(){
 			description : App.validateRules.name
 		};
 	
-	App.bindValidation('registerForm', fields, function(){
-		 var registerObj = App.serializeObject('registerForm');
+	App.bindValidation('registerMerchantForm', merchantFields, function(){
+		 var registerObj = App.serializeObject('registerMerchantForm');
+		 Register.doRegister(registerObj);
+	});
+	
+	var franchiseFields = {
+			userType : App.validateRules.dropdown,
+			name : App.validateRules.name,
+			email : App.validateRules.email,
+			password : App.validateRules.name,
+			confirmPassword : App.validateRules.confirmPassword,
+			mobile : App.validateRules.mobile,
+			state : App.validateRules.dropdown
+		};
+	
+	App.bindValidation('registerFranchiseForm', franchiseFields, function(){
+		 var registerObj = App.serializeObject('registerFranchiseForm');
 		 Register.doRegister(registerObj);
 	});
 	
@@ -29,7 +44,9 @@ var Register = (function(){
 		var registerUrl = BASE+App.URL().USER+'register';
 		App.PostRequest(registerUrl, registerObj).then(function(res){
 			if(res.statusCode == '200'){
-				$('#registerForm')[0].reset();
+				$('#registerMerchantForm').bootstrapValidator('resetForm', true);
+				$('#registerFranchiseForm').bootstrapValidator('resetForm', true);
+				
 				$('#successMessage').html('<i class="fa fa-check"></i>Registeration successfully.').fadeOut(10000);
 			}else{
 				$('#errorMessage').html('<i class="fa fa-times-circle-o"></i>'+res.message).fadeOut(10000);
@@ -70,11 +87,26 @@ var Register = (function(){
 		});
 	};
 	
+	var changeRegisterForm = function(type){
+		currentType = type;
+		if(type == 'MERCHANT'){
+			$('#registerMerchantForm').removeClass('hidden');
+			$('#registerFranchiseForm').addClass('hidden');
+			$('#registerMerchantForm #userType').val('MERCHANT');
+		}else{
+			$('#registerFranchiseForm').removeClass('hidden');
+			$('#registerMerchantForm').addClass('hidden');
+			$('#registerFranchiseForm #userType').val('FRANCHISE');
+		}
+	};
+	
+	changeRegisterForm('MERCHANT');
 	return {
 		doRegister: doRegister,
 		findAllCitiesByStateId: findAllCitiesByStateId,
 		findAllTalukasByCityId: findAllTalukasByCityId,
-		findAllVillagesByTalukaId: findAllVillagesByTalukaId
+		findAllVillagesByTalukaId: findAllVillagesByTalukaId,
+		changeRegisterForm: changeRegisterForm
 	}
 	
 })();
