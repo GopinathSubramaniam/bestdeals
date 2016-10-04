@@ -250,10 +250,17 @@ public class AppController {
 
 	@RequestMapping(value="/registerPage")
 	public String registerPage(Model model){
+		List<City> cities = null;
+		List<Taluka> talukas = null;
+		List<Village> villages = null;
 		List<State> states = stateRepository.findAll();
-		List<City> cities = cityRepository.findAllByStateId(states.get(0).getId());
-		List<Taluka> talukas = talukaRepository.findAllByCityId(cities.get(0).getId());
-		List<Village> villages = villageRepository.findAllByTalukaId(talukas.get(0).getId());
+		
+		if(states.get(0) != null)
+			cities = cityRepository.findAllByStateId(states.get(0).getId());
+		if(cities.get(0) != null)
+			talukas = talukaRepository.findAllByCityId(cities.get(0).getId());
+		if(talukas.get(0) != null )
+			villages = villageRepository.findAllByTalukaId(talukas.get(0).getId());
 		
 		model.addAttribute("states", states);
 		model.addAttribute("cities", cities);
