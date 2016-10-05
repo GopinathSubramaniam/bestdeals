@@ -37,6 +37,7 @@ import com.deals.repository.DealRepository;
 import com.deals.repository.StateRepository;
 import com.deals.repository.SubCategoryRepository;
 import com.deals.repository.TalukaRepository;
+import com.deals.repository.UserRepository;
 import com.deals.repository.VillageRepository;
 import com.deals.service.AppService;
 import com.deals.service.CategoryService;
@@ -69,6 +70,9 @@ public class AppController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private UserRepository userRepository;
 	
 	@Autowired
 	private UserDetailService userDetailService;
@@ -279,34 +283,46 @@ public class AppController {
 	
 	@RequestMapping(value="/register")
 	public String register(HttpServletRequest req, Model model, RegisterVo register){
-		User user = new User();
-		user.setUserType(register.getUserType());
-		user.setName(register.getName());
-		user.setEmail(register.getEmail());
-		user.setMobile(register.getMobile());
-		user.setPassword(register.getPassword());
-		user = (User) userService.create(user).getData();
-		
-		UserDetail userDetail = new UserDetail();
-		userDetail.setAddress1(register.getAddress1());
-		userDetail.setDescription(register.getDescription());
-		userDetail.setLikes(new Long(0));
-		userDetail.setViews(new Long(0));
-		userDetail.setShopName(register.getShopName());
-		userDetail.setUser(user);
-		userDetail.setVillage(new Village(register.getVillage()));
-		userDetail = (UserDetail)userDetailService.create(userDetail).getData();
-		
-		model.addAttribute("states", stateRepository.findAll());
-		if(userDetail.getId() > 0){
-			model.addAttribute("message", "You have registered successfully.");
-			model.addAttribute("messageClass", "has-success");
-			model.addAttribute("icon", "fa fa-check");
+		System.out.println("Mobile ::: "+register.getMobile());
+		User user = userRepository.findByMobile(register.getMobile());
+		System.out.println("User :::: "+user);
+		if(user == null ){
+			System.out.println("User not exists:::: ");
+			user = new User();
+			user.setUserType(register.getUserType());
+			user.setName(register.getName());
+			user.setEmail(register.getEmail());
+			user.setMobile(register.getMobile());
+			user.setPassword(register.getPassword());
+			user = (User) userService.create(user).getData();
+			
+			UserDetail userDetail = new UserDetail();
+			userDetail.setAddress1(register.getAddress1());
+			userDetail.setDescription(register.getDescription());
+			userDetail.setLikes(new Long(0));
+			userDetail.setViews(new Long(0));
+			userDetail.setShopName(register.getShopName());
+			userDetail.setUser(user);
+			userDetail.setVillage(new Village(register.getVillage()));
+			userDetail = (UserDetail)userDetailService.create(userDetail).getData();
+			
+			model.addAttribute("states", stateRepository.findAll());
+			if(userDetail.getId() > 0){
+				model.addAttribute("message", "You have registered successfully.");
+				model.addAttribute("messageClass", "has-success");
+				model.addAttribute("icon", "fa fa-check");
+			}else{
+				model.addAttribute("message", "Registeration failed.");
+				model.addAttribute("messageClass", "has-error");
+				model.addAttribute("icon", "fa fa-times-circle-o");
+			}
 		}else{
-			model.addAttribute("message", "Registeration failed.");
+			System.out.println("User :::: "+App.MSG_USER_EXISTS);
+			model.addAttribute("message", App.MSG_USER_EXISTS);
 			model.addAttribute("messageClass", "has-error");
 			model.addAttribute("icon", "fa fa-times-circle-o");
 		}
+		
 		return "u-register";
 	}
 	

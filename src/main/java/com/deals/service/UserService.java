@@ -32,7 +32,7 @@ import com.deals.vo.UserVO;
 @Service
 public class UserService {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	private static Status status =  new Status();
+	private static Status status =  null;
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -58,6 +58,11 @@ public class UserService {
 	@Autowired
 	private LikeViewRepository likeViewRepository;
 	
+	
+	public User userExists(String mobile){
+		return userRepository.findByMobile(mobile);
+	}
+	
 	public Status sendOTP(String mobNumber){
 		
 		User user = userRepository.findByMobile(mobNumber);
@@ -81,13 +86,14 @@ public class UserService {
 	
 	public Status create(User user){
 		User userExist = null;
-		if(user != null){
-			if(user.getMobile() != null){
-				userExist = userRepository.findByMobileOrEmail(user.getMobile(), user.getEmail());
-			}
-			if(userExist != null && userExist.getId() != null){
+		if(user != null && user.getMobile() != null){
+			userExist = userRepository.findByMobile(user.getMobile());
+			log.info("User Exists :::: "+userExist);
+			if(userExist != null){
+				log.info("EXISTS :::: ");
 				status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_USER_EXISTS, null);
 			}else{
+				log.info("NOT EXISTS :::: ");
 				user.setAuthType(AuthType.OK);
 				user = userRepository.saveAndFlush(user);
 				

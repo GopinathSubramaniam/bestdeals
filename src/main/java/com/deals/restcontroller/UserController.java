@@ -54,7 +54,7 @@ public class UserController {
 		Status status = userService.create(user);
 		user = (User)status.getData();
 		
-		if(registerVo.getShopName() != null && registerVo.getAddress1() != null){
+		if(status.getStatusCode() != "500" && registerVo.getShopName() != null && registerVo.getAddress1() != null){
 			UserDetail userDetail = new UserDetail();
 			userDetail.setAddress1(registerVo.getAddress1());
 			userDetail.setDescription(registerVo.getDescription());

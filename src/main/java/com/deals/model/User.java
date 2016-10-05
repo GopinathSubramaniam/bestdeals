@@ -30,7 +30,6 @@ public class User extends BaseEntity{
 	@Column(unique=true)
 	private String mobile;
 	
-	@Column(unique=true)
 	private String email;
 	
 	private String password;
