@@ -23,10 +23,10 @@
 					<div class="row">
 						<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" th:each="deal : ${deals}">
 						    <div class="hovereffect">
+						    	<h4 th:text="${deal.name}"></h4>
 						        <img class="img-responsive" th:src="${deal.imgUrl}" th:alt="${deal.name}" style="height: 210px;width: 100%;"/>
 						        <div class="overlay">
-						            <h4 th:text="${deal.name}"></h4>
-						            <a class="info" href="#">link here</a>
+						        	<input type="radio" name="isDefault" class="minimal" /> Select as default
 						        </div>
 						    </div>
 						</div>
@@ -68,47 +68,15 @@
 	            </div>
 	          </div>
 	          <div class="form-group">
-	            <label for="inputEmail3" class="col-sm-2 control-label">State</label>
+	            <label for="inputEmail3" class="col-sm-2 control-label">Caption Name</label>
 	            <div class="col-sm-10">
-	            	<select id="inputState" name="state" class="form-control" onchange="App.findAllCityByState($('#inputState').val())">
-	            		<option value="">--- Select ---</option>
-	            		<option th:each="state : ${states}" th:value="${state.id}" th:text="${state.name}"></option>
-	            	</select>
-	            </div>
-	          </div>
-	          <div class="form-group">
-	            <label for="inputEmail3" class="col-sm-2 control-label">City</label>
-	            <div class="col-sm-10">
-	            	<select id="inputCity" name="city" class="form-control">
-						<option value="">--- Select ---</option>		            		
-	            	</select>
-	            </div>
-	          </div>
-	        
-	         <div class="form-group">
-	            <label for="inputEmail3" class="col-sm-2 control-label">Place Name</label>
-	            <div class="col-sm-10">
-	              <input type="text" name="placeName" class="form-control" id="inputPlaceName" placeholder="Place Name"/>
-	              <input type="hidden" name="id" class="form-control" id="advId"/>
-	              <input type="hidden" name="createdDate" class="form-control" id="inputCreatedDate"/>
-	            </div>
-	          </div>
-	          <div class="form-group">
-	            <label for="inputEmail3" class="col-sm-2 control-label">Name</label>
-	            <div class="col-sm-10">
-	              <input type="text" name="name" class="form-control" id="inputName" placeholder="Name"/>
+	              <input type="text" name="name" class="form-control" id="inputname" placeholder="Caption Name"/>
 	            </div>
 	          </div>
 	          <div class="form-group">
 	            <label for="inputEmail3" class="col-sm-2 control-label">Description</label>
 	            <div class="col-sm-10">
 	              <textarea name="description" class="form-control" id="inputdescription" placeholder="Description"></textarea>
-	            </div>
-	          </div>
-	          <div class="form-group">
-	            <label for="inputEmail3" class="col-sm-2 control-label">Contact</label>
-	            <div class="col-sm-10">
-	              <textarea name="contact" class="form-control" id="inputContact" placeholder="Contact"></textarea>
 	            </div>
 	          </div>
 	           <div class="form-group">
@@ -118,6 +86,12 @@
 	              <img alt="" src="" id="fileImage" class="hidden" style="width: 50%;height: 50%;"/>
 	            </div>
 	          </div>
+	          <!-- <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">Caption Name</label>
+	            <div class="col-sm-10">
+	              <input type="checkbox" name="priority" class="form-control" id="inputname" placeholder="Caption Name"/>
+	            </div>
+	          </div> -->
 	        </div>
           </div>
           

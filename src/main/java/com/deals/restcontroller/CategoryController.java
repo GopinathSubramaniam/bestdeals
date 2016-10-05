@@ -28,6 +28,11 @@ public class CategoryController {
 		return categoryService.findAll();
 	}
 	
+	@RequestMapping(value="/findAllCategory", method= RequestMethod.GET)
+	public Status findAllCategory(){
+		return categoryService.findAllCategory();
+	}
+	
 	@RequestMapping(value="/{id}", method= RequestMethod.GET)
 	public Status findById(@PathVariable Long id){
 		return categoryService.findOne(id);

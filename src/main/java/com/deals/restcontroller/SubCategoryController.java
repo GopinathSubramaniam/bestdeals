@@ -24,7 +24,7 @@ public class SubCategoryController {
 	}
 	
 	@RequestMapping(value = "/{catId}", method=RequestMethod.GET)	
-	public Status findAllByCategoryId(@PathVariable Long catId){
+	public Status findByCategoryId(@PathVariable Long catId){
 		return subCategoryService.findByCategoryId(catId);
 	}
 	
@@ -38,6 +38,10 @@ public class SubCategoryController {
 		return subCategoryService.delete(subcatId);
 	}
 	
+	@RequestMapping(value = "/findAllByCategoryId/{catId}", method=RequestMethod.GET)	
+	public Status findAllByCategoryId(@PathVariable Long catId){
+		return subCategoryService.findAllByCategoryId(catId);
+	}
 	
 	
 	

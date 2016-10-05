@@ -132,7 +132,7 @@ var App = (function(){
 	var findAllSubCateByState = function(categoryId){
 		$('#inputSubCategory').html('');
 		if(categoryId){
-			var url = App.URL().BASE+App.URL().SUB_CATEGORY+categoryId;
+			var url = App.URL().BASE+App.URL().SUB_CATEGORY+'findAllByCategoryId/'+categoryId;
 			GetRequest(url).then(function(res){
 				res.data.forEach(function(obj, i){
 					$('#inputSubCategory').append('<option value='+obj.id+'>'+obj.name+'</option>');

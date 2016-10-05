@@ -430,11 +430,11 @@ public class AppController {
 				Deal deal = new Deal();
 				String id = req.getParameter("id");
 				Long subCatId = Long.parseLong(req.getParameter("subCategory"));
-				Long cityId = Long.parseLong(req.getParameter("city"));
-				String contact = req.getParameter("contact");
+//				Long cityId = Long.parseLong(req.getParameter("city"));
+//				String contact = req.getParameter("contact");
 				String description = req.getParameter("description");
 				String name = req.getParameter("name");
-				String placeName = req.getParameter("placeName");
+//				String placeName = req.getParameter("placeName");
 				
 				Part part = req.getPart("file");
 				log.info("Part File :::: "+part.getSize());
@@ -455,12 +455,12 @@ public class AppController {
 					deal.setImgUrl(uploadedImgUrl);
 				}
 				
-				deal.setCity(new City(cityId));
-				deal.setContact(contact);
+//				deal.setCity(new City(cityId));
+//				deal.setContact(contact);
 				deal.setDescription(description);
 				deal.setName(name);
-				deal.setPlaceName(placeName);
-				deal.setPriority(Priority.HIGH);
+//				deal.setPlaceName(placeName);
+				deal.setPriority(Priority.LOW);
 				deal.setSubCategory(new SubCategory(subCatId));
 				deal.setType(DealType.ADVERTISEMENT);
 				deal.setUser(new User(userId));
@@ -480,7 +480,7 @@ public class AppController {
 	private Model getAdvertisementModel(Model model){
 		Long userId = (Long) getSessionVal("userId");
 		List<Deal> deals = (List<Deal>)dealService.findAllByUserId(userId).getData();
-		List<Category> categories = (List<Category>)categoryService.findAll().getData();
+		List<Category> categories = (List<Category>)categoryService.findAllCategory().getData();
 		List<State> states = stateRepository.findAll();
 		model.addAttribute("tab", Page.ADVERTISEMENT.toString());
 		model.addAttribute("deals", deals);

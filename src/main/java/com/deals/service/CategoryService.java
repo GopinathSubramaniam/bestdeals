@@ -51,6 +51,19 @@ public class CategoryService {
 		return status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, filteredCategories);
 	}
 	
+	public Status findAllCategory(){
+		List<Category> categories = categoryRepository.findAll();
+		List<CategoryVo> filteredCategories = new ArrayList<CategoryVo>();
+		for (Category category : categories) {
+			CategoryVo categoryVo = new CategoryVo();
+			categoryVo.setId(category.getId());
+			categoryVo.setName(category.getName());
+			categoryVo.setDescription(category.getDescription());
+			filteredCategories.add(categoryVo);
+		}
+		return status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, filteredCategories);
+	}
+	
 	public Status delete(Long id){
 		categoryRepository.delete(id);
 		return status = App.getResponse(App.CODE_OK, App.STATUS_DELETE, App.MSG_DELETE, null);

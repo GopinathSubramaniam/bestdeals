@@ -53,6 +53,21 @@ public class SubCategoryService {
 		return status;
 	}
 	
+	public Status findAllByCategoryId(Long catId){
+		List<SubCategory> subCategories = subCategoryRepository.findAllByCategoryId(catId);
+		List<SubCategoryVo> subCategorieVos = new ArrayList<SubCategoryVo>();
+		log.info("SubCategories ::::: "+subCategories);
+		for (SubCategory subCategory : subCategories) {
+			SubCategoryVo subCategoryVo = new SubCategoryVo();
+			subCategoryVo.setId(subCategory.getId());
+			subCategoryVo.setName(subCategory.getName());
+			subCategoryVo.setDescription(subCategory.getDescription());
+			subCategorieVos.add(subCategoryVo);	
+		}
+		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, subCategorieVos);
+		return status;
+	}
+	
 	public Status findOne(Long subCatId){
 		SubCategory subCategory = subCategoryRepository.findOne(subCatId);
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, subCategory);

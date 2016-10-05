@@ -68,6 +68,20 @@ var Deal = (function(){
 		});
 	};
 	
+	 $('input').iCheck({
+		 checkboxClass : 'icheckbox_square-blue',
+		 radioClass: 'iradio_minimal-blue',
+		 increaseArea : '20%' // optional
+	 });
+	 
+	/* $('input[type="radio"].minimal').iCheck({
+		 radioClass: 'iradio_minimal-blue'
+	 });*/
+	 
+	/* $('input[type="radio"]').iCheck({
+         radioClass: 'iradio_flat-blue'
+       });*/
+	
 	return {
 		create: create,
 		deleteDeal: deleteDeal,
