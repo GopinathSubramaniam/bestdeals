@@ -48,6 +48,7 @@ public class UserDetailService {
 			}
 			existsUserDetail.setAddress1(userDetail.getAddress1());
 			existsUserDetail.setAddress2(userDetail.getAddress2());
+			existsUserDetail.setAddress3(userDetail.getAddress3());
 			existsUserDetail.setUser(userDetail.getUser());
 			userDetailRepository.saveAndFlush(existsUserDetail);
 			status = App.getResponse(App.CODE_OK, App.STATUS_CREATE, App.MSG_CREATE, existsUserDetail);
