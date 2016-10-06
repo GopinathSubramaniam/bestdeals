@@ -31,7 +31,7 @@ var UserProfile = (function(){
 	};
 	
 	var update = function(){
-		var userObj = App.serializeObject('editUserform');
+		var userObj = App.serializeObject('userInfoEditForm');
 		App.PutRequest(URL, userObj).then(function(res){
 			console.log('User Create ::: ', userObj);
 			if(res.statusCode == '500'){
@@ -40,7 +40,20 @@ var UserProfile = (function(){
 				window.location.reload();
 			}
 		});
-		
+	};
+	
+	var updateDetail = function(){
+		var usrDetailUrl = App.URL().BASE+App.URL().USER_DETAIL;
+		var userDetailObj = App.serializeObject('userDetailEditForm');
+		userDetailObj.user = {id: userDetailObj.userId};
+		App.PutRequest(usrDetailUrl, userDetailObj).then(function(res){
+			console.log('User Create ::: ', userDetailObj);
+			if(res.statusCode == '500'){
+				$('#errorMsg').html(res.message).fadeOut(10000);
+			}else{
+				window.location.reload();
+			}
+		});
 	};
 	
 	var deleteUser = function(userId){
@@ -49,9 +62,42 @@ var UserProfile = (function(){
 		});
 	};
 	
+	$('#displayUserInfoEditBtn').click(function(ev){
+		var userInfoHeadDiv = $('.userInfoHeadDiv');
+		var userInfoDiv = $('.userInfoDiv');
+		var userFormElem = $('#userInfoEditForm');
+		
+		if(userFormElem.hasClass('hidden')){
+			userFormElem.removeClass('hidden');
+			userInfoHeadDiv.addClass('hidden');
+			userInfoDiv.addClass('hidden');
+		}else{
+			userFormElem.addClass('hidden');
+			userInfoHeadDiv.removeClass('hidden');
+			userInfoDiv.removeClass('hidden');
+		}
+	});
+	
+	$('#displayUserDetailEditBtn').click(function(ev){
+		var userDetailHeadDiv = $('.userDetailHeadDiv');
+		var userDetailEditDiv = $('.userDetailDiv');
+		var userDetailEditFormElem = $('#userDetailEditForm');
+		
+		if(userDetailEditFormElem.hasClass('hidden')){
+			userDetailEditFormElem.removeClass('hidden');
+			userDetailHeadDiv.addClass('hidden');
+			userDetailEditDiv.addClass('hidden');
+		}else{
+			userDetailEditFormElem.addClass('hidden');
+			userDetailHeadDiv.removeClass('hidden');
+			userDetailEditDiv.removeClass('hidden');
+		}
+	});
+	
 	return {
 		create: create,
 		update: update,
+		updateDetail: updateDetail,
 		findUserById: findUserById,
 		deleteUser: deleteUser
 	}

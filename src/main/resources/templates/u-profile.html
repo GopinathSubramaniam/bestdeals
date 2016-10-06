@@ -16,8 +16,17 @@
 		<div class="row" style="overflow: auto; max-height:830px;">
 			<section class="content">
 				<div class="col-lg-12 col-xs-12">
-					<h3>User Information</h3>
-					<div class="box">
+					<div class="row userInfoHeadDiv">
+						<div class="col-md-2 col-lg-2">
+							<h3>User Information</h3>
+						</div>
+						<div class="col-md-2 col-lg-2">
+							<h3 id="displayUserInfoEditBtn">
+								<a href="#">Edit</a>
+							</h3>
+						</div>
+					</div>
+					<div class="box userInfoDiv">
 						<div class="form-group">
 			            	<label for="inputEmail3" class="col-sm-2 control-label">Name</label>
 			            	<div class="col-sm-10">
@@ -43,35 +52,117 @@
 			            	</div>
 			          	</div>
 					</div>
+					<form id="userInfoEditForm" class="hidden" action="javascript:void(0);" method="post" onsubmit="UserProfile.update(this)">
+						<div class="form-group">
+		            		<label for="inputEmail3" class="col-sm-2 control-label">Edit User Information</label>
+			          	</div>
+						<div class="box">
+						<input type="hidden" name="id" th:value="${user.id}"/>
+							<div class="form-group">
+				            	<label for="inputEmail3" class="col-sm-2 control-label">Name</label>
+				            	<div class="col-sm-10">
+				              		<input type="text" class="form-control" name="name" th:value="${user.name}"/>
+				            	</div>
+				          	</div>
+				          	<div class="form-group">
+				            	<label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+				            	<div class="col-sm-10">
+				              		<input type="text" class="form-control" name="email" id="labelEmail" th:value="${user.email}"/>
+				            	</div>
+				          	</div>
+				          	<div class="form-group">
+				            	<label for="inputEmail3" class="col-sm-2 control-label">Mobile</label>
+				            	<div class="col-sm-10">
+				              		<input type="text" class="form-control" name="mobile"  id="labelMobile" th:value="${user.mobile}"/>
+				            	</div>
+				          	</div>
+				          	<div class="form-group">
+				            	<div class="col-sm-10">
+				              		<button type="button" class="btn btn-warning">Cancel</button>
+				              		<button type="submit" class="btn btn-primary">Update</button>
+				            	</div>
+				          	</div>
+				          	<hr/>
+						</div>
+					</form>
 				</div>
 				<div class="col-lg-12">
-					<h3>User Details</h3>
-					<div class="box">
+					<div class="row userDetailHeadDiv">
+						<div class="col-md-2 col-lg-2">
+							<h3>User Details</h3>
+						</div>
+						<div class="col-md-2 col-lg-2">
+							<h3 id="displayUserDetailEditBtn">
+								<a href="#">Edit</a>
+							</h3>
+						</div>
+					</div>
+					<div class="box userDetailDiv">
 						<div class="form-group">
 			            	<label for="inputEmail3" class="col-sm-2 control-label">Address1</label>
 			            	<div class="col-sm-10">
-			              		<label id="labelName" th:text="${user.name}"></label>
+			              		<label id="labelName" th:text="${user.address1}"></label>
 			            	</div>
 			          	</div>
 			          	<div class="form-group">
 			            	<label for="inputEmail3" class="col-sm-2 control-label">Address2</label>
 			            	<div class="col-sm-10">
-			              		<label class="form-label" id="labelEmail" th:text="${user.email}"></label>
+			              		<label class="form-label" id="labelEmail" th:text="${user.address2}"></label>
 			            	</div>
 			          	</div>
 			          	<div class="form-group">
 			            	<label for="inputEmail3" class="col-sm-2 control-label">Address3</label>
 			            	<div class="col-sm-10">
-			              		<label class="form-label" id="labelMobile" th:text="${user.mobile}"></label>
+			              		<label class="form-label" id="labelMobile" th:text="${user.address3}"></label>
 			            	</div>
 			          	</div>
 			          	<div class="form-group">
 			            	<label for="inputEmail3" class="col-sm-2 control-label">Phone Numbers</label>
 			            	<div class="col-sm-10">
-			              		<label class="form-label" id="labelProfileCreateDate" th:text="${user.createdDate}"></label>
+			              		<label class="form-label" id="labelProfileCreateDate" th:text="${#strings.listJoin(user.phoneNumbers, ',')}"></label>
 			            	</div>
 			          	</div>
 					</div>
+					<form id="userDetailEditForm" class="hidden" action="javascript:void(0);" method="post" onsubmit="UserProfile.updateDetail(this)">  
+						<input type="hidden" id="id" name="id" th:value="${user.userDetailId}"/>
+						<input type="hidden" id="id" name="userId" th:value="${user.id}"/>
+						<div class="form-group">
+				            	<label for="inputEmail3" class="col-sm-2 control-label">Edit User Details</label>
+				          	</div>
+						<div class="box">
+							<div class="form-group">
+				            	<label for="inputEmail3" class="col-sm-2 control-label">Address1</label>
+				            	<div class="col-sm-10">
+				              		<input type="text" class="form-control" name="address1" id="inputName" th:value="${user.address1}"/>
+				            	</div>
+				          	</div>
+				          	<div class="form-group">
+				            	<label for="inputEmail3" class="col-sm-2 control-label">Address2</label>
+				            	<div class="col-sm-10">
+				              		<input type="text" class="form-control" name="address2" id="labelEmail" th:value="${user.address2}"/>
+				            	</div>
+				          	</div>
+				          	<div class="form-group">
+				            	<label for="inputEmail3" class="col-sm-2 control-label">Address3</label>
+				            	<div class="col-sm-10">
+				              		<input type="text" class="form-control"  name="address3" id="labelMobile" th:value="${user.address3}"/>
+				            	</div>
+				          	</div>
+				          	<div class="form-group">
+				            	<label for="inputEmail3" class="col-sm-2 control-label">Phone Numbers</label>
+				            	<div class="col-sm-10">
+				              		<textarea class="form-control" id="labelProfileCreateDate" name="phoneNumbers" th:text="${#strings.listJoin(user.phoneNumbers, ',')}"></textarea>
+				            	</div>
+				          	</div>
+				          	<div class="form-group">
+				            	<div class="col-sm-10">
+				              		<button type="button" class="btn btn-warning">Cancel</button>
+				              		<button type="submit" class="btn btn-primary">Update</button>
+				            	</div>
+				          	</div>
+						</div>
+					
+					</form>
 				</div>
 				<div class="col-lg-12 col-xs-12" th:if="${displayMap}" >
 					<input type="hidden" id="latitude" th:value="${user.latitude}"/>

@@ -1,5 +1,6 @@
 package com.deals.vo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.deals.enums.UserType;
@@ -25,7 +26,7 @@ public class UserVO {
 	private String address1;
 	private String address2;
 	private String address3;
-	private List<String> phoneNumbers;
+	private List<String> phoneNumbers = new ArrayList<String>();
 	private String timings;
 	private Long likes;
 	private Long views;

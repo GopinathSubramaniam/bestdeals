@@ -87,7 +87,7 @@ public class DealController {
 	public Status searchglobal(HttpServletRequest req){
 		String type = req.getParameter("type").toString();
 		if(type != null && type.toLowerCase().equals("global")){
-			String searchKey = req.getParameter("key").toString();
+			String searchKey = req.getParameter("key");
 			return dealService.searchGlobal(searchKey);
 		}else{
 			String categoryName = req.getParameter("cname");

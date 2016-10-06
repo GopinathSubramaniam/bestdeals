@@ -183,6 +183,7 @@ public class AppController {
 		List<Plan> plans = (List<Plan>)planService.findAll().getData();
 		Long userId = (Long) getSessionVal("userId");
 		UserVO userVO = (UserVO)userService.findUser(userId).getData();
+		log.info("UserVO getPhoneNumbers :::: "+userVO.getPhoneNumbers());
 		Plan plan = (Plan)planService.findOne(userVO.getPlanId()).getData();
 		
 		if(plan != null){

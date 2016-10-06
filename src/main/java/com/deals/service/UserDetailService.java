@@ -30,6 +30,33 @@ public class UserDetailService {
 		return status;
 	}
 	
+	public Status update(UserDetail userDetail){
+		if(userDetail != null){
+			UserDetail existsUserDetail = null;
+			if(userDetail.getId() != null){
+				existsUserDetail = userDetailRepository.findOne(userDetail.getId());
+			}else{
+				existsUserDetail = new UserDetail();
+			}
+			if(userDetail.getPhoneNumbers() != null){
+				String phoneNumbers = "";
+				String[] numbers = userDetail.getPhoneNumbers().split(",");
+				for (String number : numbers) {
+					phoneNumbers += number;
+				}
+				existsUserDetail.setPhoneNumbers(phoneNumbers);
+			}
+			existsUserDetail.setAddress1(userDetail.getAddress1());
+			existsUserDetail.setAddress2(userDetail.getAddress2());
+			existsUserDetail.setUser(userDetail.getUser());
+			userDetailRepository.saveAndFlush(existsUserDetail);
+			status = App.getResponse(App.CODE_OK, App.STATUS_CREATE, App.MSG_CREATE, existsUserDetail);
+		}else{
+			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_FAIL, userDetail);
+		}
+		return status;
+	}
+	
 	public Status findAllByUserId(Long userId){
 		List<UserDetail> userDetail = userDetailRepository.findAllByUserId(userId);
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, userDetail);

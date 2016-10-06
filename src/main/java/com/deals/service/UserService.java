@@ -123,6 +123,7 @@ public class UserService {
 			log.info("User Details ::: "+userDetails);
 			log.info("User ::: "+user);
 			UserVO userVO = App.setUserVo(user, userDetails.size() > 0 ? userDetails.get(0): null, deals);
+			log.info("UserDetailsId :: "+userVO.getUserDetailId());
 			status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, userVO);
 		}else{
 			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_FAIL, null);
@@ -148,11 +149,12 @@ public class UserService {
 	public Status update(User user){
 		if(user != null){
 			User existingUser = userRepository.getOne(user.getId());
-			existingUser.setChangedBy(user.getChangedBy());
+			if(user.getChangedBy() != null) existingUser.setChangedBy(user.getChangedBy());
+			if(user.getUserType() != null) existingUser.setUserType(user.getUserType());
+			if(user.getPassword() != null) existingUser.setPassword(user.getPassword());
+			
 			existingUser.setName(user.getName());
-			existingUser.setPassword(user.getPassword());
 			existingUser.setEmail(user.getEmail());
-			existingUser.setUserType(user.getUserType());
 			existingUser.setMobile(user.getMobile());
 			if(user.getPlan() != null){
 				existingUser.setPlan(user.getPlan());

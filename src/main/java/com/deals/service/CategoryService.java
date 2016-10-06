@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.deals.model.Category;
+import com.deals.model.SubCategory;
 import com.deals.repository.CategoryRepository;
 import com.deals.repository.SubCategoryRepository;
 import com.deals.util.App;
@@ -39,7 +40,8 @@ public class CategoryService {
 		List<CategoryVo> filteredCategories = new ArrayList<CategoryVo>();
 		
 		for (Category category : categories) {
-			if(subCategoryRepository.findAllByCategoryId(category.getId()).size() > 0 ){
+			List<SubCategory> subCategories = subCategoryRepository.findAllByCategoryId(category.getId());
+			if(subCategories.size() > 0 ){
 				CategoryVo categoryVo = new CategoryVo();
 				categoryVo.setId(category.getId());
 				categoryVo.setName(category.getName());
