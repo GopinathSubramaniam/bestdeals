@@ -62,7 +62,7 @@ var UserProfile = (function(){
 		});
 	};
 	
-	$('#displayUserInfoEditBtn').click(function(ev){
+	var displayUserInfoEditBtn = function(){
 		var userInfoHeadDiv = $('.userInfoHeadDiv');
 		var userInfoDiv = $('.userInfoDiv');
 		var userFormElem = $('#userInfoEditForm');
@@ -76,9 +76,9 @@ var UserProfile = (function(){
 			userInfoHeadDiv.removeClass('hidden');
 			userInfoDiv.removeClass('hidden');
 		}
-	});
+	};
 	
-	$('#displayUserDetailEditBtn').click(function(ev){
+	var displayUserDetailEditBtn = function(){
 		var userDetailHeadDiv = $('.userDetailHeadDiv');
 		var userDetailEditDiv = $('.userDetailDiv');
 		var userDetailEditFormElem = $('#userDetailEditForm');
@@ -92,14 +92,16 @@ var UserProfile = (function(){
 			userDetailHeadDiv.removeClass('hidden');
 			userDetailEditDiv.removeClass('hidden');
 		}
-	});
+	};
 	
 	return {
 		create: create,
 		update: update,
 		updateDetail: updateDetail,
 		findUserById: findUserById,
-		deleteUser: deleteUser
+		deleteUser: deleteUser,
+		displayUserInfoEditBtn: displayUserInfoEditBtn,
+		displayUserDetailEditBtn: displayUserDetailEditBtn
 	}
 	
 })();

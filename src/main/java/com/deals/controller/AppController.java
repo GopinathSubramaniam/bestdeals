@@ -199,7 +199,7 @@ public class AppController {
 		model.addAttribute("displayAdvertisement", displayAdvertisement);
 		model.addAttribute("userName", getSessionVal("username"));
 		model.addAttribute("displayMap", displayMap);
-		
+		log.info("User Timings :::: "+userVO.getTimings());
 		return "u-profile";
 	}
 
@@ -284,11 +284,11 @@ public class AppController {
 	
 	@RequestMapping(value="/register")
 	public String register(HttpServletRequest req, Model model, RegisterVo register){
-		System.out.println("Mobile ::: "+register.getMobile());
+		log.info("Mobile ::: "+register.getMobile());
 		User user = userRepository.findByMobile(register.getMobile());
-		System.out.println("User :::: "+user);
+		log.info("User :::: "+user);
 		if(user == null ){
-			System.out.println("User not exists:::: ");
+			log.info("User not exists:::: ");
 			user = new User();
 			user.setUserType(register.getUserType());
 			user.setName(register.getName());
@@ -318,10 +318,31 @@ public class AppController {
 				model.addAttribute("icon", "fa fa-times-circle-o");
 			}
 		}else{
-			System.out.println("User :::: "+App.MSG_USER_EXISTS);
+			log.info("User :::: "+App.MSG_USER_EXISTS);
 			model.addAttribute("message", App.MSG_USER_EXISTS);
 			model.addAttribute("messageClass", "has-error");
 			model.addAttribute("icon", "fa fa-times-circle-o");
+		}
+		List<City> cities = new ArrayList<City>();
+		List<Taluka> talukas = new ArrayList<Taluka>();
+		List<Village> villages = new ArrayList<Village>();
+		List<State> states = stateRepository.findAll();
+		
+		if(states.size() > 0){
+			model.addAttribute("states", states);
+			cities = cityRepository.findAllByStateId(states.get(0).getId());
+		}
+		if(cities.size() > 0){
+			model.addAttribute("cities", cities);
+			talukas = talukaRepository.findAllByCityId(cities.get(0).getId());
+		}
+		if(talukas.size() > 0){
+			model.addAttribute("talukas", talukas);
+			villages = villageRepository.findAllByTalukaId(talukas.get(0).getId());
+		}
+		
+		if(villages.size() > 0){
+			model.addAttribute("villages", villages);
 		}
 		
 		return "u-register";

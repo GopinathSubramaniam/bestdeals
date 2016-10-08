@@ -83,6 +83,25 @@ public class UserService {
 		return status;
 	}
 	
+	public Status createOnlyUser(User user){
+		User userExist = null;
+		if(user != null && user.getMobile() != null){
+			userExist = userRepository.findByMobile(user.getMobile());
+			log.info("User Exists :::: "+userExist);
+			if(userExist != null){
+				log.info("EXISTS ::::");
+				status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_USER_EXISTS, null);
+			}else{
+				log.info("NOT EXISTS ::::");
+				user.setAuthType(AuthType.OK);
+				user = userRepository.saveAndFlush(user);
+				status = App.getResponse(App.CODE_OK, App.STATUS_CREATE, App.MSG_CREATE, user);
+			}
+		}else{
+			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_FAIL, user);
+		}
+		return status;
+	}
 	
 	public Status create(User user){
 		User userExist = null;

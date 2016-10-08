@@ -39,6 +39,7 @@ public class UserVO {
 	private String shopName; //Shop Name
 	private String cityName;
 	private String stateName;
+	private String description;
 	
 	private Long planId;
 	

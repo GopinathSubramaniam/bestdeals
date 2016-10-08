@@ -51,7 +51,7 @@ public class UserController {
 		user.setPassword(registerVo.getPassword());
 		user.setUserType(registerVo.getUserType());
 		
-		Status status = userService.create(user);
+		Status status = userService.createOnlyUser(user);
 		user = (User)status.getData();
 		
 		if(status.getStatusCode() != "500" && registerVo.getShopName() != null && registerVo.getAddress1() != null){

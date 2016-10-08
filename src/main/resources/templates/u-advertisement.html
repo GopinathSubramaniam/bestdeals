@@ -25,8 +25,15 @@
 						    <div class="hovereffect">
 						    	<h4 th:text="${deal.name}"></h4>
 						        <img class="img-responsive" th:src="${deal.imgUrl}" th:alt="${deal.name}" style="height: 210px;width: 100%;"/>
-						        <div class="overlay">
-						        	<input type="radio" name="isDefault" class="minimal" /> Select as default
+						        <div class="col-lg-6 col-md-6">
+							        <div class="overlay">
+							        	<input type="radio" name="isDefault" class="minimal" /> Select as default
+							        </div>
+						        </div>
+						        <div class="col-lg-6 col-md-6">
+							        <div class="overlay has-error">
+							        	<a th:href="@{'deleteDeal?id='+ ${deal.id} }" class="control-label"><i class="fa fa-trash-o"></i>Delete</a>
+							        </div>
 						        </div>
 						    </div>
 						</div>
@@ -86,12 +93,6 @@
 	              <img alt="" src="" id="fileImage" class="hidden" style="width: 50%;height: 50%;"/>
 	            </div>
 	          </div>
-	          <!-- <div class="form-group">
-	            <label for="inputEmail3" class="col-sm-2 control-label">Caption Name</label>
-	            <div class="col-sm-10">
-	              <input type="checkbox" name="priority" class="form-control" id="inputname" placeholder="Caption Name"/>
-	            </div>
-	          </div> -->
 	        </div>
           </div>
           

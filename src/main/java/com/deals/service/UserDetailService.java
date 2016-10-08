@@ -21,6 +21,7 @@ public class UserDetailService {
 	private UserDetailRepository userDetailRepository;
 	
 	public Status create(UserDetail userDetail){
+		System.out.println("Create UserDetails :::: "+userDetail);
 		if(userDetail != null){
 			userDetail = userDetailRepository.saveAndFlush(userDetail);
 			status = App.getResponse(App.CODE_OK, App.STATUS_CREATE, App.MSG_CREATE, userDetail);
@@ -46,9 +47,21 @@ public class UserDetailService {
 				}
 				existsUserDetail.setPhoneNumbers(phoneNumbers);
 			}
-			existsUserDetail.setAddress1(userDetail.getAddress1());
-			existsUserDetail.setAddress2(userDetail.getAddress2());
-			existsUserDetail.setAddress3(userDetail.getAddress3());
+			
+			if( userDetail.getAddress1() != null ){
+				existsUserDetail.setAddress1(userDetail.getAddress1());
+			} 
+			
+			if( userDetail.getAddress2() != null ){
+				existsUserDetail.setAddress2(userDetail.getAddress2());
+			}
+			if( userDetail.getAddress3() != null ){
+				existsUserDetail.setAddress3(userDetail.getAddress3());
+			}
+			if( userDetail.getDescription() != null ){
+				existsUserDetail.setDescription(userDetail.getDescription());
+			}
+			
 			existsUserDetail.setUser(userDetail.getUser());
 			userDetailRepository.saveAndFlush(existsUserDetail);
 			status = App.getResponse(App.CODE_OK, App.STATUS_CREATE, App.MSG_CREATE, existsUserDetail);
