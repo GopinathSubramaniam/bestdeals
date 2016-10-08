@@ -43,13 +43,8 @@ var Deal = (function(){
 				$('#advId').val(obj.id);
 				$('#inputCategory').val(obj.subCategory.category.id);
 				$('#inputSubCategory').html('<option value="'+obj.subCategory.id+'">'+obj.subCategory.name+'</option>');
-				$('#inputState').val(obj.city.state.id);
-				$('#inputCity').html('<option value="'+obj.city.id+'">'+obj.city.name+'</option>');
-				$('#inputPlaceName').val(obj.placeName);
 				$('#inputName').val(obj.name);
 				$('#inputdescription').val(obj.description);
-				$('#inputContact').val(obj.contact);
-				$('#inputCreatedDate').val(obj.createdDate);
 				$('#fileImage').attr('src', obj.imgUrl);
 				$('#fileImage').removeClass('hidden');
 			}else{
@@ -68,10 +63,28 @@ var Deal = (function(){
 		});
 	};
 	
+	var selectDefault = function(id){
+		var userId = $('#userId').val();
+		App.GetRequest(URL+'selectDefault/'+id+'/true/'+userId).then(function(res){
+			if(res.statusCode == '200'){
+				$('#inputSuccess').html('You have updated the default image');
+				window.location.reload();
+			}else{
+				$('#inputError').html('Update default image is failed');
+			}
+		});
+	};
+	
 	 $('input').iCheck({
 		 checkboxClass : 'icheckbox_square-blue',
 		 radioClass: 'iradio_minimal-blue',
 		 increaseArea : '20%' // optional
+	 });
+	 
+	 $('.iCheck-helper').click(function(ev){
+		 console.log(ev);
+		 var onclickFn = $(this).offsetParent('[name="isDefault"]').parent().attr('onclick');
+		 eval(onclickFn);
 	 });
 	 
 	/* $('input[type="radio"].minimal').iCheck({
@@ -85,7 +98,8 @@ var Deal = (function(){
 	return {
 		create: create,
 		deleteDeal: deleteDeal,
-		findById: findById
+		findById: findById,
+		selectDefault: selectDefault
 	}
 	
 })();

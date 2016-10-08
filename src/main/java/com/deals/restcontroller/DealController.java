@@ -108,5 +108,10 @@ public class DealController {
 		return dealService.delete(id);
 	} 
 	
+
+	@RequestMapping(value="/selectDefault/{id}/{isDefault}/{userId}", method= RequestMethod.GET)
+	public Status selectDefault(@PathVariable Long id, @PathVariable boolean isDefault, @PathVariable Long userId){
+		return dealService.selectDefault(id, isDefault, userId);
+	} 
 	
 }

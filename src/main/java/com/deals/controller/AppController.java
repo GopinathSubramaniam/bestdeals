@@ -468,11 +468,8 @@ public class AppController {
 				Deal deal = new Deal();
 				String id = req.getParameter("id");
 				Long subCatId = Long.parseLong(req.getParameter("subCategory"));
-//				Long cityId = Long.parseLong(req.getParameter("city"));
-//				String contact = req.getParameter("contact");
 				String description = req.getParameter("description");
 				String name = req.getParameter("name");
-//				String placeName = req.getParameter("placeName");
 				
 				Part part = req.getPart("file");
 				log.info("Part File :::: "+part.getSize());
@@ -493,11 +490,8 @@ public class AppController {
 					deal.setImgUrl(uploadedImgUrl);
 				}
 				
-//				deal.setCity(new City(cityId));
-//				deal.setContact(contact);
 				deal.setDescription(description);
 				deal.setName(name);
-//				deal.setPlaceName(placeName);
 				deal.setPriority(Priority.LOW);
 				deal.setSubCategory(new SubCategory(subCatId));
 				deal.setType(DealType.ADVERTISEMENT);

@@ -92,15 +92,15 @@ public class DealService {
 		List<Deal> goldDeals = new ArrayList<>();
 		List<Deal> silverDeals = new ArrayList<>();
 		
-		platinumDeals = dealRepository.findAllByUserPlanPlanType(PlanType.PLATINUM);
+		platinumDeals = dealRepository.findAllByUserPlanPlanTypeAndIsDefault(PlanType.PLATINUM, true);
 		
 		if(platinumDeals.size() == 0 ){
-			goldDeals = dealRepository.findAllByUserPlanPlanType(PlanType.GOLD);
+			goldDeals = dealRepository.findAllByUserPlanPlanTypeAndIsDefault(PlanType.GOLD, true);
 			platinumDeals = goldDeals;
 		}
 		
 		if(platinumDeals.size() == 0 && goldDeals.size() == 0){
-			silverDeals = dealRepository.findAllByUserPlanPlanType(PlanType.SILVER);
+			silverDeals = dealRepository.findAllByUserPlanPlanTypeAndIsDefault(PlanType.SILVER, true);
 			platinumDeals = silverDeals;
 		}
 		List<DealVO> dealVOs = mergeDealVOs(platinumDeals);
@@ -134,6 +134,21 @@ public class DealService {
 	public Status delete(Long id){
 		dealRepository.delete(id);
 		return App.getResponse(App.CODE_OK, App.STATUS_DELETE, App.STATUS_DELETE, null);
+	}
+	
+	public Status selectDefault(Long id, boolean isDefault, Long userId){
+		Deal deal = dealRepository.findByUserIdAndIsDefault(userId, true);
+		deal.setDefault(false);
+		dealRepository.saveAndFlush(deal);
+		
+		deal = dealRepository.findOne(id);
+		if(deal != null){
+			deal.setDefault(isDefault);
+			dealRepository.saveAndFlush(deal);
+			return App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_UPDATE, deal);
+		}else{
+			return App.getResponse(App.CODE_OK, App.STATUS_FAIL, App.STATUS_FAIL, deal);
+		}
 	}
 	
 }

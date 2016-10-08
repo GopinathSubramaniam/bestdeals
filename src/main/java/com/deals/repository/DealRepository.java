@@ -14,9 +14,11 @@ import com.deals.model.Deal;
 @Transactional
 public interface DealRepository extends JpaRepository<Deal, Long>{
 
+	public Deal findByUserIdAndIsDefault(Long id, boolean isDefault);
+	
 	public List<Deal> findAllByUserId(Long id);
 	public List<Deal> findAllByPriorityAndUserPlanPlanType(Priority priority, PlanType planType);
-	public List<Deal> findAllByUserPlanPlanType(PlanType planType);
+	public List<Deal> findAllByUserPlanPlanTypeAndIsDefault(PlanType planType, boolean isDefault);
 	public List<Deal> findAllBySubCategoryId(Long id);
 	
 	@Query("select imgUrl from Deal d where d.user.id = ?")
