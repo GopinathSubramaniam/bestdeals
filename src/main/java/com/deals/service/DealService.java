@@ -138,8 +138,10 @@ public class DealService {
 	
 	public Status selectDefault(Long id, boolean isDefault, Long userId){
 		Deal deal = dealRepository.findByUserIdAndIsDefault(userId, true);
-		deal.setDefault(false);
-		dealRepository.saveAndFlush(deal);
+		if(deal != null){
+			deal.setDefault(false);
+			dealRepository.saveAndFlush(deal);
+		}
 		
 		deal = dealRepository.findOne(id);
 		if(deal != null){
