@@ -267,8 +267,11 @@ public class UserService {
 			
 			likeView.setType(type);
 			likeViewRepository.saveAndFlush(likeView);
+			return App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, App.MSG_OK);
+		}else{
+			return App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_USER_ALREADY_VIEWED, App.MSG_OK);
 		}
-		return App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, App.MSG_OK);
+		
 	}
 	
 }
