@@ -237,12 +237,23 @@ var App = (function(){
         }
 	};
 	
+	var getLatitudeLongitude = function (address, callback) {
+	    address = address || 'Pune';
+	    var geocoder = new google.maps.Geocoder();
+	    if (geocoder) {
+	        geocoder.geocode({
+	            'address': address
+	        }, function (results, status) {
+	            if (status == google.maps.GeocoderStatus.OK) {
+	                callback(results[0]);
+	            }
+	        });
+	    }
+	};
+	
 	// START
 	var userName = sessionStorage.getItem('username');
 	if(userName) $('#username').html(sessionStorage.getItem('username'));
-
-//	$('.userProfile').attr('href', 'profile?userId='+sessionStorage.getItem('userId'));
-//	$('.advertisement').attr('href', 'advertisement?userId='+sessionStorage.getItem('userId'));
 
 	$('.sidebar-menu li').click(function(ev){
 		console.log('>>>> Side bar clicked >>>');
@@ -258,11 +269,9 @@ var App = (function(){
 	 $('body').on('hidden.bs.modal', '.modal', function () {
 		 console.log('called hidden.bs.modal :::: ', this);
 		 $(this).find('form')[0].reset();
-		// $(this).find('form')[0].validator('destroy').validator();
       });
 	 
 	// END
-	
 	
 	return {
 		URL: URL,
@@ -280,7 +289,8 @@ var App = (function(){
 		getAdvRules: getAdvRules,
 		displayAdvTab: displayAdvTab,
 		bindValidation: bindValidation,
-		validateRules: validateRules
+		validateRules: validateRules,
+		getLatitudeLongitude: getLatitudeLongitude
 	};
 })();
 

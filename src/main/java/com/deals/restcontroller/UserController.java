@@ -57,6 +57,8 @@ public class UserController {
 		if(status.getStatusCode() != "500" && registerVo.getShopName() != null && registerVo.getAddress1() != null){
 			UserDetail userDetail = new UserDetail();
 			userDetail.setAddress1(registerVo.getAddress1());
+			userDetail.setLatitude(registerVo.getLatitude());
+			userDetail.setLongitude(registerVo.getLongitude());
 			userDetail.setDescription(registerVo.getDescription());
 			userDetail.setLikes(new Long(0));
 			userDetail.setViews(new Long(0));

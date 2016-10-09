@@ -305,6 +305,9 @@ public class AppController {
 			userDetail.setShopName(register.getShopName());
 			userDetail.setUser(user);
 			userDetail.setVillage(new Village(register.getVillage()));
+			userDetail.setLatitude(register.getLatitude());
+			userDetail.setLongitude(register.getLongitude());
+			
 			userDetail = (UserDetail)userDetailService.create(userDetail).getData();
 			
 			model.addAttribute("states", stateRepository.findAll());

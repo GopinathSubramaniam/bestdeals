@@ -41,16 +41,25 @@ var Register = (function(){
 	
 	var doRegister = function(registerObj){
 		console.log('RegisterObj ::::: ', registerObj);
-		var registerUrl = BASE+App.URL().USER+'register';
-		App.PostRequest(registerUrl, registerObj).then(function(res){
-			if(res.statusCode == '200'){
-				$('#registerMerchantForm').bootstrapValidator('resetForm', true);
-				$('#registerFranchiseForm').bootstrapValidator('resetForm', true);
-				
-				$('#successMessage').html('<i class="fa fa-check"></i>Registeration successfully.').fadeOut(10000);
-			}else{
-				$('#errorMessage').html('<i class="fa fa-times-circle-o"></i>'+res.message).fadeOut(10000);
+		
+		var placeName = $('#inputVillage').find('[value="'+registerObj.village+'"]').text();
+		App.getLatitudeLongitude(placeName, function(result){
+			console.log('Geo Result ::: ', result);
+			if(result){
+				registerObj.latitude = result.geometry.location.lat();
+				registerObj.longitude = result.geometry.location.lng();
 			}
+			var registerUrl = BASE+App.URL().USER+'register';
+			App.PostRequest(registerUrl, registerObj).then(function(res){
+				if(res.statusCode == '200'){
+					$('#registerMerchantForm').bootstrapValidator('resetForm', true);
+					$('#registerFranchiseForm').bootstrapValidator('resetForm', true);
+					
+					$('#successMessage').html('<i class="fa fa-check"></i>Registeration successfully.').fadeOut(10000);
+				}else{
+					$('#errorMessage').html('<i class="fa fa-times-circle-o"></i>'+res.message).fadeOut(10000);
+				}
+			});
 		});
 	};
 	
