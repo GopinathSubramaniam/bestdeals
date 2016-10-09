@@ -55,6 +55,8 @@ public class App {
 	public static String MSG_USER_EXISTS = "User already exists";
 	public static String MSG_USER_INVALID_EMAIL = "Invalid Email";
 	
+	public static String MSG_USER_ALREADY_VIEWED = "You have already viewd this user";
+	
 	public static String COUNTRY_CODE_IN = "91";
 	
 	private static Status status = new Status();
