@@ -167,9 +167,6 @@ public class App {
 		dealVO.setName(deal.getName());
 		dealVO.setType(deal.getType().toString());
 		dealVO.setDescription(deal.getDescription());
-//		dealVO.setCityName(deal.getCity().getName());
-//		dealVO.setStateName(deal.getCity().getState().getName());
-//		dealVO.setPlaceName(deal.getPlaceName());
 		dealVO.setUser(setUserVo(deal.getUser(), null, null));
 		dealVO.setImgUrl(deal.getImgUrl());
 		return dealVO;

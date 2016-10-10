@@ -3,6 +3,8 @@ package com.deals.restcontroller;
 import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +27,9 @@ import com.deals.util.Status;
 @RequestMapping("/rest/deal")
 public class DealController {
 
+	
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	private DealService dealService;
 	
@@ -85,11 +90,13 @@ public class DealController {
 	
 	@RequestMapping(value="/search", method= RequestMethod.GET)
 	public Status searchglobal(HttpServletRequest req){
-		String type = req.getParameter("type").toString();
+		String type = req.getParameter("type");
 		if(type != null && type.toLowerCase().equals("global")){
+			log.info("Global Search");
 			String searchKey = req.getParameter("key");
 			return dealService.searchGlobal(searchKey);
 		}else{
+			log.info("Advanced Search");
 			String categoryName = req.getParameter("cname");
 			String subCatName = req.getParameter("scname");
 			String cityName = req.getParameter("cityName");

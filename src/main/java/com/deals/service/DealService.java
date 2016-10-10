@@ -48,15 +48,15 @@ public class DealService {
 		List<Deal> goldDeals = new ArrayList<>();
 		List<Deal> silverDeals = new ArrayList<>();
 		
-		platinumDeals = dealRepository.findAllBySubCategoryCategoryNameOrSubCategoryNameOrCityNameOrPlaceNameAndUserPlanPlanType(searchKey, searchKey, searchKey, searchKey, PlanType.PLATINUM);
+		platinumDeals = dealRepository.findAllBySubCategoryCategoryNameOrSubCategoryNameOrCityNameOrPlaceNameOrDescriptionOrNameOrUserNameOrUserMobileOrUserPlanNameOrUserEmailAndUserPlanPlanType(searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey,PlanType.PLATINUM);
 		
 		if(platinumDeals.size() == 0 ){
-			goldDeals = dealRepository.findAllBySubCategoryCategoryNameOrSubCategoryNameOrCityNameOrPlaceNameAndUserPlanPlanType(searchKey, searchKey, searchKey, searchKey, PlanType.GOLD);
+			goldDeals = dealRepository.findAllBySubCategoryCategoryNameOrSubCategoryNameOrCityNameOrPlaceNameOrDescriptionOrNameOrUserNameOrUserMobileOrUserPlanNameOrUserEmailAndUserPlanPlanType(searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, PlanType.GOLD);
 			platinumDeals = goldDeals;
 		}
 		
 		if(platinumDeals.size() == 0 && goldDeals.size() == 0){
-			silverDeals = dealRepository.findAllBySubCategoryCategoryNameOrSubCategoryNameOrCityNameOrPlaceNameAndUserPlanPlanType(searchKey, searchKey, searchKey, searchKey, PlanType.SILVER);
+			silverDeals = dealRepository.findAllBySubCategoryCategoryNameOrSubCategoryNameOrCityNameOrPlaceNameOrDescriptionOrNameOrUserNameOrUserMobileOrUserPlanNameOrUserEmailAndUserPlanPlanType(searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, PlanType.SILVER);
 			platinumDeals = silverDeals;
 		}
 		List<DealVO> dealVOs = mergeDealVOs(platinumDeals);

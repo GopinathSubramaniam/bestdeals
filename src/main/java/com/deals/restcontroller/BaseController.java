@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.deals.model.City;
 import com.deals.repository.CityRepository;
+import com.deals.repository.CountryRepository;
+import com.deals.repository.StateRepository;
 import com.deals.repository.TalukaRepository;
 import com.deals.repository.UserDetailRepository;
 import com.deals.repository.VillageRepository;
@@ -26,6 +27,12 @@ public class BaseController {
 	private static Status status =  new Status();
 	
 	@Autowired
+	private CountryRepository countryRepository;
+	
+	@Autowired
+	private StateRepository stateRepository;
+	
+	@Autowired
 	private CityRepository cityRepository;
 	
 	@Autowired
@@ -37,20 +44,30 @@ public class BaseController {
 	@Autowired
 	private VillageRepository villageRepository;
 	
-	@RequestMapping(value="/findAllCitiesByState/{stateId}", method = RequestMethod.GET)
-	public Status findAllCitiesByState(@PathVariable Long stateId){
-		List<City> cities = cityRepository.findAllByStateId(stateId);
-		log.info("Cities ::: "+cities);
-		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, cities);
-		return status;
+	
+	@RequestMapping(value="/findAllCountry", method = RequestMethod.GET)
+	public Status findAllCountry(){
+		return App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, countryRepository.findAll());
 	}
 	
-	@RequestMapping(value="/findAllCities", method = RequestMethod.GET)
-	public Status findAllCities(){
-		List<City> cities = cityRepository.findAll();
-		log.info("Cities ::: "+cities);
-		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, cities);
-		return status;
+	@RequestMapping(value="/findAllStateByCountry/{countryId}", method = RequestMethod.GET)
+	public Status findAllStateByCountry(@PathVariable Long countryId){
+		return App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, stateRepository.findAllByCountryId(countryId));
+	}
+	
+	@RequestMapping(value="/findAllCitiesByState/{stateId}", method = RequestMethod.GET)
+	public Status findAllCitiesByState(@PathVariable Long stateId){
+		return App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, cityRepository.findAllByStateId(stateId));
+	}
+	
+	@RequestMapping(value="/findAllTalukasByCityId/{cityId}", method = RequestMethod.GET)
+	public Status findAllTalukasByCityId(@PathVariable Long cityId){
+		return status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, talukaRepository.findAllByCityId(cityId));
+	}
+	
+	@RequestMapping(value="/findAllVillagesByTalukaId/{talukaId}", method = RequestMethod.GET)
+	public Status findAllVillagesByTalukaId(@PathVariable Long talukaId){
+		return status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, villageRepository.findAllByTalukaId(talukaId));
 	}
 	
 	@RequestMapping(value="/findAllPlaceNames/{cityId}", method = RequestMethod.GET)
@@ -62,21 +79,6 @@ public class BaseController {
 		log.info("PlaceNameResponseVos ::: "+nameResponseVo);
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, nameResponseVo);
 		return status;
-	}
-	
-	@RequestMapping(value="/findAllCitiesByStateId/{stateId}", method = RequestMethod.GET)
-	public Status findAllCitiesByStateId(@PathVariable Long stateId){
-		return status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, cityRepository.findAllByStateId(stateId));
-	}
-	
-	@RequestMapping(value="/findAllTalukasByCityId/{cityId}", method = RequestMethod.GET)
-	public Status findAllTalukasByCityId(@PathVariable Long cityId){
-		return status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, talukaRepository.findAllByCityId(cityId));
-	}
-	
-	@RequestMapping(value="/findAllVillagesByTalukaId/{talukaId}", method = RequestMethod.GET)
-	public Status findAllVillagesByTalukaId(@PathVariable Long talukaId){
-		return status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, villageRepository.findAllByTalukaId(talukaId));
 	}
 	
 
