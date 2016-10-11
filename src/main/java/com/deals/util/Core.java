@@ -1,4 +1,4 @@
-package com.deals.util;
+/*package com.deals.util;
 
 import javax.crypto.Cipher;
 
@@ -24,3 +24,4 @@ public class Core {
 	
 
 }
+*/
