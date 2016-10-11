@@ -1,5 +1,7 @@
 package com.deals.restcontroller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +15,7 @@ import com.deals.model.User;
 import com.deals.model.UserDetail;
 import com.deals.model.Village;
 import com.deals.repository.VillageRepository;
+import com.deals.service.PublicUserPlanService;
 import com.deals.service.UserDetailService;
 import com.deals.service.UserService;
 import com.deals.util.Status;
@@ -22,6 +25,8 @@ import com.deals.vo.RegisterVo;
 @RequestMapping("/rest/user")
 public class UserController {
 
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	private UserService userService;
 	
@@ -30,6 +35,9 @@ public class UserController {
 	
 	@Autowired
 	private VillageRepository villageRepository;
+	
+	@Autowired
+	private PublicUserPlanService userPlanService;
 	
 	@RequestMapping(value="/sendOTP/{mobNumber}", method=RequestMethod.GET)
 	public Status sendOTP(@PathVariable String mobNumber){
@@ -53,6 +61,11 @@ public class UserController {
 		
 		Status status = userService.createOnlyUser(user);
 		user = (User)status.getData();
+		
+		if(user.getUserType().equals(UserType.PUBLIC)){
+			log.info("Public User::: Create QR code and plan");
+			userPlanService.create(user);
+		}
 		
 		if(status.getStatusCode() != "500" && registerVo.getShopName() != null && registerVo.getAddress1() != null){
 			UserDetail userDetail = new UserDetail();
@@ -110,11 +123,6 @@ public class UserController {
 		System.out.println("getUser Status :::: "+status);
 		return status;
 	}
-	
-	/*@RequestMapping(value="/verify/{codeOTP}/{loginId}", method=RequestMethod.GET)
-	public Status verifyOTP(@PathVariable String codeOTP, @PathVariable Long loginId){
-		return userService.verifyOTP(codeOTP, loginId);
-	}*/
 	
 	@RequestMapping(value="/findByUserType/{userType}", method=RequestMethod.GET)
 	public Status findUsersByUserType(@PathVariable UserType userType){

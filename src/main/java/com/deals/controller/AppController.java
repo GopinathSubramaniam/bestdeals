@@ -41,7 +41,6 @@ import com.deals.repository.UserRepository;
 import com.deals.repository.VillageRepository;
 import com.deals.service.AppService;
 import com.deals.service.CategoryService;
-import com.deals.service.CompanyService;
 import com.deals.service.DealService;
 import com.deals.service.LoginService;
 import com.deals.service.PlanService;
@@ -79,9 +78,6 @@ public class AppController {
 	
 	@Autowired
 	private SalesmanService salesmanService;
-	
-	@Autowired
-	private CompanyService companyService;
 	
 	@Autowired
 	private PlanService planService;
@@ -376,7 +372,6 @@ public class AppController {
 		model.addAttribute("title", "Sales List");
 		model.addAttribute("popupTitle", "Creaet New SalesMan");
 		model.addAttribute("salesmans", salesmanService.findAllSalesMan().getData());
-		model.addAttribute("companies", companyService.findAll().getData());
 		model.addAttribute("salesManagers", salesmanService.findAllSalesManager().getData());
 		
 		model.addAttribute("tab", Page.SALE.toString());
