@@ -58,6 +58,9 @@ public class UserService {
 	@Autowired
 	private LikeViewRepository likeViewRepository;
 	
+	@Autowired
+	private PublicUserPlanService userPlanService;
+	
 	
 	public User userExists(String mobile){
 		return userRepository.findByMobile(mobile);
@@ -115,6 +118,8 @@ public class UserService {
 				log.info("NOT EXISTS :::: ");
 				user.setAuthType(AuthType.OK);
 				user = userRepository.saveAndFlush(user);
+				
+				userPlanService.create(user);
 				
 				UserDetail userDetail = new UserDetail();
 				userDetail.setLikes(new Long(0));
