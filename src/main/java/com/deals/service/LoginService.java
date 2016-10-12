@@ -79,8 +79,16 @@ public class LoginService {
 				userVo.setId(user.getId());
 				userVo.setEmail(user.getEmail());
 				userVo.setName(user.getName());
-				
 				userVo.setUserType(user.getUserType());
+				
+				if(userDetail != null){
+					userVo.setAddress1(userDetail.getAddress1());
+					userVo.setAddress2(userDetail.getAddress2());
+					userVo.setAddress3(userDetail.getAddress3());
+					userVo.setCityName(userDetail.getVillage().getTaluka().getCity().getName());
+					userVo.setLatitude(userDetail.getLatitude());
+					userVo.setLongitude(userDetail.getLongitude());
+				}
 				
 				if(user.getPlan() != null){
 					userVo.setPlanId(user.getPlan().getId());
@@ -94,9 +102,13 @@ public class LoginService {
 					userVo.setPlanId(publicUserPlan.getId());
 					userVo.setPlanName(publicUserPlan.getPlanType().toString());
 					userVo.setPlanDescription(publicUserPlan.getDescription());
+					userVo.setPlanExpiryDate(publicUserPlan.getEndDate().toString());
+					userVo.setShopName(userDetail.getShopName());
+					userVo.setStateName(userDetail.getVillage().getTaluka().getCity().getState().getName());
+					userVo.setTimings(userDetail.getDescription());
 				}
 				
-				status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_USER_NOT_REGISTERED, user);
+				status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_USER_NOT_REGISTERED, userVo);
 			}
 		}else{
 			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_LOGIN_ERROR, user);
