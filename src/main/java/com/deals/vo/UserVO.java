@@ -40,8 +40,13 @@ public class UserVO {
 	private String cityName;
 	private String stateName;
 	private String description;
+	private String qrCode;
+	private String encryptedQrCode;
 	
 	private Long planId;
+	private String planName;
+	private String planExpiryDate;
+	private String planDescription;
 	
 	
 }
