@@ -21,7 +21,7 @@ public interface DealRepository extends JpaRepository<Deal, Long>{
 	public List<Deal> findAllByUserPlanPlanTypeAndIsDefault(PlanType planType, boolean isDefault);
 	public List<Deal> findAllBySubCategoryId(Long id);
 	
-	@Query("select imgUrl from Deal d where d.user.id = ?")
+	@Query("select CONCAT(img_url,'?caption=',description) as imgUrl from Deal d where d.user.id = ?")
 	public List<String> findImgUrlByUserId(Long id);
 	
 	public Integer countByUserId(Long id);

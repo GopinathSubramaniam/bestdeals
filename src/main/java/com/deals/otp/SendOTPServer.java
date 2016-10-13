@@ -18,7 +18,7 @@ import com.sun.jersey.api.client.WebResource;
 * */
 public class SendOTPServer {
 
-    private static String otp;
+//    private static String otp;
 
     //Base URL
     public static String baseUrl = "https://sendotp.msg91.com/api";
