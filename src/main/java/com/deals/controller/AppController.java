@@ -516,6 +516,7 @@ public class AppController {
 		model.addAttribute("deals", deals);
 		model.addAttribute("states", states);
 		model.addAttribute("categories", categories);
+		model.addAttribute("userId", userId);
 		return model;
 	}
 	
