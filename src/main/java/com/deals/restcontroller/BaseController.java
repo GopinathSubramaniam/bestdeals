@@ -1,5 +1,6 @@
 package com.deals.restcontroller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.deals.model.City;
 import com.deals.model.PublicUserPlan;
+import com.deals.model.State;
+import com.deals.model.Taluka;
+import com.deals.model.Village;
 import com.deals.repository.CityRepository;
 import com.deals.repository.CountryRepository;
 import com.deals.repository.PublicUserPlanRepository;
@@ -23,6 +28,7 @@ import com.deals.repository.VillageRepository;
 import com.deals.util.App;
 import com.deals.util.Secret;
 import com.deals.util.Status;
+import com.deals.vo.BasePlaceModel;
 import com.deals.vo.PlaceNameResponseVo;
 
 @RestController
@@ -30,6 +36,7 @@ import com.deals.vo.PlaceNameResponseVo;
 public class BaseController {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	private static Status status =  new Status();
+	List<BasePlaceModel> basePlaces = null;
 	
 	@Autowired
 	private CountryRepository countryRepository;
@@ -60,22 +67,54 @@ public class BaseController {
 	
 	@RequestMapping(value="/findAllStateByCountry/{countryId}", method = RequestMethod.GET)
 	public Status findAllStateByCountry(@PathVariable Long countryId){
-		return App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, stateRepository.findAllByCountryId(countryId));
+		List<State> states = stateRepository.findIdAndNameByCountryId(countryId);
+		basePlaces = new ArrayList<>();
+		for (State state : states) {
+			BasePlaceModel basePlaceModel = new BasePlaceModel();
+			basePlaceModel.setId(state.getId());
+			basePlaceModel.setName(state.getName());
+			basePlaces.add(basePlaceModel);
+		}
+		return App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, basePlaces);
 	}
 	
 	@RequestMapping(value="/findAllCitiesByState/{stateId}", method = RequestMethod.GET)
 	public Status findAllCitiesByState(@PathVariable Long stateId){
-		return App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, cityRepository.findAllByStateId(stateId));
+		List<City> cities = cityRepository.findAllByStateId(stateId);
+		basePlaces = new ArrayList<>();
+		for (City city : cities) {
+			BasePlaceModel basePlaceModel = new BasePlaceModel();
+			basePlaceModel.setId(city.getId());
+			basePlaceModel.setName(city.getName());
+			basePlaces.add(basePlaceModel);
+		}
+		return App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, basePlaces);
 	}
 	
 	@RequestMapping(value="/findAllTalukasByCityId/{cityId}", method = RequestMethod.GET)
 	public Status findAllTalukasByCityId(@PathVariable Long cityId){
-		return status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, talukaRepository.findAllByCityId(cityId));
+		List<Taluka> talukas = talukaRepository.findAllByCityId(cityId);
+		basePlaces = new ArrayList<>();
+		for (Taluka taluka : talukas) {
+			BasePlaceModel basePlaceModel = new BasePlaceModel();
+			basePlaceModel.setId(taluka.getId());
+			basePlaceModel.setName(taluka.getName());
+			basePlaces.add(basePlaceModel);	
+		}
+		return status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, basePlaces);
 	}
 	
 	@RequestMapping(value="/findAllVillagesByTalukaId/{talukaId}", method = RequestMethod.GET)
 	public Status findAllVillagesByTalukaId(@PathVariable Long talukaId){
-		return status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, villageRepository.findAllByTalukaId(talukaId));
+		List<Village> villages = villageRepository.findAllByTalukaId(talukaId);
+		basePlaces = new ArrayList<>();
+		for (Village village : villages) {
+			BasePlaceModel basePlaceModel = new BasePlaceModel();
+			basePlaceModel.setId(village.getId());
+			basePlaceModel.setName(village.getName());
+			basePlaces.add(basePlaceModel);
+		}
+		return status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, basePlaces);
 	}
 	
 	@RequestMapping(value="/findAllPlaceNames/{cityId}", method = RequestMethod.GET)

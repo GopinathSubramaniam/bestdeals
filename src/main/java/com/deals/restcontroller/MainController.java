@@ -41,7 +41,7 @@ public class MainController {
 
 	@RequestMapping(value="/findAllState/{countryId}", method=RequestMethod.GET)
 	public Status findAllState(@PathVariable Long countryId){
-		List<State> states = stateRepository.findAllByCountryId(countryId);
+		List<State> states = stateRepository.findIdAndNameByCountryId(countryId);
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, states);
 		return status;
 	}
