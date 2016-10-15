@@ -1,5 +1,7 @@
 package com.deals.restcontroller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.deals.enums.AuthType;
 import com.deals.enums.UserType;
+import com.deals.model.PublicUserPlan;
 import com.deals.model.User;
 import com.deals.model.UserDetail;
 import com.deals.model.Village;
@@ -138,6 +141,11 @@ public class UserController {
 	@RequestMapping(value="/likeOrView/{userId}/{merchantId}/{type}", method=RequestMethod.GET)
 	public Status like(@PathVariable Long userId, @PathVariable Long merchantId, @PathVariable String type){
 		return userService.likeOrView(userId, merchantId, type);
+	}
+	
+	@RequestMapping(value="/getPublicUserPlans", method=RequestMethod.GET)
+	public List<PublicUserPlan> getPublicUserPlans(){
+		return userPlanService.getPublicUserPlans();
 	}
 	
 }

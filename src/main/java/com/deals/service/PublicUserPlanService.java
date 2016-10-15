@@ -1,6 +1,7 @@
 package com.deals.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,12 +41,12 @@ public class PublicUserPlanService {
 		PublicUserPlan publicUserPlan = new PublicUserPlan();
 		publicUserPlan.setPlanType(PlanType.TRIAL);
 		publicUserPlan.setDescription("You are on six month trial period");
-		publicUserPlan.setValidatyInMonths(6);
+		publicUserPlan.setValidityInMonths(6);
 		publicUserPlan.setPercentage(new Double(20));
 		publicUserPlan.setStartDate(new Date());
 		
 		Date endDate = new Date();
-		int month = endDate.getMonth()+publicUserPlan.getValidatyInMonths();
+		int month = endDate.getMonth()+publicUserPlan.getValidityInMonths();
 		endDate.setMonth(month);
 		publicUserPlan.setEndDate(endDate);
 		
@@ -58,6 +59,11 @@ public class PublicUserPlanService {
 	
 	public Status createQRCode(QRCode qrCode){
 		return App.getResponse(App.CODE_OK, App.STATUS_CREATE, App.MSG_CREATE, qrCodeRepository.saveAndFlush(qrCode));
+	}
+	
+	
+	public List<PublicUserPlan> getPublicUserPlans(){
+		return publicUserPlanRepository.findAll();
 	}
 	
 	

@@ -44,6 +44,7 @@ import com.deals.service.CategoryService;
 import com.deals.service.DealService;
 import com.deals.service.LoginService;
 import com.deals.service.PlanService;
+import com.deals.service.PublicUserPlanService;
 import com.deals.service.SalesmanService;
 import com.deals.service.SubCategoryService;
 import com.deals.service.UserDetailService;
@@ -111,6 +112,9 @@ public class AppController {
 
 	@Autowired
 	private VillageRepository villageRepository;
+	
+	@Autowired
+	private PublicUserPlanService publicUserPlanservice;
 	
 	
 	@RequestMapping(value="/login")
@@ -435,6 +439,14 @@ public class AppController {
 		model.addAttribute("popupTitle", "Create New SubCategory");
 		model.addAttribute("subcategories", subcategoryService.findAll().getData());
 		return "category";
+	}
+	
+	@RequestMapping(value="/publicUserPlan")
+	public String publicUserPlan(Model model){
+		model.addAttribute("tab", Page.PUBLIC_USER_PLAN.toString());
+		model.addAttribute("title", "Public User Plan List");
+		model.addAttribute("publicUserPlans", publicUserPlanservice.getPublicUserPlans());
+		return "publicuserplan";
 	}
 	
 	@RequestMapping(value="/deleteDeal")

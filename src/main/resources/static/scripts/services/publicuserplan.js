@@ -1,6 +1,6 @@
 'use strict';
 
-var Plan = (function(){
+var PublicUserPlan = (function(){
 	var URL = App.URL().BASE+App.URL().PLAN;
 	
 	var create = function(){
@@ -25,8 +25,8 @@ var Plan = (function(){
 			$('#editname').val(plan.name);
 			$('#editamount').val(plan.amount);
 			$('#editdescription').val(plan.description);
-			$('#editPlanType').val(plan.planType);
-//			$('#editCompany').val(plan.company.id);
+			$('#editPlan').val(plan.planType);
+			$('#editCompany').val(plan.company.id);
 		});
 	};
 	

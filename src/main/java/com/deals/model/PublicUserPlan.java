@@ -2,6 +2,7 @@ package com.deals.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -30,7 +31,10 @@ public class PublicUserPlan {
 	private PlanType planType;
 	private String description;
 	private Double percentage;
-	private Integer validatyInMonths;
+	
+	@Column(columnDefinition="Decimal(10,2) default '0.00'")
+	private Double amount = 0.00;
+	private Integer validityInMonths = 6;
 	private Date startDate;
 	private Date endDate;	
 	

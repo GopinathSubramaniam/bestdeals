@@ -9,32 +9,32 @@
 			<div align="center">
 				<h2 th:text="${title}" ></h2>
 			</div>
-			<div>
-<!-- 				 <button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#planModal">Create New</button> -->
-			</div>
 			<div class="box">
 				 <table id="userTable" class="table table-bordered table-hover">
 				 	<thead>
                       <tr>
-<!--                         <th>Created Date</th> -->
-                        <th>Name</th>
+                        <th>Plan Type</th>
+                        <th>Percentage</th>
+                        <th>Validity In Months</th>
                         <th>Amount</th>
                         <th>Description</th>
-                        <th>Plan Type</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                    	<tr th:each="plan : ${plans}">
-<!--                     		<td th:text="${plan.createdDate}"></td> -->
-                    		<td th:text="${plan.name}"></td>
-                    		<td><i class="fa fa-rupee"></i><span th:text="${plan.amount}"></span></td>
-                    		<td th:text="${plan.description}"></td>
-                    		<td th:text="${plan.planType}"></td>
+                    	<tr th:each="publicUserPlan : ${publicUserPlans}">
+                    		<td th:text="${publicUserPlan.planType}"></td>
+                    		<td th:text="${publicUserPlan.percentage}"></td>
+                    		<td th:text="${publicUserPlan.validityInMonths}"></td>
+                    		<td><i class="fa fa-rupee"></i><span th:text="${publicUserPlan.amount}"></span></td>
+                    		<td th:text="${publicUserPlan.description}"></td>
+                    		<td th:text="${publicUserPlan.startDate}"></td>
+                    		<td th:text="${publicUserPlan.endDate}"></td>
                     		<td>
-<!--                     			<button title="Delete" class="btn btn-xs btn-danger" th:onclick="'Plan.deletePlan('+${plan.id}+')'"><i class="fa fa-fw fa-trash"></i>Delete</button> -->
-								<button title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#planUpdateModal" th:onclick="'Plan.findPlan('+${plan.id}+')'"><i class="fa fa-fw fa-edit"></i>Edit</button>
-<!-- 								<button title="Assign to User" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#assignToModal" th:onclick="'Plan.findAllFranchise('+${plan.id}+')'"><i class="fa fa-fw fa-user"></i>Assign To Merchant</button> -->
+                    			<button title="Delete" class="btn btn-xs btn-danger" th:onclick="'Plan.deletePlan('+${publicUserPlan.id}+')'"><i class="fa fa-fw fa-trash"></i>Delete</button>
+								<button title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#planUpdateModal" th:onclick="'Plan.findPlan('+${publicUserPlan.id}+')'"><i class="fa fa-fw fa-edit"></i>Edit</button>
                     		</td>
                     	</tr>
                     </tbody>
@@ -168,6 +168,15 @@
 	            	<select id="editPlanType" name="planType" class="form-control" >
 	            		<option value="">--- Select ---</option>
 	            		<option th:each="planType : ${planTypes}" th:value="${planType}" th:text="${planType}"></option>
+	            	</select>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">Company</label>
+	            <div class="col-sm-10">
+	            	<select id="editCompany" name="company" class="form-control">
+	            		<option value="">--- Select ---</option>
+	            		<option th:each="company: ${companies}" th:value="${company.id}" th:text="${company.name}"></option>
 	            	</select>
 	            </div>
 	          </div>

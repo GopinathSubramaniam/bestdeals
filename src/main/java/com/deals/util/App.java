@@ -119,6 +119,7 @@ public class App {
 			userVO.setCreatedDate(user.getCreatedDate().toString());
 			if(user.getPlan() != null){
 				userVO.setPlanId(user.getPlan().getId());
+				userVO.setPlanName(user.getPlan().getName());
 			}
 		}
 		if(userDetail !=null){
