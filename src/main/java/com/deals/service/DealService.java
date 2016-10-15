@@ -13,6 +13,7 @@ import com.deals.repository.DealRepository;
 import com.deals.util.App;
 import com.deals.util.Status;
 import com.deals.vo.DealVO;
+import com.deals.vo.ImageVo;
 import com.deals.vo.UserVO;
 
 @Service
@@ -124,8 +125,13 @@ public class DealService {
 			UserVO user = App.setUserVo(deal.getUser(), userDetail , null);
 			dealVO.setUser(user);
 			
-			List<String> imgUrls = dealRepository.findImgUrlByUserId(user.getId());
-			user.setImageUrls(imgUrls);
+			List<Deal> imgUrls = dealRepository.findImageUrlAndDescriptionByUserId(user.getId());
+			for (Deal dealObj : imgUrls) {
+				ImageVo imageVo = new ImageVo();
+				imageVo.setImgUrl(dealObj.getImgUrl());
+				imageVo.setDescription(dealObj.getDescription());
+				user.getImageUrls().add(imageVo);
+			}
 			dealVOs.add(dealVO);
 		}
 		return dealVOs;

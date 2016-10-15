@@ -33,7 +33,7 @@ public class UserVO {
 	private String latitude;
 	private String longitude;
 	private List<Deal> deals;
-	private List<String> imageUrls;
+	private List<ImageVo> imageUrls;
 	
 	private String placeName; //Village Name
 	private String shopName; //Shop Name

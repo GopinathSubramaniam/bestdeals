@@ -5,7 +5,6 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import com.deals.enums.PlanType;
 import com.deals.enums.Priority;
@@ -21,8 +20,8 @@ public interface DealRepository extends JpaRepository<Deal, Long>{
 	public List<Deal> findAllByUserPlanPlanTypeAndIsDefault(PlanType planType, boolean isDefault);
 	public List<Deal> findAllBySubCategoryId(Long id);
 	
-	@Query("select CONCAT(img_url,'?caption=',description) as imgUrl from Deal d where d.user.id = ?")
-	public List<String> findImgUrlByUserId(Long id);
+//	@Query("select CONCAT(img_url,'?caption=',description) as imgUrl from Deal d where d.user.id = ?")
+	public List<Deal> findImageUrlAndDescriptionByUserId(Long id);
 	
 	public Integer countByUserId(Long id);
 //	public Long removeAllByUserId(Long id);

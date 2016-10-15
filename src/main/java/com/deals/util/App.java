@@ -16,6 +16,7 @@ import com.deals.model.EmailDetail;
 import com.deals.model.User;
 import com.deals.model.UserDetail;
 import com.deals.vo.DealVO;
+import com.deals.vo.ImageVo;
 import com.deals.vo.UserVO;
 
 //import com.way2sms.SMS;
@@ -148,12 +149,15 @@ public class App {
 				userVO.setPhoneNumbers(phoneNumbers);
 			}
 		}
-		List<String> imgUrls = new ArrayList<String>();
+		List<ImageVo> imgUrls = new ArrayList<ImageVo>();
 		if(deals != null ){
 			for (Deal deal : deals) {
 				System.out.println("Deal ::: "+deal);
 				System.out.println("Deal Image Url ::: "+deal.getImgUrl());
-				imgUrls.add(deal.getImgUrl());
+				ImageVo imgUrl = new ImageVo();
+				imgUrl.setImgUrl(deal.getImgUrl());
+				imgUrl.setDescription( deal.getDescription());
+				imgUrls.add(imgUrl);
 			}
 		}
 		userVO.setImageUrls(imgUrls);

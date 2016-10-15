@@ -13,18 +13,22 @@
 				 <table id="userTable" class="table table-bordered table-hover">
 				 	<thead>
                       <tr>
+                      	<th>User Name</th>
+                      	<th>User Mobile</th>
                         <th>Plan Type</th>
                         <th>Percentage</th>
                         <th>Validity In Months</th>
                         <th>Amount</th>
                         <th>Description</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
+                        <th>Plan Start Date</th>
+                        <th>Plan End Date</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
                     	<tr th:each="publicUserPlan : ${publicUserPlans}">
+                    		<td th:text="${publicUserPlan.user.name}"></td>
+                    		<td th:text="${publicUserPlan.user.mobile}"></td>
                     		<td th:text="${publicUserPlan.planType}"></td>
                     		<td th:text="${publicUserPlan.percentage}"></td>
                     		<td th:text="${publicUserPlan.validityInMonths}"></td>
@@ -45,35 +49,6 @@
 	<div th:include="footer"></div>
 	<div th:include="base-js"></div>
 	<script src="scripts/services/plan.js"></script>
-	
-	<!-- Assign plan to user model start -->
-	<div id="assignToModal" class="modal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Assign Selected Plan to Merchant</h4>
-          </div>
-          <div class="modal-body">
-          <input type="hidden" name="planId" id="planId"/>
-	 	  	<select id="inputAssignPlan" name="assignPlan" class="form-control">
-    	  		
-    	  	</select>
-          </div>
-          <div class="modal-footer">
-          	<span class="form-group has-success pull-left">
-              <label class="control-label" for="inputSuccess" id="assignSuccessMsg"></label>
-            </span>
-            <span class="form-group has-error pull-left">
-              <label class="control-label" for="inputError" id="assignErrorMsg"></label>
-            </span>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="Plan.assignPlanToUser($('#inputAssignPlan').val(), $('#planId').val())">Assign</button>
-          </div>
-        </div>
-      </div>
-    </div>
-	<!-- Assign plan to user model end -->
 	
 	<!-- Create new sales model start -->
 	<div id="planModal" class="modal">
@@ -131,73 +106,5 @@
       </div>
     </div>
 	<!-- Create new sales model end -->
-	
-	<!-- Create new sales model start -->
-	<div id="planUpdateModal" class="modal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="modalTitle">Update Plan</h4>
-          </div>
-          <form id="updatePlanform" class="form-horizontal" action="javascript:void(0);" method="post" th:onsubmit="'Plan.update(this);'">
-          <div class="modal-body">
-	        <div class="box-body">
-	         <div class="form-group">
-	            <label for="inputEmail3" class="col-sm-2 control-label">Name</label>
-	            <div class="col-sm-10">
-	              <input type="text" name="name" class="form-control" id="editname" placeholder="Name"/>
-	              <input type="hidden" name="id" class="form-control" id="editid" placeholder="Name"/>
-	            </div>
-	          </div>
-	          <div class="form-group">
-	            <label for="inputEmail3" class="col-sm-2 control-label">Amount</label>
-	            <div class="col-sm-10">
-	              <input type="number" name="amount" class="form-control" id="editamount" placeholder="Amount"/>
-	            </div>
-	          </div>
-	          <div class="form-group">
-	            <label for="inputEmail3" class="col-sm-2 control-label">Description</label>
-	            <div class="col-sm-10">
-	              <textarea type="text" name="description" class="form-control" id="editdescription" placeholder="Description"></textarea>
-	            </div>
-	          </div>
-	          <div class="form-group">
-	            <label for="inputEmail3" class="col-sm-2 control-label">Plan Type</label>
-	            <div class="col-sm-10">
-	            	<select id="editPlanType" name="planType" class="form-control" >
-	            		<option value="">--- Select ---</option>
-	            		<option th:each="planType : ${planTypes}" th:value="${planType}" th:text="${planType}"></option>
-	            	</select>
-	            </div>
-	          </div>
-	          <div class="form-group">
-	            <label for="inputEmail3" class="col-sm-2 control-label">Company</label>
-	            <div class="col-sm-10">
-	            	<select id="editCompany" name="company" class="form-control">
-	            		<option value="">--- Select ---</option>
-	            		<option th:each="company: ${companies}" th:value="${company.id}" th:text="${company.name}"></option>
-	            	</select>
-	            </div>
-	          </div>
-	        </div>
-          </div>
-          
-          <div class="modal-footer">
-          	<span class="form-group has-success pull-left">
-              <label class="control-label" for="inputSuccess" id="editSuccessMsg"  style="padding-left: 50%;"></label>
-            </span>
-            <span class="form-group has-error pull-left">
-              <label class="control-label" for="inputError" id="editErrorMsg"  style="padding-left: 50%;"></label>
-            </span>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary" id="modalSubmitBtn">Update</button>
-          </div>
-          </form>	
-        </div>
-      </div>
-    </div>
-	<!-- Create new sales model end -->
-	
 </body>
 </html>
