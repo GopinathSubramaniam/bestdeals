@@ -148,4 +148,14 @@ public class UserController {
 		return userPlanService.getPublicUserPlans();
 	}
 	
+	@RequestMapping(value="/findPublicPlanById/{id}", method=RequestMethod.GET)
+	public Status findPublicPlanByUserId(@PathVariable Long id){
+		return userPlanService.getPublicUserPlan(id);
+	}
+	
+	@RequestMapping(value="/updatePublicPlan", method=RequestMethod.PUT)
+	public Status updatePublicPlan(@RequestBody PublicUserPlan publicUserPlan){
+		return userPlanService.updatePublicUserPlan(publicUserPlan);
+	}
+	
 }

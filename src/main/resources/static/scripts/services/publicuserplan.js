@@ -1,7 +1,7 @@
 'use strict';
 
 var PublicUserPlan = (function(){
-	var URL = App.URL().BASE+App.URL().PLAN;
+	var URL = App.URL().BASE+App.URL().USER;
 	
 	var create = function(){
 		var obj = App.serializeObject('newPlanform');
@@ -19,22 +19,26 @@ var PublicUserPlan = (function(){
 	var findPlan = function(id){
 		$('#modalTitle').html('Update Plan');
 		$('#modalSubmitBtn').html('Update');
-		App.GetRequest(URL+id).then(function(res){
+		App.GetRequest(URL+'findPublicPlanById/'+id).then(function(res){
 			var plan = res.data;
-			$('#editid').val(plan.id)
-			$('#editname').val(plan.name);
-			$('#editamount').val(plan.amount);
-			$('#editdescription').val(plan.description);
-			$('#editPlan').val(plan.planType);
-			$('#editCompany').val(plan.company.id);
+			if(plan){
+				$('#publicPlanId').val(plan.id)
+				$('#planType').val(plan.planType);
+				$('#inputPercentage').val(plan.percentage);
+				$('#inputValidityInMonths').val(plan.description);
+				$('#inputAmount').val(plan.amount);
+				$('#inputDescription').val(plan.description);
+				
+				$('#startDate').datepicker({format: 'yyyy-mm-dd'}).datepicker("setDate", plan.startDate);
+				$('#endDate').datepicker({format: 'yyyy-mm-dd'}).datepicker("setDate", plan.endDate);
+			}
 		});
 	};
 	
 	var update = function(){
-		var obj = App.serializeObject('updatePlanform');
-		obj.company = {company: parseInt(obj.company)};
+		var obj = App.serializeObject('updatePublicUserPlan');
 		
-		App.PutRequest(URL, obj).then(function(res){
+		App.PutRequest(URL+'updatePublicPlan', obj).then(function(res){
 			if(res.statusCode == '200'){
 				window.location.reload();
 			}else{

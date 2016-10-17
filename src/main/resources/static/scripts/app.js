@@ -251,6 +251,39 @@ var App = (function(){
 	    }
 	};
 	
+	var findAllCitiesByStateId = function(stateId){
+		App.GetRequest(URL+'findAllCitiesByState/'+stateId).then(function(res){
+			var dropdownHtml = '';
+			var cities = res.data;
+			cities.forEach(function(city, i){
+				dropdownHtml += '<option value="'+city.id+'">'+city.name+'</option>';
+			});
+			$('#inputCity').html(dropdownHtml);
+		});
+	};
+	
+	var findAllTalukasByCityId = function(cityId){
+		App.GetRequest(URL+'findAllTalukasByCityId/'+cityId).then(function(res){
+			var dropdownHtml = '';
+			var talukas = res.data;
+			talukas.forEach(function(taluka, i){
+				dropdownHtml += '<option value="'+taluka.id+'">'+taluka.name+'</option>';
+			});
+			$('#inputTaluka').html(dropdownHtml);
+		});
+	};
+	
+	var findAllVillagesByTalukaId = function(talukaId){
+		App.GetRequest(URL+'findAllVillagesByTalukaId/'+talukaId).then(function(res){
+			var dropdownHtml = '';
+			var villages = res.data;
+			villages.forEach(function(village, i){
+				dropdownHtml += '<option value="'+village.id+'">'+village.name+'</option>';
+			});
+			$('#inputVillage').html(dropdownHtml);
+		});
+	};
+	
 	// START
 	var userName = sessionStorage.getItem('username');
 	if(userName) $('#username').html(sessionStorage.getItem('username'));
@@ -290,7 +323,11 @@ var App = (function(){
 		displayAdvTab: displayAdvTab,
 		bindValidation: bindValidation,
 		validateRules: validateRules,
-		getLatitudeLongitude: getLatitudeLongitude
+		getLatitudeLongitude: getLatitudeLongitude,
+		findAllCitiesByStateId: findAllCitiesByStateId,
+		findAllTalukasByCityId: findAllTalukasByCityId,
+		findAllVillagesByTalukaId: findAllVillagesByTalukaId
+		
 	};
 })();
 

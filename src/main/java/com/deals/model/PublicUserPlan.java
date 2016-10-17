@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.deals.enums.PlanType;
 
@@ -35,7 +37,11 @@ public class PublicUserPlan {
 	@Column(columnDefinition="Decimal(10,2) default '0.00'")
 	private Double amount = 0.00;
 	private Integer validityInMonths = 6;
+	
+	@Temporal(TemporalType.DATE)
 	private Date startDate;
+	
+	@Temporal(TemporalType.DATE)
 	private Date endDate;	
 	
 	@ManyToOne

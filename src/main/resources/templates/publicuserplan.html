@@ -9,8 +9,8 @@
 			<div align="center">
 				<h2 th:text="${title}" ></h2>
 			</div>
-			<div class="box">
-				 <table id="userTable" class="table table-bordered table-hover">
+			<div class="box" style="max-height: 740px; overflow-y: scroll;">
+				 <table id="userTable" class="table table-hover">
 				 	<thead>
                       <tr>
                       	<th>User Name</th>
@@ -38,7 +38,7 @@
                     		<td th:text="${publicUserPlan.endDate}"></td>
                     		<td>
                     			<button title="Delete" class="btn btn-xs btn-danger" th:onclick="'Plan.deletePlan('+${publicUserPlan.id}+')'"><i class="fa fa-fw fa-trash"></i>Delete</button>
-								<button title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#planUpdateModal" th:onclick="'Plan.findPlan('+${publicUserPlan.id}+')'"><i class="fa fa-fw fa-edit"></i>Edit</button>
+								<button title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#planUpdateModal" th:onclick="'PublicUserPlan.findPlan('+${publicUserPlan.id}+')'"><i class="fa fa-fw fa-edit"></i>Edit</button>
                     		</td>
                     	</tr>
                     </tbody>
@@ -48,44 +48,63 @@
 	</div>
 	<div th:include="footer"></div>
 	<div th:include="base-js"></div>
-	<script src="scripts/services/plan.js"></script>
+	<script src="scripts/services/publicuserplan.js"></script>
 	
 	<!-- Create new sales model start -->
-	<div id="planModal" class="modal">
+	<div id="planUpdateModal" class="modal">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="modalTitle">Create New Plan</h4>
           </div>
-          <form id="newPlanform" class="form-horizontal" action="javascript:void(0);" method="post" th:onsubmit="'Plan.create(this);'">
+          <form id="updatePublicUserPlan" class="form-horizontal" action="javascript:void(0);" method="post" th:onsubmit="'PublicUserPlan.update(this);'">
           <div class="modal-body">
 	        <div class="box-body">
-	         <div class="form-group">
-	            <label for="inputEmail3" class="col-sm-2 control-label">Name</label>
+	          <div class="form-group">
+	          	<input type="hidden" id="publicPlanId" name="id"/>
+	            <label for="planType" class="col-sm-2 control-label">Plan Type</label>
 	            <div class="col-sm-10">
-	              <input type="text" name="name" class="form-control" id="inputname" placeholder="Name"/>
+	            	<select name="planType" id="planType" class="form-control">
+	            		<option value="">--Select--</option>
+	            		<option value="TRIAL">TRIAL</option>
+	            	</select>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">Percentage</label>
+	            <div class="col-sm-10">
+	              <input type="text" name="percentage" class="form-control" id="inputPercentage" placeholder="Name"/>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">Validity In Months</label>
+	            <div class="col-sm-10">
+	              <input type="text" name="inputValidityInMonths" class="form-control" id="inputValidityInMonths" placeholder="Name"/>
 	            </div>
 	          </div>
 	          <div class="form-group">
 	            <label for="inputEmail3" class="col-sm-2 control-label">Amount</label>
 	            <div class="col-sm-10">
-	              <input type="number" name="amount" class="form-control" id="inputamount" placeholder="Amount"/>
+	              <input type="number" name="amount" class="form-control" id="inputAmount" placeholder="Amount"/>
 	            </div>
 	          </div>
 	          <div class="form-group">
 	            <label for="inputEmail3" class="col-sm-2 control-label">Description</label>
 	            <div class="col-sm-10">
-	              <textarea type="text" name="description" class="form-control" id="inputdescription" placeholder="Description"></textarea>
+	              <textarea type="text" name="description" class="form-control" id="inputDescription" placeholder="Description"></textarea>
 	            </div>
 	          </div>
 	          <div class="form-group">
-	            <label for="inputEmail3" class="col-sm-2 control-label">Plan Type</label>
+	            <label for="inputEmail3" class="col-sm-2 control-label">Plan Start Date</label>
 	            <div class="col-sm-10">
-	            	<select id="inputPlanType" name="planType" class="form-control">
-	            		<option value="">--- Select ---</option>
-	            		<option th:each="planType : ${planTypes}" th:value="${planType}" th:text="${planType}"></option>
-	            	</select>
+	            	<input type="text" name="startDate" id="startDate" class="form-control"/>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">Plan End Date</label>
+	            <div class="col-sm-10">
+	            	<input type="text" name="endDate" id="endDate" class="form-control"/>
 	            </div>
 	          </div>
 	        </div>

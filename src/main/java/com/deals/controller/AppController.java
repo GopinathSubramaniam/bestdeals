@@ -394,6 +394,31 @@ public class AppController {
 	
 	@RequestMapping(value="/user")
 	public String user(Model model){
+		List<City> cities = new ArrayList<City>();
+		List<Taluka> talukas = new ArrayList<Taluka>();
+		List<Village> villages = new ArrayList<Village>();
+		List<State> states = stateRepository.findAll();
+		
+		if(states.size() > 0){
+			model.addAttribute("states", states);
+			cities = cityRepository.findAllByStateId(states.get(0).getId());
+		}
+		if(cities.size() > 0){
+			model.addAttribute("cities", cities);
+			talukas = talukaRepository.findAllByCityId(cities.get(0).getId());
+		}
+		if(talukas.size() > 0){
+			model.addAttribute("talukas", talukas);
+			villages = villageRepository.findAllByTalukaId(talukas.get(0).getId());
+		}
+		
+		if(villages.size() > 0){
+			model.addAttribute("villages", villages);
+		}
+		
+		model.addAttribute("message", null);
+		
+		
 		List<String> userTypes = App.getUserTypes();
 		Status status = userService.findAll();
 		

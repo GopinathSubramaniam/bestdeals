@@ -3,6 +3,8 @@ package com.deals.service;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ import com.deals.util.Status;
 
 @Service
 public class PublicUserPlanService {
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	private static Status status = new Status();
 	
@@ -64,6 +67,24 @@ public class PublicUserPlanService {
 	
 	public List<PublicUserPlan> getPublicUserPlans(){
 		return publicUserPlanRepository.findAll();
+	}
+	
+	public Status getPublicUserPlan(Long userId){
+		PublicUserPlan publicUserPlan = publicUserPlanRepository.findOne(userId);
+		return App.getResponse(App.CODE_OK, App.STATUS_CREATE, App.MSG_CREATE, publicUserPlan);
+	}
+	
+	public Status updatePublicUserPlan(PublicUserPlan userPlan){
+		log.info("Update Public User Plan ::: "+userPlan);
+		PublicUserPlan publicUserPlan = publicUserPlanRepository.findOne(userPlan.getId());
+		publicUserPlan.setAmount(userPlan.getAmount());
+		publicUserPlan.setDescription(userPlan.getDescription());
+		publicUserPlan.setPercentage(userPlan.getPercentage());
+		publicUserPlan.setPlanType(userPlan.getPlanType());
+		publicUserPlan.setStartDate(userPlan.getStartDate());
+		publicUserPlan.setEndDate(userPlan.getEndDate());
+		publicUserPlanRepository.saveAndFlush(publicUserPlan);
+		return App.getResponse(App.CODE_OK, App.STATUS_CREATE, App.MSG_CREATE, publicUserPlan);
 	}
 	
 	
