@@ -16,34 +16,118 @@
 			</div>
 		</div>
 		<div class="">
-			<div class="box" style="max-height: 700px;overflow: auto;">
-				 <table id="userTable" class="table table-bordered table-hover">
-				 	<thead>
-	                     <tr>
-	                       <th>Name</th>
-	                       <th>Email</th>
-	                       <th>Mobile</th>
-	                       <th>User Type</th>
-	                       <th>Login State</th>
-	                       <th>Plan Name</th>
-	                       <th>Action</th>
-	                     </tr>
-	                   </thead>
-	                   <tbody>
-	                   	<tr th:each="user : ${users}">
-	                   		<td th:text="${user.name}"></td>
-	                   		<td th:text="${user.email}"></td>
-	                   		<td th:text="${user.mobile}"></td>
-	                   		<td th:text="${user.userType}"></td>
-	                   		<td th:text="${user.loginState}"></td>
-	                   		<td th:text="${user.plan} != null ? (${user.plan.name}+' - '+${user.plan.planType}) : ''"></td>
-	                   		<td>
-	                   			<button title="Delete" class="btn btn-xs btn-danger" th:onclick="'User.deleteUser('+${user.id}+')'"><i class="fa fa-fw fa-trash"></i>Delete</button>
-								<button th:id="${user.userType}"  title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#editUserModal" th:onclick="'User.findUserById('+${user.id}+')'"><i class="fa fa-fw fa-edit"></i>Edit</button>
-	                   		</td>
-	                   	</tr>
-	                   </tbody>
-				 </table>
+			<div class="nav-tabs-custom">
+				<ul class="nav nav-tabs">
+					<li class="active">
+						<a href="#tab_1" data-toggle="tab"><i class="fa fa-fw fa-bank text-aqua"></i>Merchant</a>
+					</li>
+					<li><a href="#tab_2" data-toggle="tab"><i class="fa fa-fw fa-bank text-aqua"></i>Franchise</a></li>
+					<li><a href="#tab_3" data-toggle="tab"><i class="fa fa-fw fa-users text-aqua"></i>Public</a></li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane active" id="tab_1" th:if="${merchants} != null">
+						<table id="userTable" class="table table-bordered table-hover">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Email</th>
+									<th>Mobile</th>
+									<th>Plan Name</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="merchant : ${merchants}">
+									<td th:text="${merchant.name}"></td>
+									<td th:text="${merchant.email}"></td>
+									<td th:text="${merchant.mobile}"></td>
+									<td
+										th:text="${merchant.plan} != null ? (${merchant.plan.name}+' - '+${merchant.plan.planType}) : ''"></td>
+									<td>
+										<button title="Delete" class="btn btn-xs btn-danger"
+											th:onclick="'User.deleteUser('+${merchant.id}+')'">
+											<i class="fa fa-fw fa-trash"></i>Delete
+										</button>
+										<button th:id="${merchant.userType}" title="Edit"
+											class="btn btn-xs btn-primary" data-toggle="modal"
+											data-target="#editUserModal"
+											th:onclick="'User.findUserById('+${merchant.id}+')'">
+											<i class="fa fa-fw fa-edit"></i>Edit
+										</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="tab-pane" id="tab_2" th:if="${franchises} != null">
+						<table id="userTable" class="table table-bordered table-hover">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Email</th>
+									<th>Mobile</th>
+									<th>Plan Name</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="franchise : ${franchises}">
+									<td th:text="${franchise.name}"></td>
+									<td th:text="${franchise.email}"></td>
+									<td th:text="${franchise.mobile}"></td>
+									<td
+										th:text="${franchise.plan} != null ? (${franchise.plan.name}+' - '+${franchise.plan.planType}) : ''"></td>
+									<td>
+										<button title="Delete" class="btn btn-xs btn-danger"
+											th:onclick="'User.deleteUser('+${franchise.id}+')'">
+											<i class="fa fa-fw fa-trash"></i>Delete
+										</button>
+										<button th:id="${franchise.userType}" title="Edit"
+											class="btn btn-xs btn-primary" data-toggle="modal"
+											data-target="#editUserModal"
+											th:onclick="'User.findUserById('+${franchise.id}+')'">
+											<i class="fa fa-fw fa-edit"></i>Edit
+										</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="tab-pane" id="tab_3" th:if="${publicUsers} != null">
+						<table id="userTable" class="table table-bordered table-hover">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Email</th>
+									<th>Mobile</th>
+									<th>Plan Name</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="publicUser : ${publicUsers}">
+									<td th:text="${publicUser.name}"></td>
+									<td th:text="${publicUser.email}"></td>
+									<td th:text="${publicUser.mobile}"></td>
+									<td
+										th:text="${publicUser.plan} != null ? (${publicUser.plan.name}+' - '+${publicUser.plan.planType}) : ''"></td>
+									<td>
+										<button title="Delete" class="btn btn-xs btn-danger"
+											th:onclick="'User.deleteUser('+${publicUser.id}+')'">
+											<i class="fa fa-fw fa-trash"></i>Delete
+										</button>
+										<button th:id="${publicUser.userType}" title="Edit"
+											class="btn btn-xs btn-primary" data-toggle="modal"
+											data-target="#editUserModal"
+											th:onclick="'User.findUserById('+${publicUser.id}+')'">
+											<i class="fa fa-fw fa-edit"></i>Edit
+										</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

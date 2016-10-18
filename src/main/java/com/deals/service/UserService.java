@@ -1,5 +1,6 @@
 package com.deals.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -226,10 +227,22 @@ public class UserService {
 		return status;
 	}
 	
-	public Status findAllFranchise(){
-		List<User> users = userRepository.findAllByUserType(UserType.FRANCHISE);
-		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, users);
-		return status;
+	public List<User> findAllFranchise(){
+		List<User> users =  new ArrayList<User>();
+		users = userRepository.findAllByUserType(UserType.FRANCHISE);
+		return users;
+	}
+	
+	public List<User> findAllMerchant(){
+		List<User> users = new ArrayList<User>();
+		users = userRepository.findAllByUserType(UserType.MERCHANT);
+		return users;
+	}
+	
+	public List<User> findAllPublic(){
+		List<User> users = new ArrayList<User>();
+		users = userRepository.findAllByUserType(UserType.PUBLIC);
+		return users;
 	}
 	
 	public Status forgotPassword(String email){

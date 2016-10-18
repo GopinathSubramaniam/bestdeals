@@ -50,7 +50,6 @@ import com.deals.service.SubCategoryService;
 import com.deals.service.UserDetailService;
 import com.deals.service.UserService;
 import com.deals.util.App;
-import com.deals.util.Status;
 import com.deals.vo.RegisterVo;
 import com.deals.vo.UserVO;
 
@@ -420,9 +419,14 @@ public class AppController {
 		
 		
 		List<String> userTypes = App.getUserTypes();
-		Status status = userService.findAll();
+		List<User> merchants = userService.findAllMerchant();
+		List<User> franchises = userService.findAllFranchise();
+		List<User> publicUsers = userService.findAllPublic();
 		
-		model.addAttribute("users", status.getData());
+		model.addAttribute("merchants", merchants);
+		model.addAttribute("franchises", franchises);
+		model.addAttribute("publicUsers", publicUsers);
+		
 		model.addAttribute("plans", planService.findAll().getData());
 		model.addAttribute("title", "Users List");
 		model.addAttribute("popupTitle", "Create New User");
