@@ -49,8 +49,6 @@
 	</div>
 	<div th:include="footer"></div>
 	<div th:include="base-js"></div>
-	<script src="scripts/services/user.js"></script>
-	<script src="scripts/services/register.js"></script>
 	
 	<!-- Edit user model start -->
 	<div id="editUserModal" class="modal">
@@ -258,7 +256,7 @@
 							</div>
 							<!-- /.box-body -->
 							<div class="box-footer pull-right">
-								<a href="/BestDeals/" class="btn btn-default">Back To Login</a>
+								<button class="btn btn-default" data-dismiss="modal">Close</button>
 								<button type="submit" class="btn btn-primary">Register</button>
 							</div>
 							<!-- /.box-footer -->
@@ -330,7 +328,7 @@
 							</div>
 							<!-- /.box-body -->
 							<div class="box-footer pull-right">
-								<a href="/BestDeals/" class="btn btn-default">Cancel</a>
+								<button class="btn btn-default" data-dismiss="modal">Close</button>
 								<button type="submit" class="btn btn-primary">Register</button>
 							</div>
 							<!-- /.box-footer -->
@@ -342,8 +340,9 @@
 	</div>
 
 	<!-- Create new user model end -->
-	
-	
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwelkrFN__LksGXcg-Sy_kWecvrEpFzvU&amp;sensor=false" defer="defer" async="async"></script>
+	<script src="scripts/services/register.js"></script>
+	<script src="scripts/services/user.js"></script>
 	
 </body>
 </html>

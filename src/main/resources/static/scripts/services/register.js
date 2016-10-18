@@ -41,15 +41,30 @@ var Register = (function(){
 	
 	var doRegister = function(registerObj){
 		console.log('RegisterObj ::::: ', registerObj);
-		
-		var placeName = $('#inputVillage').find('[value="'+registerObj.village+'"]').text();
-		App.getLatitudeLongitude(placeName, function(result){
-			console.log('Geo Result ::: ', result);
-			if(result){
-				registerObj.latitude = result.geometry.location.lat();
-				registerObj.longitude = result.geometry.location.lng();
-			}
-			var registerUrl = BASE+App.URL().USER+'register';
+		var registerUrl = BASE+App.URL().USER+'register';
+		if(registerObj.userType == 'MERCHANT'){
+			var city = $('#inputCity').find('[value="'+registerObj.city+'"]').text();
+			var taluka = $('#inputTaluka').find('[value="'+registerObj.taluka+'"]').text();
+			var placeName = $('#inputVillage').find('[value="'+registerObj.village+'"]').text();
+			var place = placeName+','+taluka+','+city;
+			App.getLatitudeLongitude(place, function(result){
+				console.log('Geo Result ::: ', result);
+				if(result){
+					registerObj.latitude = result.geometry.location.lat();
+					registerObj.longitude = result.geometry.location.lng();
+				}
+				App.PostRequest(registerUrl, registerObj).then(function(res){
+					if(res.statusCode == '200'){
+						window.location.reload();
+						/*$('#registerMerchantForm').bootstrapValidator('resetForm', true);
+						$('#registerFranchiseForm').bootstrapValidator('resetForm', true);
+						$('#successMessage').html('<i class="fa fa-check"></i>Registeration successfully.').fadeOut(10000);*/
+					}else{
+						$('#errorMessage').html('<i class="fa fa-times-circle-o"></i>'+res.message).fadeOut(10000);
+					}
+				});
+			});
+		}else{
 			App.PostRequest(registerUrl, registerObj).then(function(res){
 				if(res.statusCode == '200'){
 					$('#registerMerchantForm').bootstrapValidator('resetForm', true);
@@ -60,7 +75,8 @@ var Register = (function(){
 					$('#errorMessage').html('<i class="fa fa-times-circle-o"></i>'+res.message).fadeOut(10000);
 				}
 			});
-		});
+		}
+		
 	};
 	
 	var findAllCitiesByStateId = function(stateId){
