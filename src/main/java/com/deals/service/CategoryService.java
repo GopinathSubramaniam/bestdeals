@@ -3,12 +3,15 @@ package com.deals.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.deals.model.Category;
 import com.deals.model.SubCategory;
 import com.deals.repository.CategoryRepository;
+import com.deals.repository.DealRepository;
 import com.deals.repository.SubCategoryRepository;
 import com.deals.util.App;
 import com.deals.util.Status;
@@ -16,6 +19,7 @@ import com.deals.vo.CategoryVo;
 
 @Service
 public class CategoryService {
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	private static Status status = new Status();
 	
@@ -24,6 +28,9 @@ public class CategoryService {
 	
 	@Autowired
 	private SubCategoryRepository subCategoryRepository;
+	
+	@Autowired
+	private DealRepository dealRepository;
 	
 	public Status create(Category category){
 		if(category !=null){
@@ -41,12 +48,16 @@ public class CategoryService {
 		
 		for (Category category : categories) {
 			List<SubCategory> subCategories = subCategoryRepository.findAllByCategoryId(category.getId());
-			if(subCategories.size() > 0 ){
-				CategoryVo categoryVo = new CategoryVo();
-				categoryVo.setId(category.getId());
-				categoryVo.setName(category.getName());
-				categoryVo.setDescription(category.getDescription());
-				filteredCategories.add(categoryVo);
+			for (SubCategory subCategory : subCategories) {
+				Long dealCount = dealRepository.countBySubCategoryId(subCategory.getId());
+				log.info("Deal Count :::: "+dealCount);
+				if(dealCount > 0){
+					CategoryVo categoryVo = new CategoryVo();
+					categoryVo.setId(category.getId());
+					categoryVo.setName(category.getName());
+					categoryVo.setDescription(category.getDescription());
+					filteredCategories.add(categoryVo);
+				}
 			}
 		}
 		

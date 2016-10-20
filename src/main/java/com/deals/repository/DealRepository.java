@@ -19,6 +19,7 @@ public interface DealRepository extends JpaRepository<Deal, Long>{
 	public List<Deal> findAllByPriorityAndUserPlanPlanType(Priority priority, PlanType planType);
 	public List<Deal> findAllByUserPlanPlanTypeAndIsDefault(PlanType planType, boolean isDefault);
 	public List<Deal> findAllBySubCategoryId(Long id);
+	public Long countBySubCategoryId(Long id);
 	
 //	@Query("select CONCAT(img_url,'?caption=',description) as imgUrl from Deal d where d.user.id = ?")
 	public List<Deal> findImageUrlAndDescriptionByUserId(Long id);
