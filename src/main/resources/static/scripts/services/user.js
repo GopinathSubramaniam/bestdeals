@@ -74,7 +74,7 @@ var User = (function(){
 	 $('#merchantTable').DataTable({
          "paging": true,
          "lengthChange": false,
-         "searching": false,
+         "searching": true,
          "ordering": true,
          "info": true,
          "autoWidth": false
@@ -82,7 +82,7 @@ var User = (function(){
 	 $('#franchiseTable').DataTable({
          "paging": true,
          "lengthChange": false,
-         "searching": false,
+         "searching": true,
          "ordering": true,
          "info": true,
          "autoWidth": false
@@ -90,7 +90,7 @@ var User = (function(){
 	 $('#publicUserTable').DataTable({
          "paging": true,
          "lengthChange": false,
-         "searching": false,
+         "searching": true,
          "ordering": true,
          "info": true,
          "autoWidth": false
