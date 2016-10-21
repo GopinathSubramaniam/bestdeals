@@ -135,6 +135,7 @@ var App = (function(){
 		if(categoryId){
 			var url = App.URL().BASE+App.URL().SUB_CATEGORY+'findAllByCategoryId/'+categoryId;
 			GetRequest(url).then(function(res){
+				$('#inputSubCategory').append('<option>-- Select --</option>');
 				res.data.forEach(function(obj, i){
 					$('#inputSubCategory').append('<option value='+obj.id+'>'+obj.name+'</option>');
 				});

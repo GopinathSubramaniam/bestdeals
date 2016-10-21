@@ -120,7 +120,7 @@ public class AppController {
 	public String dologin(Model model, User user){
 		user = (User)loginService.login(user).getData();
 		String page = "u-login";
-		
+		int maxAdvCount = 0;
 		if(user != null){
 			boolean isAdmin = user.getUserType().name().equals(UserType.ADMIN);
 			session.setAttribute("userId", user.getId());
@@ -128,6 +128,9 @@ public class AppController {
 			log.info("Logged In Plan ::: "+user.getPlan());
 			if(user.getPlan() != null){
 				session.setAttribute("planType", user.getPlan().getPlanType());
+				JSONObject rule = new JSONObject(user.getPlan().getRules());
+				maxAdvCount = rule.getInt("max_adv_count");
+				session.setAttribute("maxAdvCount", maxAdvCount);
 			}
 			model.addAttribute("message", "Welcome to BestDeals!!!");
 			model.addAttribute("username", user.getName());
@@ -211,6 +214,7 @@ public class AppController {
 			model.addAttribute("message", "You limit exceed");
 		}
 		model = getAdvertisementModel(model);
+		
 		model.addAttribute("userName", getSessionVal("username"));
 		return "u-advertisement";
 	}
@@ -489,6 +493,8 @@ public class AppController {
 	public String createDeal(HttpServletRequest req, HttpServletResponse res, Model model){
 		
 		String page = "redirect:advertisement";
+		int dealCount = 0;
+		int maxAdvCount = 0;
 		
 		try {
 			Long userId = (Long) getSessionVal("userId");
@@ -497,46 +503,74 @@ public class AppController {
 			boolean isAllowedToCreateDeal = false;
 			
 			if(user != null && user.getPlan() != null && user.getPlan().getAmount() > 0){
-				rule = new JSONObject(user.getPlan().getRules()); 
-				if(rule.getInt("max_adv_count") > 0 && rule.getInt("max_adv_count") > dealRepository.countByUserId(userId)){
+				rule = new JSONObject(user.getPlan().getRules());
+				maxAdvCount = rule.getInt("max_adv_count");
+				if(maxAdvCount > 0 && maxAdvCount > dealRepository.countByUserId(userId)){
 					isAllowedToCreateDeal = true;
 				}
 			}
 			
 			if(isAllowedToCreateDeal){
-				Deal deal = new Deal();
 				String id = req.getParameter("id");
-				Long subCatId = Long.parseLong(req.getParameter("subCategory"));
-				String description = req.getParameter("description");
+				String subCat = req.getParameter("subCategory");
+				Long subCatId = subCat.isEmpty() ? 0 : Long.parseLong(subCat);
 				String name = req.getParameter("name");
 				
-				Part part = req.getPart("file");
-				log.info("Part File :::: "+part.getSize());
-				log.info("Id ::: "+id);
-				if(id != null && !(id.isEmpty())){
-					deal = (Deal)dealService.findOne(Long.parseLong(id)).getData();
+				for (int i = 1; i <= maxAdvCount; i++) {
+					Part part = req.getPart("file_"+i);
+					Long fileSize = part != null ? part.getSize() : 0;
+					if(dealCount <= maxAdvCount && fileSize > 0){
+						Deal deal = new Deal();
+						dealCount++;
+						log.info("Part File :::: "+fileSize);
+						log.info("Id ::: "+id);
+						if(id != null && !(id.isEmpty())){
+							deal = (Deal)dealService.findOne(Long.parseLong(id)).getData();
+						}
+						
+						String uploadedImgUrl = appService.copyFileInputstream(part, res);
+						log.info("File Url ::: "+uploadedImgUrl);
+						deal.setImgUrl(uploadedImgUrl);
+
+						String description = req.getParameter("description_"+i);
+						deal.setDescription(description);
+						deal.setName(name);
+						deal.setPriority(Priority.LOW);
+						deal.setSubCategory(new SubCategory(subCatId));
+						deal.setType(DealType.ADVERTISEMENT);
+						deal.setUser(new User(userId));
+						
+						dealService.create(deal);
+					}
 				}
 				
-				if(part != null && part.getSize() > 0){
-					String uploadedImgUrl = appService.copyFileInputstream(part, res);
-					log.info("File Url ::: "+uploadedImgUrl);
-					// Delete old image
-					/*if(deal.getImgUrl() != null && deal.getImgUrl() != ""){
-						log.info("Delete Image ::: "+deal.getImgUrl());
-						appService.deleteFileFromServer(deal.getImgUrl());
-					}*/
-					
-					deal.setImgUrl(uploadedImgUrl);
-				}
-				
-				deal.setDescription(description);
-				deal.setName(name);
-				deal.setPriority(Priority.LOW);
-				deal.setSubCategory(new SubCategory(subCatId));
-				deal.setType(DealType.ADVERTISEMENT);
-				deal.setUser(new User(userId));
-				
-				dealService.create(deal);
+				/*for (Part part : parts) {
+//					Part part = req.getPart("file");
+					Deal deal = new Deal();
+					if(dealCount <= maxAdvCount){
+						dealCount++;
+						log.info("Part File :::: "+part.getSize());
+						log.info("Id ::: "+id);
+						if(id != null && !(id.isEmpty())){
+							deal = (Deal)dealService.findOne(Long.parseLong(id)).getData();
+						}
+						
+						if(part != null && part.getSize() > 0){
+							String uploadedImgUrl = appService.copyFileInputstream(part, res);
+							log.info("File Url ::: "+uploadedImgUrl);
+							deal.setImgUrl(uploadedImgUrl);
+						}
+						
+						deal.setDescription(description);
+						deal.setName(name);
+						deal.setPriority(Priority.LOW);
+						deal.setSubCategory(new SubCategory(subCatId));
+						deal.setType(DealType.ADVERTISEMENT);
+						deal.setUser(new User(userId));
+						
+						dealService.create(deal);
+					}
+				}*/
 			}else{
 				page = user.getPlan() == null ? page+"?error=0" : page+"?error=1";
 			}
@@ -558,6 +592,16 @@ public class AppController {
 		model.addAttribute("states", states);
 		model.addAttribute("categories", categories);
 		model.addAttribute("userId", userId);
+		
+		Long maxAdvCount = (Long.parseLong(session.getAttribute("maxAdvCount").toString()) - deals.size());
+		Long count = (maxAdvCount <= 0) ? 0 : (maxAdvCount);
+		log.info("Adv Count Left :::: "+count);
+		model.addAttribute("maxAdvCount", count);
+		
+		if(count == 0){
+			model.addAttribute("message", "Your is limit exceed. Your can create only "+session.getAttribute("maxAdvCount")+" advertisement.");
+		}
+		
 		return model;
 	}
 	
