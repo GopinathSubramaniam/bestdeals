@@ -3,6 +3,7 @@
 <head th:include="base-css">
 <!-- 	<link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css"/> -->
 </head>
+<link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css"/>
 <body>
 	<div th:include="header"></div>
 	<div th:include="left-side"></div>
@@ -26,7 +27,7 @@
 				</ul>
 				<div class="tab-content">
 					<div class="tab-pane active" id="tab_1" th:if="${merchants} != null">
-						<table id="userTable" class="table table-bordered table-hover">
+						<table id="merchantTable" class="table table-bordered table-hover">
 							<thead>
 								<tr>
 									<th>Name</th>
@@ -60,7 +61,7 @@
 						</table>
 					</div>
 					<div class="tab-pane" id="tab_2" th:if="${franchises} != null">
-						<table id="userTable" class="table table-bordered table-hover">
+						<table id="franchiseTable" class="table table-bordered table-hover">
 							<thead>
 								<tr>
 									<th>Name</th>
@@ -94,7 +95,7 @@
 						</table>
 					</div>
 					<div class="tab-pane" id="tab_3" th:if="${publicUsers} != null">
-						<table id="userTable" class="table table-bordered table-hover">
+						<table id="publicUserTable" class="table table-bordered table-hover">
 							<thead>
 								<tr>
 									<th>Name</th>
@@ -424,6 +425,10 @@
 	</div>
 
 	<!-- Create new user model end -->
+	<script src="plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
+	<script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+	
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwelkrFN__LksGXcg-Sy_kWecvrEpFzvU&amp;sensor=false" defer="defer" async="async"></script>
 	<script src="scripts/services/register.js"></script>
 	<script src="scripts/services/user.js"></script>

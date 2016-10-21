@@ -71,6 +71,31 @@ var User = (function(){
 		});
 	};
 	
+	 $('#merchantTable').DataTable({
+         "paging": true,
+         "lengthChange": false,
+         "searching": false,
+         "ordering": true,
+         "info": true,
+         "autoWidth": false
+       });
+	 $('#franchiseTable').DataTable({
+         "paging": true,
+         "lengthChange": false,
+         "searching": false,
+         "ordering": true,
+         "info": true,
+         "autoWidth": false
+       });
+	 $('#publicUserTable').DataTable({
+         "paging": true,
+         "lengthChange": false,
+         "searching": false,
+         "ordering": true,
+         "info": true,
+         "autoWidth": false
+       });
+	
 	return {
 		create: create,
 		update: update,
