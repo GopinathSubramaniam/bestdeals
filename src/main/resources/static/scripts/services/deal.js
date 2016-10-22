@@ -40,13 +40,13 @@ var Deal = (function(){
 		App.GetRequest(URL+'findOne/'+id).then(function(res){
 			if(res.statusCode == '200'){
 				var obj = res.data;
-				$('#advId').val(obj.id);
-				$('#inputCategory').val(obj.subCategory.category.id);
-				$('#inputSubCategory').html('<option value="'+obj.subCategory.id+'">'+obj.subCategory.name+'</option>');
-				$('#inputName').val(obj.name);
-				$('#inputdescription').val(obj.description);
-				$('#fileImage').attr('src', obj.imgUrl);
-				$('#fileImage').removeClass('hidden');
+				$('#editAdvId').val(obj.id);
+				$('#editInputCategory').val(obj.subCategory.category.id);
+				$('#editInputSubCategory').html('<option value="'+obj.subCategory.id+'">'+obj.subCategory.name+'</option>');
+				$('#editInputName').val(obj.name);
+				$('#editInputDesc').val(obj.description);
+				$('#editFileImage').attr('src', obj.imgUrl);
+				$('#editFileImage').removeClass('hidden');
 			}else{
 				$('#errorMsg').html('<i class="fa fa-times"></i> Error in Fetching advertisement. Please try again later.').fadeIn().fadeOut(20000);
 			}

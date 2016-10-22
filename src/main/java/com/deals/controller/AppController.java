@@ -516,33 +516,45 @@ public class AppController {
 				Long subCatId = subCat.isEmpty() ? 0 : Long.parseLong(subCat);
 				String name = req.getParameter("name");
 				
-				for (int i = 1; i <= maxAdvCount; i++) {
-					Part part = req.getPart("file_"+i);
-					Long fileSize = part != null ? part.getSize() : 0;
-					if(dealCount <= maxAdvCount && fileSize > 0){
-						Deal deal = new Deal();
-						dealCount++;
-						log.info("Part File :::: "+fileSize);
-						log.info("Id ::: "+id);
-						if(id != null && !(id.isEmpty())){
-							deal = (Deal)dealService.findOne(Long.parseLong(id)).getData();
-						}
-						
+				if(id != null && !(id.isEmpty())){
+					Deal deal = (Deal)dealService.findOne(Long.parseLong(id)).getData();
+					Part part = req.getPart("file");
+					if(part.getSize() > 0){
 						String uploadedImgUrl = appService.copyFileInputstream(part, res);
 						log.info("File Url ::: "+uploadedImgUrl);
 						deal.setImgUrl(uploadedImgUrl);
+					}
+					deal.setDescription(req.getParameter("description"));
+					deal.setSubCategory(new SubCategory(subCatId));
+					dealService.create(deal);
+				}else{
+					for (int i = 1; i <= maxAdvCount; i++) {
+						Part part = req.getPart("file_"+i);
+						Long fileSize = part != null ? part.getSize() : 0;
+						if(dealCount <= maxAdvCount && fileSize > 0){
+							Deal deal = new Deal();
+							dealCount++;
+							log.info("Part File :::: "+fileSize);
+							log.info("Id ::: "+id);
+							
+							String uploadedImgUrl = appService.copyFileInputstream(part, res);
+							log.info("File Url ::: "+uploadedImgUrl);
+							deal.setImgUrl(uploadedImgUrl);
 
-						String description = req.getParameter("description_"+i);
-						deal.setDescription(description);
-						deal.setName(name);
-						deal.setPriority(Priority.LOW);
-						deal.setSubCategory(new SubCategory(subCatId));
-						deal.setType(DealType.ADVERTISEMENT);
-						deal.setUser(new User(userId));
-						
-						dealService.create(deal);
+							String description = req.getParameter("description_"+i);
+							deal.setDescription(description);
+							deal.setName(name);
+							deal.setPriority(Priority.LOW);
+							deal.setSubCategory(new SubCategory(subCatId));
+							deal.setType(DealType.ADVERTISEMENT);
+							deal.setUser(new User(userId));
+							
+							dealService.create(deal);
+						}
 					}
 				}
+				
+				
 				
 				/*for (Part part : parts) {
 //					Part part = req.getPart("file");
@@ -593,13 +605,18 @@ public class AppController {
 		model.addAttribute("categories", categories);
 		model.addAttribute("userId", userId);
 		
-		Long maxAdvCount = (Long.parseLong(session.getAttribute("maxAdvCount").toString()) - deals.size());
-		Long count = (maxAdvCount <= 0) ? 0 : (maxAdvCount);
-		log.info("Adv Count Left :::: "+count);
-		model.addAttribute("maxAdvCount", count);
-		
-		if(count == 0){
-			model.addAttribute("message", "Your is limit exceed. Your can create only "+session.getAttribute("maxAdvCount")+" advertisement.");
+		if(session.getAttribute("maxAdvCount") != null){
+			Long maxAdvCount = (Long.parseLong(session.getAttribute("maxAdvCount").toString()) - deals.size());
+			Long count = (maxAdvCount <= 0) ? 0 : (maxAdvCount);
+			log.info("Adv Count Left :::: "+count);
+			model.addAttribute("maxAdvCount", count);
+			
+			if(count == 0){
+				model.addAttribute("message", "Your is limit exceed. Your can create only "+session.getAttribute("maxAdvCount")+" advertisement.");
+			}
+		}else{
+			model.addAttribute("maxAdvCount", 0);
+			model.addAttribute("message", "Buy plan to post advertisement!!!. Go to plan section and purchase.");
 		}
 		
 		return model;
