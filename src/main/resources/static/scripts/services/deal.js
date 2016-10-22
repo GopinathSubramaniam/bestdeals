@@ -87,23 +87,6 @@ var Deal = (function(){
 		 eval(onclickFn);
 	 });
 	 
-	 $('#example2').DataTable({
-         "paging": true,
-         "lengthChange": false,
-         "searching": false,
-         "ordering": true,
-         "info": true,
-         "autoWidth": false
-       });
-	 
-	/* $('input[type="radio"].minimal').iCheck({
-		 radioClass: 'iradio_minimal-blue'
-	 });*/
-	 
-	/* $('input[type="radio"]').iCheck({
-         radioClass: 'iradio_flat-blue'
-       });*/
-	
 	return {
 		create: create,
 		deleteDeal: deleteDeal,
