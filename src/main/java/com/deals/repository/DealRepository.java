@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.deals.enums.PlanType;
 import com.deals.enums.Priority;
 import com.deals.model.Deal;
+import org.springframework.data.repository.query.Param;
 
 @Transactional
 public interface DealRepository extends JpaRepository<Deal, Long>{
@@ -20,7 +21,10 @@ public interface DealRepository extends JpaRepository<Deal, Long>{
 	public List<Deal> findAllByUserPlanPlanTypeAndIsDefault(PlanType planType, boolean isDefault);
 	public List<Deal> findAllBySubCategoryId(Long id);
 	public Long countBySubCategoryId(Long id);
-	
+
+//	@Query( "select d from Deal d where subCategory in :ids" )
+	public Long countBySubCategoryIdIn(@Param("ids") List<Long> subCategoryIdList);
+
 //	@Query("select CONCAT(img_url,'?caption=',description) as imgUrl from Deal d where d.user.id = ?")
 	public List<Deal> findImageUrlAndDescriptionByUserId(Long id);
 	

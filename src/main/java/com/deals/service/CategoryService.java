@@ -42,22 +42,18 @@ public class CategoryService {
 		return status;
 	}
 	
-	public Status findAll(){
+	public Status findAllHavingSubCategoryAndDeals(){
 		List<Category> categories = categoryRepository.findAll();
 		List<CategoryVo> filteredCategories = new ArrayList<CategoryVo>();
-		
 		for (Category category : categories) {
 			List<SubCategory> subCategories = subCategoryRepository.findAllByCategoryId(category.getId());
-			for (SubCategory subCategory : subCategories) {
-				Long dealCount = dealRepository.countBySubCategoryId(subCategory.getId());
-				log.info("Deal Count :::: "+dealCount);
-				if(dealCount > 0){
-					CategoryVo categoryVo = new CategoryVo();
-					categoryVo.setId(category.getId());
-					categoryVo.setName(category.getName());
-					categoryVo.setDescription(category.getDescription());
-					filteredCategories.add(categoryVo);
-				}
+			List<Long> subCategoriesIds = new ArrayList<>(subCategories.size());
+			for(SubCategory subCategory : subCategories) {
+				subCategoriesIds.add(subCategory.getId());
+			}
+			long dealCount = dealRepository.countBySubCategoryIdIn(subCategoriesIds);
+			if(dealCount > 0){
+				filteredCategories.add(new CategoryVo(category.getId(), category.getName(), category.getDescription()));
 			}
 		}
 		
