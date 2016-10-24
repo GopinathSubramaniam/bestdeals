@@ -292,4 +292,8 @@ public class UserService {
 		
 	}
 	
+	public User findUserByMobile(String mobile){
+		return userRepository.findByMobile(mobile);
+	}
+	
 }

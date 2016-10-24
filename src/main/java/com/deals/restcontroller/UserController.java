@@ -21,6 +21,7 @@ import com.deals.repository.VillageRepository;
 import com.deals.service.PublicUserPlanService;
 import com.deals.service.UserDetailService;
 import com.deals.service.UserService;
+import com.deals.util.App;
 import com.deals.util.Status;
 import com.deals.vo.RegisterVo;
 
@@ -54,39 +55,48 @@ public class UserController {
 	
 	@RequestMapping(value="/register", method=RequestMethod.POST, produces={"application/json"})
 	public Status register(@RequestBody RegisterVo registerVo){
-		User user = new User();
-		user.setName(registerVo.getName());
-		user.setEmail(registerVo.getEmail());
-		user.setMobile(registerVo.getMobile());
-		user.setAuthType(AuthType.OK);
-		user.setPassword(registerVo.getPassword());
-		user.setUserType(registerVo.getUserType());
-		
-		Status status = userService.createOnlyUser(user);
-		user = (User)status.getData();
-		
-		if(user.getUserType().equals(UserType.PUBLIC)){
-			log.info("Public User::: Create QR code and plan");
-			userPlanService.create(user);
-		}
-		UserDetail userDetail = new UserDetail();
-		if(status.getStatusCode() != "500" && registerVo.getShopName() != null && registerVo.getAddress1() != null){
-			userDetail.setAddress1(registerVo.getAddress1());
-			userDetail.setLatitude(registerVo.getLatitude());
-			userDetail.setLongitude(registerVo.getLongitude());
-			userDetail.setDescription(registerVo.getDescription());
-			userDetail.setLikes(new Long(0));
-			userDetail.setViews(new Long(0));
-			userDetail.setPhoneNumbers(registerVo.getPhoneNumbers());
-			userDetail.setPlaceName(registerVo.getPlaceName());
-			userDetail.setShopName(registerVo.getShopName());
-			userDetail.setUser(user);
-			userDetail.setVillage(new Village(registerVo.getVillage()));
+		Status status = new Status();
+		User user = userService.findUserByMobile(registerVo.getMobile());
+		if(user == null){
+			user= new User();
+			user.setName(registerVo.getName());
+			user.setEmail(registerVo.getEmail());
+			user.setMobile(registerVo.getMobile());
+			user.setAuthType(AuthType.OK);
+			user.setPassword(registerVo.getPassword());
+			user.setUserType(registerVo.getUserType());
+			
+			status = userService.createOnlyUser(user);
+			user = (User)status.getData();
+			
+			if(user.getUserType().equals(UserType.PUBLIC)){
+				log.info("Public User::: Create QR code and plan");
+				userPlanService.create(user);
+			}
+			UserDetail userDetail = new UserDetail();
+			if(status.getStatusCode() != "500" && registerVo.getShopName() != null && registerVo.getAddress1() != null){
+				userDetail.setAddress1(registerVo.getAddress1());
+				userDetail.setLatitude(registerVo.getLatitude());
+				userDetail.setLongitude(registerVo.getLongitude());
+				userDetail.setDescription(registerVo.getDescription());
+				userDetail.setLikes(new Long(0));
+				userDetail.setViews(new Long(0));
+				userDetail.setPhoneNumbers(registerVo.getPhoneNumbers());
+				userDetail.setPlaceName(registerVo.getPlaceName());
+				userDetail.setShopName(registerVo.getShopName());
+				userDetail.setUser(user);
+				userDetail.setVillage(new Village(registerVo.getVillage()));
+			}else{
+				userDetail.setLikes(new Long(0));
+				userDetail.setViews(new Long(0));
+			}
+			userDetailService.create(userDetail);
 		}else{
-			userDetail.setLikes(new Long(0));
-			userDetail.setViews(new Long(0));
+			status.setMessage(App.MSG_USER_EXISTS);
+			status.setStatusCode(App.CODE_FAIL);
+			status.setStatusMsg(App.MSG_FAIL);
 		}
-		userDetailService.create(userDetail);
+		
 		return status;
 	}
 	

@@ -54,14 +54,25 @@ var Register = (function(){
 					registerObj.longitude = result.geometry.location.lng();
 				}
 				App.PostRequest(registerUrl, registerObj).then(function(res){
-					if(res.statusCode == '200'){
-						window.location.reload();
-						/*$('#registerMerchantForm').bootstrapValidator('resetForm', true);
-						$('#registerFranchiseForm').bootstrapValidator('resetForm', true);
-						$('#successMessage').html('<i class="fa fa-check"></i>Registeration successfully.').fadeOut(10000);*/
+					if(window.location.pathname == '/BestDeals/registerPage'){
+						if(res.statusCode == '200'){
+							$('#registerMerchantForm').bootstrapValidator('resetForm', true);
+							$('#registerFranchiseForm').bootstrapValidator('resetForm', true);
+							$('#successMessage').html('<i class="fa fa-check"></i>Registeration successfully.').fadeOut(10000);
+						}else if(res.statusCode == '500'){
+							$('#errorMessage').html('<i class="fa fa-times-circle-o"></i>'+res.message).fadeOut(10000);
+						}else{
+							window.location.reload();
+						}
 					}else{
-						$('#errorMessage').html('<i class="fa fa-times-circle-o"></i>'+res.message).fadeOut(10000);
+						if(res.statusCode == '200'){
+							window.location.reload();
+						}else{
+							$('#errorMessage').html('<i class="fa fa-times-circle-o"></i>'+res.message).fadeOut(10000);
+						}
+						
 					}
+					
 				});
 			});
 		}else{

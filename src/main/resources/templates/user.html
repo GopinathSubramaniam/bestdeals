@@ -218,6 +218,14 @@
 					</button>
 					<h4 class="modal-title">Create User</h4>
 				</div>
+				<div class="col-lg-6">
+       				<span class="form-group has-error">
+       					<label class="control-label box-title"><span id="errorMessage"></span></label>
+       				</span>
+       				<span class="form-group has-success">
+       					<label class="control-label box-title"><span id="successMessage"></span></label>
+       				</span>
+       			</div>
 				<div class="modal-body">
 					<div class="box-body">
 						<form id="registerMerchantForm" class="form-horizontal merchantForm" method="post" th:submit="Register.doRegister(); return false;">
