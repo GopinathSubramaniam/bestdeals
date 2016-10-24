@@ -28,7 +28,7 @@ public interface DealRepository extends JpaRepository<Deal, Long>{
 //	public Long removeAllByUserId(Long id);
 	public Long deleteByUserId(Long id);
 	public List<Deal> findAllBySubCategoryCategoryNameOrSubCategoryNameOrCityNameOrPlaceNameOrDescriptionOrNameOrUserNameOrUserMobileOrUserPlanNameOrUserEmailAndUserPlanPlanType(String categoryName, String subCatName, String cityName, String placeName, String description, String name, String userName, String mobile, String planName, String email, PlanType planType);
-	public List<Deal> findAllBySubCategoryCategoryNameAndSubCategoryNameAndCityNameLikeAndPlaceNameLikeAndUserPlanPlanType(String categoryName, String subCatName, String cityName, String placeName, PlanType planType);
+	public List<Deal> findAllBySubCategoryCategoryNameAndSubCategoryNameAndCityNameAndPlaceNameLikeAndUserPlanPlanType(String categoryName, String subCatName, String cityName, String placeName, PlanType planType);
 	
 	
 }
