@@ -4,11 +4,13 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.deals.model.SubCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.deals.enums.PlanType;
 import com.deals.enums.Priority;
 import com.deals.model.Deal;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 @Transactional
@@ -20,6 +22,11 @@ public interface DealRepository extends JpaRepository<Deal, Long>{
 	public List<Deal> findAllByPriorityAndUserPlanPlanType(Priority priority, PlanType planType);
 	public List<Deal> findAllByUserPlanPlanTypeAndIsDefault(PlanType planType, boolean isDefault);
 	public List<Deal> findAllBySubCategoryId(Long id);
+	public List<Deal> findAllBySubCategoryIdAndIsDefault(Long id, boolean isDefault);
+
+	@Query(value = "select d from Deal d where d.subCategory = :id group by d.user")
+	public List<Deal> findAllBySubCategoryIdGroupByUser(@Param("id") SubCategory subCategory);
+
 	public Long countBySubCategoryId(Long id);
 
 //	@Query( "select d from Deal d where subCategory in :ids" )
