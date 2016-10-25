@@ -499,6 +499,9 @@ public class AppController {
 		try {
 			Long userId = (Long) getSessionVal("userId");
 			User user = userService.findOne(userId);
+			List<UserDetail> userDetails =(List<UserDetail>)userDetailService.findAllByUserId(userId).getData();
+			UserDetail userDetail = userDetails.get(0);
+			
 			JSONObject rule = null;
 			boolean isAllowedToCreateDeal = false;
 			
@@ -548,6 +551,9 @@ public class AppController {
 							deal.setSubCategory(new SubCategory(subCatId));
 							deal.setType(DealType.ADVERTISEMENT);
 							deal.setUser(new User(userId));
+							if(userDetail.getVillage() != null){
+								deal.setCity(userDetail.getVillage().getTaluka().getCity());
+							}
 							
 							dealService.create(deal);
 						}
