@@ -3,6 +3,7 @@ package com.deals.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.deals.model.SubCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -109,8 +110,13 @@ public class DealService {
 		return status;
 	}
 	
-	public Status findAllBySubCat(Long subCatId){
-		List<Deal> deals = dealRepository.findAllBySubCategoryId(subCatId);
+	public Status findAllBySubCat(Long subCatId, boolean isDefault){
+		List<Deal> deals = dealRepository.findAllBySubCategoryIdAndIsDefault(subCatId, isDefault);
+		if (deals == null || deals.size() < 1) {
+			SubCategory sc = new SubCategory();
+			sc.setId(subCatId);
+			deals = dealRepository.findAllBySubCategoryIdGroupByUser(sc);
+		}
 		List<DealVO> dealVOs = mergeDealVOs(deals);
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, dealVOs);
 		return status;

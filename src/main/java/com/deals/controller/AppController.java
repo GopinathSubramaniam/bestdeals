@@ -214,7 +214,7 @@ public class AppController {
 			model.addAttribute("message", "You limit exceed");
 		}
 		model = getAdvertisementModel(model);
-		
+		model.addAttribute("userId", getSessionVal("userId"));
 		model.addAttribute("userName", getSessionVal("username"));
 		return "u-advertisement";
 	}

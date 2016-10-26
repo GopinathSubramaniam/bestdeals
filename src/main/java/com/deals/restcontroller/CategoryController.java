@@ -25,7 +25,7 @@ public class CategoryController {
 	
 	@RequestMapping(value="/", method= RequestMethod.GET)
 	public Status findAll(){
-		return categoryService.findAll();
+		return categoryService.findAllHavingSubCategoryAndDeals();
 	}
 	
 	@RequestMapping(value="/findAllCategory", method= RequestMethod.GET)

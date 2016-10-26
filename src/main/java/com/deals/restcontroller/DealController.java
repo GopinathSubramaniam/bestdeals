@@ -106,8 +106,8 @@ public class DealController {
 	} 
 	
 	@RequestMapping(value="/findAllBySubCat/{subCatId}", method= RequestMethod.GET)
-	public Status findAllBySubCat(@PathVariable Long subCatId){
-		return dealService.findAllBySubCat(subCatId);
+	public Status findAllBySubCatAndUniqueMerchant(@PathVariable Long subCatId){
+		return dealService.findAllBySubCat(subCatId, true);
 	} 
 	
 	@RequestMapping(value="/{id}", method= RequestMethod.DELETE)
