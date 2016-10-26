@@ -25,6 +25,7 @@ public class Category {
 	private Long id;
 	private String name;
 	private String description;
+	private String imgUrl;
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	List<SubCategory> subCategories;

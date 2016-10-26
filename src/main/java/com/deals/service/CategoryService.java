@@ -53,7 +53,7 @@ public class CategoryService {
 			}
 			long dealCount = dealRepository.countBySubCategoryIdIn(subCategoriesIds);
 			if(dealCount > 0){
-				filteredCategories.add(new CategoryVo(category.getId(), category.getName(), category.getDescription()));
+				filteredCategories.add(new CategoryVo(category.getId(), category.getName(), category.getDescription(), category.getImgUrl()));
 			}
 		}
 		
@@ -68,6 +68,7 @@ public class CategoryService {
 			categoryVo.setId(category.getId());
 			categoryVo.setName(category.getName());
 			categoryVo.setDescription(category.getDescription());
+			categoryVo.setImgUrl(category.getImgUrl());
 			filteredCategories.add(categoryVo);
 		}
 		return status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, filteredCategories);

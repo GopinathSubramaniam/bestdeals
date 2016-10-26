@@ -17,7 +17,7 @@ import com.deals.util.Status;
 @Service
 public class PlanService {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	private static Status status = new Status();
+//	private static Status status = new Status();
 	
 	@Autowired
 	private PlanRepository planRepository;
@@ -27,6 +27,7 @@ public class PlanService {
 	
 	
 	public Status create(Plan plan){
+		Status status = null;
 		if(plan !=null){
 			plan = planRepository.saveAndFlush(plan);
 			status = App.getResponse(App.CODE_OK, App.STATUS_CREATE, App.MSG_CREATE, plan);
@@ -38,7 +39,7 @@ public class PlanService {
 	
 	public Status findAll(){
 		List<Plan> plans = planRepository.findAll();
-		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, plans);
+		Status status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, plans);
 		return status;
 	}
 	
@@ -48,7 +49,7 @@ public class PlanService {
 		if(id !=null){
 			plan = planRepository.findOne(id);
 		}
-		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, plan);
+		Status status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, plan);
 		return status;
 	}
 	
@@ -60,13 +61,13 @@ public class PlanService {
 		existingPlan.setPlanType(plan.getPlanType());
 		
 		plan = planRepository.saveAndFlush(existingPlan);
-		status = App.getResponse(App.CODE_OK, App.STATUS_UPDATE, App.MSG_UPDATE, plan);
+		Status status = App.getResponse(App.CODE_OK, App.STATUS_UPDATE, App.MSG_UPDATE, plan);
 		return status;
 	}
 	
 	public Status delete(Long id){
 		planRepository.delete(id);
-		status = App.getResponse(App.CODE_OK, App.STATUS_DELETE, App.MSG_DELETE, null);
+		Status status = App.getResponse(App.CODE_OK, App.STATUS_DELETE, App.MSG_DELETE, null);
 		return status;
 	}
 	
@@ -75,7 +76,7 @@ public class PlanService {
 		User user = userRepository.findOne(userId);
 		user.setPlan(plan);
 		user = userRepository.saveAndFlush(user);
-		status = App.getResponse(App.CODE_OK, App.STATUS_UPDATE, App.MSG_UPDATE, user);
+		Status status = App.getResponse(App.CODE_OK, App.STATUS_UPDATE, App.MSG_UPDATE, user);
 		return status;
 	}
 	
