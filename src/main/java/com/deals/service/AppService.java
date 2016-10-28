@@ -47,15 +47,15 @@ public class AppService {
 	
 	@Value("${img.copy.path}")
 	private String imgCopyPath;
-	
+
 	@Value("${img.server.path}")
 	private String imgServerPath;
 	
 	public String copyFile(MultipartFile file){
 		String fileName = null; 
 		try {
-			fileName = App.generateKey(6)+"_"+file.getOriginalFilename();
-			File outFile = new File(imgCopyPath+fileName);
+			fileName = App.generateKey(6)+"_"+file.getOriginalFilename().replaceAll("\\s+","");
+			File outFile = new File( imgCopyPath + fileName);
 			
 			FileCopyUtils.copy(file.getBytes(), outFile);
 		} catch (IOException e) {
@@ -63,7 +63,7 @@ public class AppService {
 		}
 		return imgServerPath+fileName;
 	}
-	
+
 	public String copyFileInputstream(Part part, HttpServletResponse res){
 		OutputStream out = null;
 		InputStream fileContent = null;
