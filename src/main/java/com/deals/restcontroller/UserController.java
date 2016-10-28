@@ -2,6 +2,7 @@ package com.deals.restcontroller;
 
 import java.util.List;
 
+import com.deals.util.App;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,29 +64,30 @@ public class UserController {
 		user.setUserType(registerVo.getUserType());
 		
 		Status status = userService.createOnlyUser(user);
+		if (status.getStatusCode() != App.CODE_OK || status.getData() == null) {
+			return status;
+		}
 		user = (User)status.getData();
 		
-		if(user.getUserType().equals(UserType.PUBLIC)){
+		if(UserType.PUBLIC.equals(user.getUserType())){
 			log.info("Public User::: Create QR code and plan");
 			userPlanService.create(user);
 		}
 		UserDetail userDetail = new UserDetail();
-		if(status.getStatusCode() != "500" && registerVo.getShopName() != null && registerVo.getAddress1() != null){
+		if(status.getStatusCode() == App.CODE_OK && registerVo.getShopName() != null && registerVo.getAddress1() != null){
 			userDetail.setAddress1(registerVo.getAddress1());
 			userDetail.setLatitude(registerVo.getLatitude());
 			userDetail.setLongitude(registerVo.getLongitude());
-			userDetail.setDescription(registerVo.getDescription());
-			userDetail.setLikes(new Long(0));
-			userDetail.setViews(new Long(0));
 			userDetail.setPhoneNumbers(registerVo.getPhoneNumbers());
 			userDetail.setPlaceName(registerVo.getPlaceName());
 			userDetail.setShopName(registerVo.getShopName());
-			userDetail.setUser(user);
-			userDetail.setVillage(new Village(registerVo.getVillage()));
-		}else{
-			userDetail.setLikes(new Long(0));
-			userDetail.setViews(new Long(0));
 		}
+		userDetail.setDescription(registerVo.getDescription());
+		userDetail.setVillage(new Village(registerVo.getVillage()));
+		userDetail.setUser(user);
+		userDetail.setLikes(new Long(0));
+		userDetail.setViews(new Long(0));
+
 		userDetailService.create(userDetail);
 		return status;
 	}
