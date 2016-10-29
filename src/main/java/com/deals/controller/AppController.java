@@ -59,9 +59,6 @@ public class AppController {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
-	private HttpSession session;
-	
-	@Autowired
 	private AppService appService;
 	
 	@Autowired
@@ -117,20 +114,20 @@ public class AppController {
 	
 	
 	@RequestMapping(value="/login")
-	public String dologin(Model model, User user){
+	public String dologin(Model model, User user, HttpServletRequest req){
 		user = (User)loginService.login(user).getData();
 		String page = "u-login";
 		int maxAdvCount = 0;
 		if(user != null){
 			boolean isAdmin = user.getUserType().name().equals(UserType.ADMIN);
-			session.setAttribute("userId", user.getId());
-			session.setAttribute("username", user.getName());
+			req.getSession().setAttribute("userId", user.getId());
+			req.getSession().setAttribute("username", user.getName());
 			log.info("Logged In Plan ::: "+user.getPlan());
 			if(user.getPlan() != null){
-				session.setAttribute("planType", user.getPlan().getPlanType());
+				req.getSession().setAttribute("planType", user.getPlan().getPlanType());
 				JSONObject rule = new JSONObject(user.getPlan().getRules());
 				maxAdvCount = rule.getInt("max_adv_count");
-				session.setAttribute("maxAdvCount", maxAdvCount);
+				req.getSession().setAttribute("maxAdvCount", maxAdvCount);
 			}
 			model.addAttribute("message", "Welcome to BestDeals!!!");
 			model.addAttribute("username", user.getName());
@@ -144,16 +141,16 @@ public class AppController {
 	
 	@RequestMapping(value="/logout")
 	public String logout(HttpServletRequest req){
-		if(session != null){
-			session.invalidate();
+		if(req.getSession() != null){
+			req.getSession().invalidate();
 		}
 		return "login";
 	}
 	
 	@RequestMapping(value="/out")
-	public String out(){
-		if(session != null){
-			session.invalidate();
+	public String out(HttpServletRequest req){
+		if(req.getSession() != null){
+			req.getSession().invalidate();
 		}
 		return "u-login";
 	}
@@ -170,20 +167,20 @@ public class AppController {
 	}
 	
 	@RequestMapping(value="/greetings")
-	public String userLandingPage(Model model){
-		log.info("Session UserType ::::: "+session.getAttribute("planType"));
+	public String userLandingPage(HttpServletRequest req, Model model){
+		log.info("Session UserType ::::: "+ req.getSession().getAttribute("planType"));
 		model.addAttribute("message", "Welcome to BestDeals !!!");
-		model.addAttribute("userName", getSessionVal("username"));
+		model.addAttribute("userName", getSessionVal("username", req.getSession()));
 		return "u-greetings";
 	}
 
 	@RequestMapping(value="/profile")
-	public String profile(Model model){
+	public String profile(HttpServletRequest req, Model model){
 		boolean displayAdvertisement = false;
 		boolean displayMap = false;
 		
 		List<Plan> plans = (List<Plan>)planService.findAll().getData();
-		Long userId = (Long) getSessionVal("userId");
+		Long userId = (Long) getSessionVal("userId", req.getSession());
 		UserVO userVO = (UserVO)userService.findUser(userId).getData();
 		log.info("UserVO getPhoneNumbers :::: "+userVO.getPhoneNumbers());
 		Plan plan = (Plan)planService.findOne(userVO.getPlanId()).getData();
@@ -199,7 +196,7 @@ public class AppController {
 		model.addAttribute("plan", plan);
 		model.addAttribute("plans", plans);
 		model.addAttribute("displayAdvertisement", displayAdvertisement);
-		model.addAttribute("userName", getSessionVal("username"));
+		model.addAttribute("userName", getSessionVal("username", req.getSession()));
 		model.addAttribute("displayMap", displayMap);
 		log.info("User Timings :::: "+userVO.getTimings());
 		return "u-profile";
@@ -213,15 +210,15 @@ public class AppController {
 		}else if(isError != null && isError.equals("1")){
 			model.addAttribute("message", "You limit exceed");
 		}
-		model = getAdvertisementModel(model);
-		model.addAttribute("userId", getSessionVal("userId"));
-		model.addAttribute("userName", getSessionVal("username"));
+		model = getAdvertisementModel(model, req.getSession());
+		model.addAttribute("userId", getSessionVal("userId", req.getSession()));
+		model.addAttribute("userName", getSessionVal("username", req.getSession()));
 		return "u-advertisement";
 	}
 	
 	@RequestMapping("/updatePlan")
 	public String updatePlan(HttpServletRequest req, Model model){
-		Long userId = (Long) getSessionVal("userId");
+		Long userId = (Long) getSessionVal("userId", req.getSession());
 		Long planId = Long.parseLong(req.getParameter("pid"));
 		log.info("UserId = "+userId);
 		log.info("PlanId = "+planId);
@@ -240,8 +237,8 @@ public class AppController {
 	 * @return
 	 */
 	@RequestMapping(value="/userplan")
-	public String uplan(Model model){
-		Long userId = (Long) getSessionVal("userId");
+	public String uplan(HttpServletRequest req, Model model){
+		Long userId = (Long) getSessionVal("userId", req.getSession());
 		UserVO userVO = (UserVO)userService.findUser(userId).getData();
 		List<Plan> plans = (List<Plan>)planService.findAll().getData();
 		log.info("Plan id ::: "+userVO.getPlanId());
@@ -252,7 +249,7 @@ public class AppController {
 		model.addAttribute("user", userVO);
 		model.addAttribute("plan", plan);
 		model.addAttribute("plans", plans);
-		model.addAttribute("userName", getSessionVal("username"));
+		model.addAttribute("userName", getSessionVal("username", req.getSession()));
 		
 		return "u-plan";
 	}
@@ -497,7 +494,7 @@ public class AppController {
 		int maxAdvCount = 0;
 		
 		try {
-			Long userId = (Long) getSessionVal("userId");
+			Long userId = (Long) getSessionVal("userId", req.getSession());
 			User user = userService.findOne(userId);
 			JSONObject rule = null;
 			boolean isAllowedToCreateDeal = false;
@@ -547,8 +544,8 @@ public class AppController {
 							deal.setPriority(Priority.LOW);
 							deal.setSubCategory(new SubCategory(subCatId));
 							deal.setType(DealType.ADVERTISEMENT);
-							deal.setUser(new User(userId));
-							
+							deal.setUser(user);
+
 							dealService.create(deal);
 						}
 					}
@@ -594,8 +591,8 @@ public class AppController {
 	}
 	
 	
-	private Model getAdvertisementModel(Model model){
-		Long userId = (Long) getSessionVal("userId");
+	private Model getAdvertisementModel(Model model, HttpSession session){
+		Long userId = (Long) session.getAttribute("userId");
 		List<Deal> deals = (List<Deal>)dealService.findAllByUserId(userId).getData();
 		List<Category> categories = (List<Category>)categoryService.findAllCategory().getData();
 		List<State> states = stateRepository.findAll();
@@ -622,7 +619,7 @@ public class AppController {
 		return model;
 	}
 	
-	public Object getSessionVal(String key){
+	public Object getSessionVal(String key, HttpSession session){
 		Object val = session.getAttribute(key);
 		if(val != null){
 			String  strVal = val.toString();
