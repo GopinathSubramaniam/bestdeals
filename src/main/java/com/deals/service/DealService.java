@@ -3,7 +3,10 @@ package com.deals.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.deals.model.Category;
 import com.deals.model.SubCategory;
+import com.deals.repository.CategoryRepository;
+import com.deals.repository.SubCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +26,10 @@ public class DealService {
 	
 	@Autowired
 	private DealRepository dealRepository;
-	
+	@Autowired
+	private CategoryRepository categoryRepository;
+	@Autowired
+	private SubCategoryRepository subCategoryRepository;
 	@Autowired
 	private UserDetailService userDetailService;
 	
@@ -65,7 +71,34 @@ public class DealService {
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, dealVOs);
 		return status;
 	}
-	
+
+	public List<DealVO> searchOr(String categoryName, String subCatName, String cityName, String placeName){
+		List<Deal> deals = null;
+		if (!categoryName.isEmpty()) {
+//			List<Long> categoryIds= categoryRepository.findIdByNameLike(categoryName);
+			List<Long> subCategoryIds = subCategoryRepository.findIdByCategoryNameLike(categoryName);
+			deals = dealRepository.findBySubCategoryIdIn(subCategoryIds);
+		} else if (!subCatName.isEmpty()) {
+			List<Long> subCategoryIds = subCategoryRepository.findIdByNameLike(subCatName);
+//			deals = dealRepository.findBySubCategoryIdIn(subCategoryIds);
+			deals = dealRepository.findDefaultDealsBySubCategoryIdInAndOnePerUser(subCategoryIds);
+		} else if (!cityName.isEmpty()) {
+			deals = dealRepository.findByCityName(cityName);
+		} else if (!placeName.isEmpty()) {
+			deals = dealRepository.findByPlaceName(placeName);
+		}
+		List<DealVO> dealVOs = null;
+		if (deals != null && deals.size() > 0) {
+			dealVOs = new ArrayList<>();
+			for (Deal deal : deals) {
+				deal.getUser();
+				List<UserDetail> userDetails = userDetailService.findByUser(deal.getUser());
+				UserDetail userDetail = userDetails.size() > 0 ? userDetails.get(0) : null;
+				dealVOs.add(new DealVO(deal, new UserVO(deal.getUser(), userDetail, null)));
+			}
+		}
+		return dealVOs;
+	}
 	public Status findAll(String categoryName, String subCatName, String cityName, String placeName){
 
 		List<Deal> platinumDeals = new ArrayList<>();

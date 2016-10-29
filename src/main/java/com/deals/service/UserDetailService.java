@@ -2,6 +2,7 @@ package com.deals.service;
 
 import java.util.List;
 
+import com.deals.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +71,11 @@ public class UserDetailService {
 		}
 		return status;
 	}
-	
+
+	public List<UserDetail> findByUser(User user){
+		return  userDetailRepository.findAllByUserId(user.getId());
+	}
+
 	public Status findAllByUserId(Long userId){
 		List<UserDetail> userDetail = userDetailRepository.findAllByUserId(userId);
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, userDetail);

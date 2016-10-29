@@ -2,6 +2,9 @@ package com.deals.restcontroller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.deals.util.App;
+import com.deals.vo.DealVO;
+import com.deals.vo.UserVO;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +25,9 @@ import com.deals.model.User;
 import com.deals.service.AppService;
 import com.deals.service.DealService;
 import com.deals.util.Status;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/rest/deal")
@@ -103,8 +109,26 @@ public class DealController {
 			String placeName = req.getParameter("placeName");
 			return dealService.findAll(categoryName, subCatName, cityName, placeName); 
 		}
-	} 
-	
+	}
+
+	@RequestMapping(value="/searchDeal", method= RequestMethod.GET)
+	public Status searchDeal(HttpServletRequest req){
+		String type = req.getParameter("type");
+		if(type != null && type.toLowerCase().equals("global")){
+			log.info("Global Search");
+			String searchKey = req.getParameter("key");
+			return dealService.searchGlobal(searchKey);
+		}else{
+			log.info("Advanced Search");
+			String categoryName = req.getParameter("cname");
+			String subCatName = req.getParameter("scname");
+			String cityName = req.getParameter("city");
+			String placeName = req.getParameter("place");
+			List<DealVO> dealVOs = dealService.searchOr(categoryName, subCatName, cityName, placeName);
+			return App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, dealVOs);
+		}
+	}
+
 	@RequestMapping(value="/findAllBySubCat/{subCatId}", method= RequestMethod.GET)
 	public Status findAllBySubCatAndUniqueMerchant(@PathVariable Long subCatId){
 		return dealService.findAllBySubCat(subCatId, true);

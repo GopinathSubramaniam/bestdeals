@@ -6,6 +6,9 @@ import java.util.List;
 import com.deals.enums.UserType;
 import com.deals.model.Deal;
 
+import com.deals.model.PublicUserPlan;
+import com.deals.model.User;
+import com.deals.model.UserDetail;
 import groovy.transform.ToString;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,6 +50,44 @@ public class UserVO {
 	private String planName;
 	private String planExpiryDate;
 	private String planDescription;
-	
-	
+
+	public UserVO() {
+	}
+	public UserVO(User user, UserDetail userDetail, PublicUserPlan publicUserPlan) {
+		this.setId(user.getId());
+		this.setEmail(user.getEmail());
+		this.setName(user.getName());
+		this.setUserType(user.getUserType());
+
+		if(userDetail != null){
+			this.setAddress1(userDetail.getAddress1());
+			this.setAddress2(userDetail.getAddress2());
+			this.setAddress3(userDetail.getAddress3());
+			if (userDetail.getVillage() != null)
+				if (userDetail.getVillage().getTaluka() != null)
+					if (userDetail.getVillage().getTaluka().getCity() != null)
+						this.setCityName(userDetail.getVillage().getTaluka().getCity().getName());
+			this.setLatitude(userDetail.getLatitude());
+			this.setLongitude(userDetail.getLongitude());
+
+			this.setShopName(userDetail.getShopName());
+//			this.setStateName(userDetail.getVillage().getTaluka().getCity().getState().getName());
+			this.setTimings(userDetail.getDescription());
+		}
+
+		if(user.getPlan() != null){
+			this.setPlanId(user.getPlan().getId());
+			this.setPlanName(user.getPlan().getName());
+			this.setPlanDescription(user.getPlan().getDescription());
+		}
+
+		if(publicUserPlan != null){
+			this.setQrCode(publicUserPlan.getQrCode().getNormalQrCode());
+			this.setEncryptedQrCode(publicUserPlan.getQrCode().getEncryptedQrCode());
+			this.setPlanId(publicUserPlan.getId());
+			this.setPlanName(publicUserPlan.getPlanType().toString());
+			this.setPlanDescription(publicUserPlan.getDescription());
+			this.setPlanExpiryDate(publicUserPlan.getEndDate().toString());
+		}
+	}
 }

@@ -205,7 +205,7 @@ public class UserService {
 					salesmanRepository.deleteBySalesManagerId(salesManager.getId());
 					salesmanagerRepository.delete(salesManager.getId());
 				}
-				userDetailRepository.deleteByUserId(user.getId());
+				userDetailRepository.deleteByUser(user);
 				userRepository.delete(user);
 			}
 			status = App.getResponse(App.CODE_OK, App.STATUS_DELETE, App.MSG_DELETE, id);
