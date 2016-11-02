@@ -1,15 +1,14 @@
 package com.deals.restcontroller;
 
+import com.deals.service.AppService;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.deals.model.Category;
 import com.deals.service.CategoryService;
 import com.deals.util.Status;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/rest/category")
@@ -17,9 +16,26 @@ public class CategoryController {
 
 	@Autowired
 	private CategoryService categoryService;
+	@Autowired
+	private AppService appService;
 
 	@RequestMapping(value="/", method= RequestMethod.POST, produces={"application/json"})
-	public Status create(@RequestBody Category category){
+	public Status create(@RequestParam("category") String categoryJson,
+						 @RequestParam("imageFile") MultipartFile categoryImagePart){
+		String fileUrl = "";
+		JSONObject jsonDeal = new JSONObject(categoryJson);
+		if(!(categoryImagePart.getOriginalFilename().contains("null.txt"))){
+			fileUrl = appService.copyFile(categoryImagePart);
+		} else
+			fileUrl = jsonDeal.getString("imgUrl");
+		Category category = new Category();
+		if (jsonDeal.getString("id").isEmpty())
+			category.setId(0l);
+		else
+			category.setId(Long.parseLong(jsonDeal.getString("id")));
+		category.setName(jsonDeal.getString("name"));
+		category.setDescription(jsonDeal.getString("description"));
+		category.setImgUrl(fileUrl);
 		return categoryService.create(category);
 	}
 	

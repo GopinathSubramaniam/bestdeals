@@ -24,12 +24,15 @@ import com.deals.repository.PublicUserPlanRepository;
 import com.deals.repository.StateRepository;
 import com.deals.repository.TalukaRepository;
 import com.deals.repository.UserDetailRepository;
+import com.deals.repository.UserRepository;
 import com.deals.repository.VillageRepository;
 import com.deals.util.App;
 import com.deals.util.Secret;
 import com.deals.util.Status;
 import com.deals.vo.BasePlaceModel;
 import com.deals.vo.PlaceNameResponseVo;
+import com.deals.vo.PublicPlanResponse;
+import com.deals.vo.QRCodeResponse;
 
 @RestController
 @RequestMapping(value="/rest/base/")
@@ -58,6 +61,9 @@ public class BaseController {
 	
 	@Autowired
 	private PublicUserPlanRepository userPlanRepository;
+	
+	@Autowired
+	public UserRepository userRepository;
 	
 	
 	@RequestMapping(value="/findAllCountry", method = RequestMethod.GET)
@@ -133,24 +139,56 @@ public class BaseController {
 		String type = req.getParameter("type");
 		String strUserId = req.getParameter("userId");
 		Long userId = strUserId != null ? Long.parseLong(strUserId) : new Long(0);
-		Object response = null;
+		QRCodeResponse qrRes = new QRCodeResponse();
+		PublicUserPlan userPlan = userPlanRepository.findByUserId(userId);
 		
 		if(type != null && type.toLowerCase().equals("getsecret")){
-			PublicUserPlan userPlan = userPlanRepository.findByUserId(userId);
 			if(userPlan!=null && userPlan.getQrCode()!=null){
-				response = userPlan.getQrCode();
+				qrRes.setQr(userPlan.getQrCode());
+				System.out.println("UserPlan :::: "+userPlan);
+				PublicPlanResponse planRes = new PublicPlanResponse();
+				planRes.setId(userPlan.getId());
+				planRes.setAmount(userPlan.getAmount());
+				planRes.setDescription(userPlan.getDescription());
+				planRes.setPercentage(userPlan.getPercentage());
+				planRes.setPlanType(userPlan.getPlanType());
+				planRes.setStartDate(userPlan.getStartDate());
+				planRes.setEndDate(userPlan.getEndDate());
+				planRes.setValidityInMonths(userPlan.getValidityInMonths());
+				qrRes.setDetails(planRes);
 			}else{
-				response = "Error in getting QR code. Try again later";
+				qrRes.setQr("Error in getting QR code. Try again later");
 			}	
 		}else if(type != null && type.toLowerCase().equals("encrypt")){
 			String key = req.getParameter("key");
-			response = new Secret().encrypt(key);
+			qrRes.setQr(new Secret().encrypt(key));
 		}else if(type != null && type.toLowerCase().equals("decrypt")){
 			String key = req.getParameter("key");
-			response = new Secret().decrypt(key);
+			qrRes.setQr(new Secret().decrypt(key));
+		}else if(type != null && type.toLowerCase().equals("verify")){
+			String key = req.getParameter("key");
+			System.out.println("Key :::: "+userPlan.getQrCode().getNormalQrCode());
+			
+			if(userPlan.getQrCode() != null && key.equals(userPlan.getQrCode().getNormalQrCode())){
+				qrRes.setIsvalidQR(true);
+				qrRes.setQr(userPlan.getQrCode().getNormalQrCode());
+				PublicPlanResponse planRes = new PublicPlanResponse();
+				planRes.setId(userPlan.getId());
+				planRes.setAmount(userPlan.getAmount());
+				planRes.setDescription(userPlan.getDescription());
+				planRes.setPercentage(userPlan.getPercentage());
+				planRes.setPlanType(userPlan.getPlanType());
+				planRes.setStartDate(userPlan.getStartDate());
+				planRes.setEndDate(userPlan.getEndDate());
+				planRes.setValidityInMonths(userPlan.getValidityInMonths());
+				qrRes.setDetails(planRes);
+			}else{
+				qrRes.setIsvalidQR(false);
+				qrRes.setDetails(false);
+			}
 		}
 		
-		return App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, response);
+		return App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, qrRes);
 	}
 	
 

@@ -27,7 +27,7 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Click here to go userdetails">
                   <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image"/>
                   <span class="hidden-xs" id="username" th:text="${userName}">Anonymous</span>
-                    <input id="userId" type="hidden" value="${userId}"/>
+                    <input id="userId" name="userId" type="hidden" th:value="${userId}"></input>
                 </a>
                 <!-- <ul class="dropdown-menu">
                    <li class="user-body">

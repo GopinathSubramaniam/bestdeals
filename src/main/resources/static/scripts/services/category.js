@@ -6,7 +6,17 @@ var Category = (function(){
 	
 	var create = function(){
 		var obj = App.serializeObject('newCategoryForm');
-		App.PostRequest(CAT_URL, obj).then(function(res){
+		var formData = new FormData();
+
+		if($('#categoryImage')[0].files[0]){
+			formData.append('imageFile', $('#categoryImage')[0].files[0]);
+		}else{
+			var f = new File([""], "null.txt", {type: "text/plain", lastModified: new Date()})
+			formData.append('imageFile', f);
+		}
+		formData.append('category', JSON.stringify(obj));
+		
+		App.PostFormData(CAT_URL, formData).then(function(res){
 			if(res.statusCode == '200'){
 				window.location.reload();
 			}else{
@@ -23,7 +33,7 @@ var Category = (function(){
 			$('#inputid').val(res.data.id);
 			$('#inputname').val(res.data.name);
 			$('#inputDescription').val(res.data.description);
-			
+			$('#inputImgUrl').val(res.data.imgUrl);
 		}).error(function(error){
 			$('#errorMsg').html('<i class="fa fa-times"></i> Error in creating user. Please try again later.').fadeIn().fadeOut(5000);
 		});
