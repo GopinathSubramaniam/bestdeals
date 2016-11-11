@@ -141,9 +141,11 @@ public class BaseController {
 		Long userId = strUserId != null ? Long.parseLong(strUserId) : new Long(0);
 		QRCodeResponse qrRes = new QRCodeResponse();
 		PublicUserPlan userPlan = userPlanRepository.findByUserId(userId);
-		
+		if (userPlan == null)
+			return App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, "User plan not found", qrRes);
+
 		if(type != null && type.toLowerCase().equals("getsecret")){
-			if(userPlan!=null && userPlan.getQrCode()!=null){
+			if(userPlan.getQrCode()!=null){
 				qrRes.setQr(userPlan.getQrCode());
 				System.out.println("UserPlan :::: "+userPlan);
 				PublicPlanResponse planRes = new PublicPlanResponse();
@@ -157,7 +159,7 @@ public class BaseController {
 				planRes.setValidityInMonths(userPlan.getValidityInMonths());
 				qrRes.setDetails(planRes);
 			}else{
-				qrRes.setQr("Error in getting QR code. Try again later");
+				return App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, "QR code not found", qrRes);
 			}	
 		}else if(type != null && type.toLowerCase().equals("encrypt")){
 			String key = req.getParameter("key");
@@ -169,7 +171,7 @@ public class BaseController {
 			String key = req.getParameter("key");
 			System.out.println("Key :::: "+userPlan.getQrCode().getNormalQrCode());
 			
-			if(userPlan.getQrCode() != null && key.equals(userPlan.getQrCode().getNormalQrCode())){
+			if(userPlan.getQrCode() != null && key.equals(userPlan.getQrCode().getEncryptedQrCode())){
 				qrRes.setIsvalidQR(true);
 				qrRes.setQr(userPlan.getQrCode().getNormalQrCode());
 				PublicPlanResponse planRes = new PublicPlanResponse();
@@ -185,6 +187,7 @@ public class BaseController {
 			}else{
 				qrRes.setIsvalidQR(false);
 				qrRes.setDetails(false);
+				return App.getResponse(App.CODE_OK, App.STATUS_FAIL, "QR code not matched", qrRes);
 			}
 		}
 		
