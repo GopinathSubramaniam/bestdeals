@@ -80,7 +80,10 @@ public class DealService {
 		} else if (!subCatName.isEmpty()) {
 			List<Long> subCategoryIds = subCategoryRepository.findIdByNameLike(subCatName);
 //			deals = dealRepository.findBySubCategoryIdIn(subCategoryIds);
-			deals = dealRepository.findDefaultDealsBySubCategoryIdInAndOnePerUser(subCategoryIds);
+			// using default image
+//			deals = dealRepository.findDefaultDealsBySubCategoryIdInAndOnePerUser(subCategoryIds);
+			// any random deal image
+			deals = dealRepository.findBySubCategoryIdInAndOnePerUser(subCategoryIds);
 		} else if (!cityName.isEmpty()) {
 			deals = dealRepository.findByCityName(cityName);
 		} else if (!placeName.isEmpty()) {

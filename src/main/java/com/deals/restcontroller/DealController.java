@@ -94,7 +94,7 @@ public class DealController {
 		return dealService.findAll();
 	} 
 	
-	@RequestMapping(value="/search", method= RequestMethod.GET)
+	@RequestMapping(value="/searchGlobal", method= RequestMethod.GET)
 	public Status searchglobal(HttpServletRequest req){
 		String type = req.getParameter("type");
 		if(type != null && type.toLowerCase().equals("global")){
@@ -111,7 +111,7 @@ public class DealController {
 		}
 	}
 
-	@RequestMapping(value="/searchDeal", method= RequestMethod.GET)
+	@RequestMapping(value="/search", method= RequestMethod.GET)
 	public Status searchDeal(HttpServletRequest req){
 		String type = req.getParameter("type");
 		if(type != null && type.toLowerCase().equals("global")){
