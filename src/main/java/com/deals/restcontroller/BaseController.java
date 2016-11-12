@@ -142,7 +142,7 @@ public class BaseController {
 		User user= userRepository.findOne(userId);
 		Plan plan = user.getPlan();
 
-		if (plan == null || plan.getPlanType() == PlanType.FREE || plan.getPlanType() != PlanType.TRIAL)
+		if (plan == null || plan.getPlanType() == PlanType.FREE)
 			return App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, "Please buy plan first", qrRes);
 
 		if(type != null && type.toLowerCase().equals("getsecret")){

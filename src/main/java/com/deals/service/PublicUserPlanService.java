@@ -42,7 +42,7 @@ public class PublicUserPlanService {
 		qrCode = qrCodeRepository.saveAndFlush(qrCode);
 		
 		PublicUserPlan publicUserPlan = new PublicUserPlan();
-		publicUserPlan.setPlanType(PlanType.TRIAL);
+		publicUserPlan.setPlanType(PlanType.FREE);
 		publicUserPlan.setDescription("You are on six month trial period");
 		publicUserPlan.setValidityInMonths(6);
 		publicUserPlan.setPercentage(new Double(20));
