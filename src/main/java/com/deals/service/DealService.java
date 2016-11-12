@@ -76,7 +76,9 @@ public class DealService {
 		if (!categoryName.isEmpty()) {
 //			List<Long> categoryIds= categoryRepository.findIdByNameLike(categoryName);
 			List<Long> subCategoryIds = subCategoryRepository.findIdByCategoryNameLike(categoryName);
-			deals = dealRepository.findBySubCategoryIdIn(subCategoryIds);
+			//deals = dealRepository.findBySubCategoryIdIn(subCategoryIds);
+
+			deals = dealRepository.findBySubCategoryIdInOnePerUser(subCategoryIds);
 		} else if (!subCatName.isEmpty()) {
 			List<Long> subCategoryIds = subCategoryRepository.findIdByNameLike(subCatName);
 //			deals = dealRepository.findBySubCategoryIdIn(subCategoryIds);

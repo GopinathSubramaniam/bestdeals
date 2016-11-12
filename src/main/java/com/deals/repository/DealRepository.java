@@ -40,6 +40,9 @@ public interface DealRepository extends JpaRepository<Deal, Long>{
 	@Query( "select d from Deal d where d.subCategory.id in :ids" )
 	public List<Deal> findBySubCategoryIdIn(@Param("ids") List<Long> subCategoryIdList);
 
+	@Query( "select d from Deal d where d.subCategory.id in :ids group by d.user" )
+	public List<Deal> findBySubCategoryIdInOnePerUser(@Param("ids") List<Long> subCategoryIdList);
+
 	@Query( "select d from Deal d where d.isDefault = true and d.subCategory.id in :ids " )
 	public List<Deal> findDefaultDealsBySubCategoryIdIn(@Param("ids") List<Long> subCategoryIdList);
 
