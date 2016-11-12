@@ -225,9 +225,11 @@
 							</tr>
 						</table>
 					</div>
-					<form id="userDetailEditForm" class="hidden" action="javascript:void(0);" method="post" onsubmit="UserProfile.updateDetail(this)">  
-						<input type="hidden" id="id" name="id" th:value="${user.userDetailId}"/>
-						<input type="hidden" id="id" name="userId" th:value="${user.id}"/>
+					<form id="userDetailEditForm" class="hidden" action="javascript:void(0);" method="post" onsubmit="UserProfile.updateDetail(this)">
+						<input type="hidden" id="latitude" name="latitude" th:value="${user.latitude}"/>
+						<input type="hidden" id="longitude" name="longitude" th:value="${user.longitude}"/>
+						<input type="hidden" name="id" th:value="${user.userDetailId}"/>
+						<input type="hidden" name="userId" th:value="${user.id}"/>
 						<div class="col-sm-6 col-md-6 col-lg-6 ">
 							<h3>Edit User Details</h3>
 							<table class="table">
@@ -289,12 +291,10 @@
 				            	</div>
 			          		</div>
 						</div>
-						
+
 					</form>
 				</div>
 				<div class="col-lg-12 col-xs-12" th:if="${displayMap}" >
-					<input type="hidden" id="latitude" th:value="${user.latitude}"/>
-					<input type="hidden" id="longitude" th:value="${user.longitude}"/>
 					<h3>Your Shop Location</h3>
 					<input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
 					<div id="map"></div>

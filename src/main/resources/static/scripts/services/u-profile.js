@@ -127,6 +127,7 @@ function initMap() {
       zoom: 13,
       mapTypeId: google.maps.MapTypeId.ROADMAP //'roadmap'
     });
+    placeMarker({'lat': parseFloat(lat), 'lng':parseFloat(lng)}, map);
     //google.maps.event.addListener(map,'click',function(event) {
     map.addListener('click',function(event) {
         //document.getElementById('latlongclicked').value = event.latLng.lat() + ', ' + event.latLng.lng();

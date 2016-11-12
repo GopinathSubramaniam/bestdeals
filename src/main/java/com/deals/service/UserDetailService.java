@@ -48,11 +48,15 @@ public class UserDetailService {
 				}
 				existsUserDetail.setPhoneNumbers(phoneNumbers);
 			}
-			
+			if( userDetail.getLatitude() != null ){
+				existsUserDetail.setLatitude(userDetail.getLatitude());
+			}
+			if( userDetail.getLongitude() != null ){
+				existsUserDetail.setLongitude(userDetail.getLongitude());
+			}
 			if( userDetail.getAddress1() != null ){
 				existsUserDetail.setAddress1(userDetail.getAddress1());
-			} 
-			
+			}
 			if( userDetail.getAddress2() != null ){
 				existsUserDetail.setAddress2(userDetail.getAddress2());
 			}
