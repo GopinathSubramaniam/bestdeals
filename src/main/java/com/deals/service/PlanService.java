@@ -79,5 +79,9 @@ public class PlanService {
 		Status status = App.getResponse(App.CODE_OK, App.STATUS_UPDATE, App.MSG_UPDATE, user);
 		return status;
 	}
-	
+
+	public Plan getPlanByUser(Long userId){
+		User user = userRepository.findOne(userId);
+		return user.getPlan();
+	}
 }

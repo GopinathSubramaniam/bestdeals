@@ -86,6 +86,10 @@ public class PublicUserPlanService {
 		publicUserPlanRepository.saveAndFlush(publicUserPlan);
 		return App.getResponse(App.CODE_OK, App.STATUS_CREATE, App.MSG_CREATE, publicUserPlan);
 	}
-	
-	
+	public PublicUserPlan findByUserId(Long userId) {
+		return publicUserPlanRepository.findByUserId(userId);
+	}
+	public PublicUserPlan findByQrCodeEncryptedQrCode(String encryptedQrCode) {
+		return publicUserPlanRepository.findByQrCodeEncryptedQrCode(encryptedQrCode);
+	}
 }

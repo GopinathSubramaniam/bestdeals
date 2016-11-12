@@ -10,5 +10,6 @@ import com.deals.model.PublicUserPlan;
 public interface PublicUserPlanRepository extends JpaRepository<PublicUserPlan, Long>{
 
 	PublicUserPlan findByUserId(Long id);
+	PublicUserPlan findByQrCodeEncryptedQrCode(String encryptedQrCode);
 	
 }

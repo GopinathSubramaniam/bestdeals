@@ -1,10 +1,14 @@
 package com.deals.restcontroller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.deals.enums.PlanType;
+import com.deals.model.*;
+import com.deals.service.PublicUserPlanService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.deals.model.City;
-import com.deals.model.PublicUserPlan;
-import com.deals.model.State;
-import com.deals.model.Taluka;
-import com.deals.model.Village;
 import com.deals.repository.CityRepository;
 import com.deals.repository.CountryRepository;
 import com.deals.repository.PublicUserPlanRepository;
@@ -59,9 +58,9 @@ public class BaseController {
 	@Autowired
 	private VillageRepository villageRepository;
 	
-	@Autowired
-	private PublicUserPlanRepository userPlanRepository;
-	
+//	@Autowired private PublicUserPlanRepository userPlanRepository;
+	@Autowired PublicUserPlanService publicUserPlanService;
+
 	@Autowired
 	public UserRepository userRepository;
 	
@@ -138,14 +137,19 @@ public class BaseController {
 	public Status secret(HttpServletRequest req){
 		String type = req.getParameter("type");
 		String strUserId = req.getParameter("userId");
-		Long userId = strUserId != null ? Long.parseLong(strUserId) : new Long(0);
 		QRCodeResponse qrRes = new QRCodeResponse();
-		PublicUserPlan userPlan = userPlanRepository.findByUserId(userId);
-		if (userPlan == null)
-			return App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, "User plan not found", qrRes);
+		Long userId = strUserId != null ? Long.parseLong(strUserId) : new Long(0);
+		User user= userRepository.findOne(userId);
+		Plan plan = user.getPlan();
+
+		if (plan == null || plan.getPlanType() == PlanType.FREE || plan.getPlanType() != PlanType.TRIAL)
+			return App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, "Please buy plan first", qrRes);
 
 		if(type != null && type.toLowerCase().equals("getsecret")){
-			if(userPlan.getQrCode()!=null){
+			PublicUserPlan userPlan = publicUserPlanService.findByUserId(userId);
+			if (userPlan == null)
+				return App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, "User plan not found", qrRes);
+			if(userPlan.getQrCode()!=null && userPlan.getEndDate().getTime() > new Date().getTime()){
 				qrRes.setQr(userPlan.getQrCode());
 				System.out.println("UserPlan :::: "+userPlan);
 				PublicPlanResponse planRes = new PublicPlanResponse();
@@ -159,7 +163,7 @@ public class BaseController {
 				planRes.setValidityInMonths(userPlan.getValidityInMonths());
 				qrRes.setDetails(planRes);
 			}else{
-				return App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, "QR code not found", qrRes);
+				return App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, "QR code not found or expired", qrRes);
 			}	
 		}else if(type != null && type.toLowerCase().equals("encrypt")){
 			String key = req.getParameter("key");
@@ -169,9 +173,12 @@ public class BaseController {
 			qrRes.setQr(new Secret().decrypt(key));
 		}else if(type != null && type.toLowerCase().equals("verify")){
 			String key = req.getParameter("key");
-			System.out.println("Key :::: "+userPlan.getQrCode().getNormalQrCode());
-			
-			if(userPlan.getQrCode() != null && key.equals(userPlan.getQrCode().getEncryptedQrCode())){
+			PublicUserPlan userPlan = publicUserPlanService.findByQrCodeEncryptedQrCode(key);
+			if (userPlan == null)
+				return App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, "User plan not found", qrRes);
+			if(userPlan.getQrCode() != null
+					&& userPlan.getEndDate().getTime() > new Date().getTime()
+					&& key.equals(userPlan.getQrCode().getEncryptedQrCode())){
 				qrRes.setIsvalidQR(true);
 				qrRes.setQr(userPlan.getQrCode().getNormalQrCode());
 				PublicPlanResponse planRes = new PublicPlanResponse();
@@ -187,7 +194,7 @@ public class BaseController {
 			}else{
 				qrRes.setIsvalidQR(false);
 				qrRes.setDetails(false);
-				return App.getResponse(App.CODE_OK, App.STATUS_FAIL, "QR code not matched", qrRes);
+				return App.getResponse(App.CODE_OK, App.STATUS_FAIL, "QR code not matched or expired", qrRes);
 			}
 		}
 		
