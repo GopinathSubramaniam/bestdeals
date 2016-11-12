@@ -98,7 +98,8 @@ public class DealService {
 				deal.getUser();
 				List<UserDetail> userDetails = userDetailService.findByUser(deal.getUser());
 				UserDetail userDetail = userDetails.size() > 0 ? userDetails.get(0) : null;
-				dealVOs.add(new DealVO(deal, new UserVO(deal.getUser(), userDetail, null)));
+				List<Deal> userDeals = dealRepository.findAllByUserId(deal.getUser().getId());
+				dealVOs.add(new DealVO(deal, new UserVO(deal.getUser(), userDetail, null, userDeals)));
 			}
 		}
 		return dealVOs;

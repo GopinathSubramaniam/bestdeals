@@ -53,7 +53,7 @@ public class UserVO {
 
 	public UserVO() {
 	}
-	public UserVO(User user, UserDetail userDetail, PublicUserPlan publicUserPlan) {
+	public UserVO(User user, UserDetail userDetail, PublicUserPlan publicUserPlan, List<Deal> deals) {
 		this.setId(user.getId());
 		this.setEmail(user.getEmail());
 		this.setName(user.getName());
@@ -88,6 +88,16 @@ public class UserVO {
 			this.setPlanName(publicUserPlan.getPlanType().toString());
 			this.setPlanDescription(publicUserPlan.getDescription());
 			this.setPlanExpiryDate(publicUserPlan.getEndDate().toString());
+		}
+
+		if (deals != null && deals.size() > 0) {
+			imageUrls = new ArrayList<>();
+			for (Deal deal: deals) {
+				ImageVo iVo = new ImageVo();
+				iVo.setImgUrl(deal.getImgUrl());
+				iVo.setDescription(deal.getDescription());
+				imageUrls.add(iVo);
+			}
 		}
 	}
 }
