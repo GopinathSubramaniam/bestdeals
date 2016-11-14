@@ -169,11 +169,8 @@ public class App {
 	public static DealVO setDealVO(Deal deal) {
 		DealVO dealVO = new DealVO();
 		dealVO.setId(deal.getId());
-		dealVO.setName(deal.getName());
 		dealVO.setType(deal.getType().toString());
-		dealVO.setDescription(deal.getDescription());
 		dealVO.setUser(setUserVo(deal.getUser(), null, null));
-		dealVO.setImgUrl(deal.getImgUrl());
 		return dealVO;
 	}
 	

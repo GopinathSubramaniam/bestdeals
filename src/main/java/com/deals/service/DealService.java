@@ -73,19 +73,19 @@ public class DealService {
 
 	public List<DealVO> searchOr(String categoryName, String subCatName, String cityName, String placeName){
 		List<Deal> deals = null;
-		if (!categoryName.isEmpty()) {
-//			List<Long> categoryIds= categoryRepository.findIdByNameLike(categoryName);
-			List<Long> subCategoryIds = subCategoryRepository.findIdByCategoryNameLike(categoryName);
-			//deals = dealRepository.findBySubCategoryIdIn(subCategoryIds);
-
-			deals = dealRepository.findBySubCategoryIdInOnePerUser(subCategoryIds);
-		} else if (!subCatName.isEmpty()) {
+		if (!subCatName.isEmpty()) {
 			List<Long> subCategoryIds = subCategoryRepository.findIdByNameLike(subCatName);
 //			deals = dealRepository.findBySubCategoryIdIn(subCategoryIds);
 			// using default image
 //			deals = dealRepository.findDefaultDealsBySubCategoryIdInAndOnePerUser(subCategoryIds);
 			// any random deal image
 			deals = dealRepository.findBySubCategoryIdInAndOnePerUser(subCategoryIds);
+		} else if (!categoryName.isEmpty()) {
+//			List<Long> categoryIds= categoryRepository.findIdByNameLike(categoryName);
+			List<Long> subCategoryIds = subCategoryRepository.findIdByCategoryNameLike(categoryName);
+			//deals = dealRepository.findBySubCategoryIdIn(subCategoryIds);
+
+			deals = dealRepository.findBySubCategoryIdInOnePerUser(subCategoryIds);
 		} else if (!cityName.isEmpty()) {
 			deals = dealRepository.findByCityName(cityName);
 		} else if (!placeName.isEmpty()) {
@@ -104,8 +104,8 @@ public class DealService {
 		}
 		return dealVOs;
 	}
-	public Status findAll(String categoryName, String subCatName, String cityName, String placeName){
 
+	public Status findAll(String categoryName, String subCatName, String cityName, String placeName){
 		List<Deal> platinumDeals = new ArrayList<>();
 		List<Deal> goldDeals = new ArrayList<>();
 		List<Deal> silverDeals = new ArrayList<>();

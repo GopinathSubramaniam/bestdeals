@@ -89,11 +89,6 @@ public class DealController {
 		return dealService.findAllByUserId(userId);
 	} 
 	
-	@RequestMapping(value="/", method= RequestMethod.GET)
-	public Status findAll(){
-		return dealService.findAll();
-	} 
-	
 	@RequestMapping(value="/searchGlobal", method= RequestMethod.GET)
 	public Status searchglobal(HttpServletRequest req){
 		String type = req.getParameter("type");
@@ -122,8 +117,8 @@ public class DealController {
 			log.info("Advanced Search");
 			String categoryName = req.getParameter("cname");
 			String subCatName = req.getParameter("scname");
-			String cityName = req.getParameter("city");
-			String placeName = req.getParameter("place");
+			String cityName = req.getParameter("cityName");
+			String placeName = req.getParameter("placeName");
 			List<DealVO> dealVOs = dealService.searchOr(categoryName, subCatName, cityName, placeName);
 			return App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, dealVOs);
 		}
