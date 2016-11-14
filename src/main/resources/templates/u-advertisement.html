@@ -9,9 +9,11 @@
 		<div class="row">
 			<section class="content">
 				<div class="col-lg-12 col-xs-12">
-					<h3>Advertisements</h3>
+					<h3>Advertisements <div th:if="${maxAdvCount} &gt; 0">
+						<button class="btn btn-primary btn-flat pull-right" data-toggle="modal" data-target="#advertisementModal"> <i class="fa fa-plus-circle"></i> Create New </button>
+					</div> </h3>
 					<div class="row" style="margin-left: 0%; margin-right: 0%;">
-						<div>
+						<div class="col-md-12">
 							<span class="form-group has-error">
 								<b><h5 class="control-label box-title message has-error" for="inputError"><b id="inputError" th:text="${message}"></b></h5></b>
 							</span>
@@ -19,9 +21,7 @@
 								<b><h5 class="control-label box-title message has-success" for="inputSuccess"><b id="inputSuccess"></b></h5></b>
 							</span>
 						</div>
-						<div th:if="${maxAdvCount} &gt; 0">
-							<button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#advertisementModal">Create New</button>
-						</div>
+
 						<!-- <div th:if="${maxAdvCount} == 0">
 							<span class="form-group has-error">
 								<b><h5 class="control-label box-title message has-error" for="inputError"><b id="inputError" th:text="${message}"></b></h5></b>
@@ -29,27 +29,30 @@
 						</div> -->
 					</div>
 					<div class="row">
-						<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" th:each="deal : ${deals}">
-						    <div class="hovereffect">
-						    	<h4 th:text="${deal.name}"></h4>
-						        <img class="img-responsive" th:src="${deal.imgUrl}" th:alt="${deal.name}" style="height: 210px;width: 100%;"/>
-						        <input type="hidden" name="user_deal_id" th:id="${deal.id}+'_'+${deal.user.id}" th:value="${deal.user.id}"/>
-						        <div class="col-lg-6 col-md-6">
-							        <div class="overlay" th:onclick="'Deal.selectDefault('+${deal.id}+')'">
-							        	<input type="radio" name="isDefault" class="minimal" th:checked="${deal.default}"/> Select as default
-							        </div>
-						        </div>
-						        <div class="col-lg-3 col-md-3">
-							        <div class="overlay has-error">
-							        	<a th:href="@{'deleteDeal?id='+ ${deal.id} }" class="control-label"><i class="fa fa-trash-o"></i>Delete</a>
-							        </div>
-						        </div>
-						        <div class="col-lg-3 col-md-3">
-							        <div class="overlay has-success">
-							        	<a href="#" data-toggle="modal" data-target="#editAdvModal" th:onclick="'Deal.findById('+${deal.id}+')'" class="control-label"><i class="fa fa-trash-o"></i>Edit</a>
-							        </div>
-						        </div>
-						    </div>
+						<div class="col-xs-6 col-md-3" th:each="deal : ${deals}">
+							<div class="thumbnail">
+								<img class="img-responsive" th:src="${deal.imgUrl}" th:alt="${deal.name}" style="height: 210px;width: 100%;"/>
+								<input type="hidden" name="user_deal_id" th:id="${deal.id}+'_'+${deal.user.id}" th:value="${deal.user.id}"/>
+
+								<div class="caption">
+									<p><strong th:text="${deal.name}" ></strong></p>
+
+									<p><div class="overlay" th:onclick="'Deal.selectDefault('+${deal.id}+')'">
+									<input type="radio" name="isDefault" class="minimal" th:checked="${deal.default}"/> Select as default
+								</div></p>
+
+									<div class="row">
+										<div class="col-md-12">
+
+										<a href="#" th:href="@{'deleteDeal?id='+ ${deal.id} }"  class="btn btn-danger btn-flat col-md-5" role="button"> <i class="fa fa-trash-o"></i> Delete </a>
+
+										<a href="#" data-toggle="modal" data-target="#editAdvModal" th:onclick="'Deal.findById('+${deal.id}+')'" class="btn btn-primary btn-flat col-md-5 pull-right" role="button"> <i class="fa fa-pencil-square-o"></i> Edit</a>
+										</div>
+									</div>
+
+
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

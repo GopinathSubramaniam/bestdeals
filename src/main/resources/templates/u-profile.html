@@ -5,7 +5,7 @@
 <body>
 <style type="text/css">
 	#map {
-        height: 350px;
+        height: 250px;
         width: 100%;
        }
 .controls {
@@ -61,17 +61,17 @@
 			<section class="content">
 				<div class="col-lg-12 col-xs-12">
 					<div class="row userInfoHeadDiv">
-						<div class="col-md-2 col-lg-2">
+						<div class="col-md-6 col-lg-6">
 							<h3>User Information</h3>
 						</div>
-						<div class="col-md-2 col-lg-2">
-							<h3 id="displayUserInfoEditBtn" onclick="UserProfile.displayUserInfoEditBtn()">
-								<a href="#">Edit</a>
-							</h3>
+						<div class="col-md-6 col-lg-6">
+							<button id="displayUserInfoEditBtn" onclick="UserProfile.displayUserInfoEditBtn()" class="btn btn-primary btn-flat pull-right">
+                                <i class="fa fa-edit"></i> Edit
+							</button>
 						</div>
 					</div>
 					<div class="userInfoDiv">
-						<table>
+						<table class="table">
 							<tr>
 								<td>
 									<label for="inputEmail3" class="col-sm-12 col-md-12 col-lg-12 control-label">Name</label>
@@ -162,30 +162,31 @@
 				</div>
 				<div class="col-lg-12">
 					<div class="row userDetailHeadDiv">
-						<div class="col-md-2 col-lg-2">
+						<div class="col-md-6 col-lg-6">
 							<h3>User Details</h3>
 						</div>
-						<div class="col-md-2 col-lg-2">
-							<h3 id="displayUserDetailEditBtn" onclick="UserProfile.displayUserDetailEditBtn()">
-								<a href="#">Edit</a>
-							</h3>
+						<div class="col-md-6 col-lg-6">
+							<button id="displayUserDetailEditBtn" onclick="UserProfile.displayUserDetailEditBtn()" class="btn btn-primary btn-flat pull-right">
+                                <i class="fa fa-edit"></i> Edit
+                                </button>
 						</div>
 					</div>
 					<div class="userDetailDiv">
-						<table>
+						<table class="table">
 							<tr>
 								<td>
-									<label for="inputEmail3" class="col-sm-2 control-label">Shop Name</label>
+									<label for="inputEmail3" class="control-label">Shop Name</label>
 								</td>
 								<td>
 									<div class="col-sm-10">
-										<input type="text" class="form-control" name="shopName" th:value="${user.shopName}"/>
+                                        <label th:text="${user.shopName}"></label>
+
 									</div>
 								</td>
 							</tr>
 							<tr>
 								<td>
-									<label for="inputAddress1" class="col-sm-2 control-label">Address1</label>
+									<label for="inputAddress1" class="control-label">Address1</label>
 								</td>
 								<td>
 									<div class="col-sm-12 col-md-12 col-lg-12">
@@ -195,7 +196,7 @@
 							</tr>
 							<tr>
 								<td>
-									<label for="inputAddress2" class="col-sm-2 control-label">Address2</label>
+									<label for="inputAddress2" class="control-label">Address2</label>
 								</td>
 								<td>
 									<div class="col-sm-12 col-md-12 col-lg-12">
@@ -205,7 +206,7 @@
 							</tr>
 							<tr>
 								<td>
-									<label for="inputAddress3" class="col-sm-2 control-label">Address3</label>
+									<label for="inputAddress3" class="control-label">Address3</label>
 								</td>
 								<td>
 									<div class="col-sm-12 col-md-12 col-lg-12">
@@ -215,7 +216,7 @@
 							</tr>
 							<tr>
 								<td>
-									<label for="inputPhoneNumbers" class="col-sm-2 control-label">Phone Numbers</label>
+									<label for="inputPhoneNumbers" class="control-label">Phone Numbers</label>
 								</td>
 								<td>
 									<div class="col-sm-12 col-md-12 col-lg-12">
@@ -225,7 +226,7 @@
 							</tr>
 							<tr>
 								<td>
-									<label for="inputDescription" class="col-sm-2 control-label">Description/Timings</label>
+									<label for="inputDescription" class="control-label">Description/Timings</label>
 								</td>
 								<td>
 									<div class="col-sm-12 col-md-12 col-lg-12">
@@ -234,6 +235,7 @@
 								</td>
 							</tr>
 						</table>
+
 					</div>
 					<form id="userDetailEditForm" class="hidden" action="javascript:void(0);" method="post" onsubmit="UserProfile.updateDetail(this)">
 						<input type="hidden" id="latitude" name="latitude" th:value="${user.latitude}"/>
@@ -245,7 +247,7 @@
 							<table class="table">
 								<tr>
 									<td>
-										<label for="inputEmail3" class="col-sm-2 control-label">Shop Name</label>
+										<label for="inputEmail3" class="control-label">Shop Name</label>
 									</td>
 									<td>
 										<div class="col-sm-10">
@@ -255,7 +257,7 @@
 								</tr>
 								<tr>
 									<td>
-										<label for="inputEmail3" class="col-sm-2 control-label">Address1</label>
+										<label for="inputEmail3" class="control-label">Address1</label>
 									</td>
 									<td>
 										<div class="col-sm-10">
@@ -265,7 +267,7 @@
 								</tr>
 								<tr>
 									<td>
-										<label for="inputEmail3" class="col-sm-2 control-label">Address2</label>
+										<label for="inputEmail3" class="control-label">Address2</label>
 									</td>
 									<td>
 										<div class="col-sm-10">
@@ -275,7 +277,7 @@
 								</tr>
 								<tr>
 									<td>
-										<label for="inputEmail3" class="col-sm-2 control-label">Address3</label>
+										<label for="inputEmail3" class="control-label">Address3</label>
 									</td>
 									<td>
 										<div class="col-sm-10">
@@ -285,7 +287,7 @@
 								</tr>
 								<tr>
 									<td>
-										<label for="inputPhoneNumbers" class="col-sm-2 control-label">Phone Numbers</label>
+										<label for="inputPhoneNumbers" class="control-label">Phone Numbers</label>
 									</td>
 									<td>
 										<div class="col-sm-10">
@@ -294,16 +296,30 @@
 									</td>
 								</tr>
 								<tr>
-								<td>
-									<label for="inputDescription" class="col-sm-2 control-label">Description/Timings</label>
-								</td>
-								<td>
-									<div class="col-sm-10">
-					              		<textarea class="form-control" name="description" id="textDescription" th:text="${user.timings}"></textarea>
-					            	</div>
-								</td>
-							</tr>
+                                <td>
+                                    <label for="inputDescription" class="control-label">Description/Timings</label>
+                                </td>
+                                <td>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control" name="description" id="textDescription" th:text="${user.timings}"></textarea>
+                                    </div>
+                                </td>
+                            </tr>
+                                <tr th:if="${displayMap}">
+                                    <td>
+                                        <label class="control-label"> Your Shop Location </label>
+                                    </td>
+                                    <td>
+                                        <div class="col-sm-10">
+                                            <input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
+                                            <div id="map"></div>
+                                        </div>
+                                    </td>
+                                </tr>
 							</table>
+
+
+
 							<div class="form-group pull-right">
 				            	<div class="col-sm-12 col-lg-12 col-md-12">
 				              		<button type="button" class="btn btn-warning" onclick="UserProfile.displayUserDetailEditBtn()">Cancel</button>
@@ -313,11 +329,6 @@
 						</div>
 
 					</form>
-				</div>
-				<div class="col-lg-12 col-xs-12" th:if="${displayMap}" >
-					<h3>Your Shop Location</h3>
-					<input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
-					<div id="map"></div>
 				</div>
 			</section>	
 		</div>

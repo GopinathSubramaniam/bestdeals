@@ -9,7 +9,7 @@
 		<div class="row">
 			<section class="content">
 				<div class="row">
-					<div class="col-lg-3 col-xs-6" th:each="detail : ${details}">
+					<div class="col-md-12" th:each="detail : ${details}">
 						<div th:classappend="${detail.colorName}" class="small-box">
 							<div class="inner">
 								<h3 th:text="${detail.count}"></h3>
