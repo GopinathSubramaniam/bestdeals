@@ -204,6 +204,7 @@ function initMap() {
       });
       map.fitBounds(bounds);
     });
+	$('#pac-input').addClass('hidden');
      infowindow = new google.maps.InfoWindow({content: "LatLng Applied" })
 }
 

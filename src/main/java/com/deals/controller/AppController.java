@@ -166,6 +166,10 @@ public class AppController {
 	 */
 	@RequestMapping(value="/")
 	public String loginForCustomer(Model model){
+		Object objval = getSessionVal("userId");
+		if (objval != null)
+			return "redirect:greetings";
+
 		model.addAttribute("message", "Login in BestDeals");
 		return "u-login";
 	}
