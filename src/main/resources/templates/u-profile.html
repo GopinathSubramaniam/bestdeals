@@ -152,8 +152,8 @@
 							</table>
 				          	<div class="form-group pull-right">
 				            	<div class="col-sm-12 col-lg-12 col-md-12">
-				              		<button type="button" class="btn btn-warning" onclick="UserProfile.displayUserInfoEditBtn()">Cancel</button>
-				              		<button type="submit" class="btn btn-primary">Update</button>
+				              		<button type="button" class="btn btn-warning btn-flat" onclick="UserProfile.displayUserInfoEditBtn()">Cancel</button>
+				              		<button type="submit" class="btn btn-primary btn-flat">Update</button>
 				            	</div>
 				          	</div>
 				          	<hr/>
@@ -250,7 +250,7 @@
 										<label for="inputEmail3" class="control-label">Shop Name</label>
 									</td>
 									<td>
-										<div class="col-sm-10">
+										<div class="col-md-12">
 											<input type="text" class="form-control" name="shopName" th:value="${user.shopName}"/>
 										</div>
 									</td>
@@ -260,7 +260,7 @@
 										<label for="inputEmail3" class="control-label">Address1</label>
 									</td>
 									<td>
-										<div class="col-sm-10">
+										<div class="col-md-12">
 						              		<input type="text" class="form-control" name="address1" id="inputName" th:value="${user.address1}"/>
 						            	</div>
 									</td>
@@ -270,7 +270,7 @@
 										<label for="inputEmail3" class="control-label">Address2</label>
 									</td>
 									<td>
-										<div class="col-sm-10">
+										<div class="col-md-12">
 						              		<input type="text" class="form-control" name="address2" id="labelEmail" th:value="${user.address2}"/>
 						            	</div>
 									</td>
@@ -280,7 +280,7 @@
 										<label for="inputEmail3" class="control-label">Address3</label>
 									</td>
 									<td>
-										<div class="col-sm-10">
+										<div class="col-md-12">
 						              		<input type="text" class="form-control"  name="address3" id="labelMobile" th:value="${user.address3}"/>
 						            	</div>
 									</td>
@@ -290,7 +290,7 @@
 										<label for="inputPhoneNumbers" class="control-label">Phone Numbers</label>
 									</td>
 									<td>
-										<div class="col-sm-10">
+										<div class="col-md-12">
 						              		<textarea class="form-control" id="textPhoneNumbers" name="phoneNumbers" th:text="${#strings.listJoin(user.phoneNumbers, ',')}"></textarea>
 						            	</div>
 									</td>
@@ -300,7 +300,7 @@
                                     <label for="inputDescription" class="control-label">Description/Timings</label>
                                 </td>
                                 <td>
-                                    <div class="col-sm-10">
+                                    <div class="col-md-12">
                                         <textarea class="form-control" name="description" id="textDescription" th:text="${user.timings}"></textarea>
                                     </div>
                                 </td>
@@ -310,7 +310,7 @@
                                         <label class="control-label"> Your Shop Location </label>
                                     </td>
                                     <td>
-                                        <div class="col-sm-10">
+                                        <div class="col-md-12">
                                             <input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
                                             <div id="map"></div>
                                         </div>
@@ -322,8 +322,8 @@
 
 							<div class="form-group pull-right">
 				            	<div class="col-sm-12 col-lg-12 col-md-12">
-				              		<button type="button" class="btn btn-warning" onclick="UserProfile.displayUserDetailEditBtn()">Cancel</button>
-				              		<button type="submit" class="btn btn-primary">Update</button>
+				              		<button type="button" class="btn btn-warning btn-flat" onclick="UserProfile.displayUserDetailEditBtn()"> Cancel </button>
+				              		<button type="submit" class="btn btn-primary btn-flat"> Update </button>
 				            	</div>
 			          		</div>
 						</div>

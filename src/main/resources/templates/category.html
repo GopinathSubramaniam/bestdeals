@@ -8,14 +8,13 @@
 	<div th:include="left-side"></div>
 	<div class="container-fluid content-wrapper">
 		<div class="">
-			<div align="center">
-				<h2 th:text="${title}" ></h2>
-			</div>
+				<h3 th:text="${title}" ></h3>
+
 			<div class="row">
-				<div class="col-md-6 col-lg-6 col-sm-6">
+				<div class="col-md-5">
 					<div>
 						<span>
-				 			<button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#newCategoryModal">Create New Category</button>
+				 			<button class="btn btn-primary btn-flat pull-right" data-toggle="modal" data-target="#newCategoryModal"> <i class="fa fa-plus-circle"></i> Create New Category</button>
 						</span>
 						<span>
 		 					<span class="form-group has-error">
@@ -24,35 +23,35 @@
 		 				</span>
 					</div>
 					<div class="box cat-max-height">
-						<table id="categoryTable" class="table table-bordered table-hover">
+						<table id="categoryTable" class="table table-striped">
 						 	<thead>
 		                      <tr>
-								  <th></th>
+								<th align="center"> Icon </th>
 		                        <th>Category Name</th>
-		                        <th>Description</th>
-		                        <th>Action</th>
+		                        <!--<th>Description</th>-->
+		                        <th align="right">Action</th>
 		                      </tr>
 		                    </thead>
 		                    <tbody>
 		                    	<tr th:each="category : ${categories}">
-									<td>
+									<td  class="success" align="center" >
 										<img src="" style="width: 30px; height: 30px;" th:src="${category.imgUrl}" th:alt="${category.name}" alt="Image Not Available" />
 									</td>
 		                    		<td th:text="${category.name}"></td>
-		                    		<td th:text="${category.description}"></td>
-		                    		<td>
-		                    			<button title="Delete" class="btn btn-xs btn-danger" th:onclick="'Category.deleteCategory('+${category.id}+')'"><i class="fa fa-fw fa-trash"></i>Delete</button>
-										<button title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#newCategoryModal" th:onclick="'Category.findCategoryById('+${category.id}+')'"><i class="fa fa-fw fa-edit"></i>Edit</button>
+		                    		<!--<td th:text="${category.description}"></td>-->
+		                    		<td align="right">
+		                    			<button title="Delete" class="btn btn-xs btn-danger btn-flat" th:onclick="'Category.deleteCategory('+${category.id}+')'"><i class="fa fa-fw fa-trash"></i>Delete</button>
+										<button title="Edit" class="btn btn-xs btn-primary btn-flat" data-toggle="modal" data-target="#newCategoryModal" th:onclick="'Category.findCategoryById('+${category.id}+')'"><i class="fa fa-fw fa-edit"></i>Edit</button>
 		                    		</td>
 		                    	</tr>
 		                    </tbody>
 						 </table>	
 					</div>
 				</div>
-				<div class="col-md-6 col-lg-6 col-sm-6">
+				<div class="col-md-7">
 					<div>
 		 				<span>
-		 					<button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#newSubCategoryModal">Create New SubCategory</button>
+		 					<button class="btn btn-primary btn-flat pull-right" data-toggle="modal" data-target="#newSubCategoryModal"> <i class="fa fa-plus-circle"></i> Create New SubCategory</button>
 		 				</span>
 		 				<span>
 		 					<span class="form-group has-error">
@@ -62,23 +61,23 @@
 					</div>
 					
 					<div class="box cat-max-height">
-						<table id="subCategoryTable" class="table table-bordered table-hover">
+						<table id="subCategoryTable" class="table table-striped">
 						 	<thead>
 		                      <tr>
 		                        <th>Sub Category Name</th>
-		                        <th>Description</th>
+		                       <!-- <th>Description</th>-->
 		                        <th>Category Name</th>
-		                         <th>Action</th>
+		                         <th align="right">Action</th>
 		                      </tr>
 		                    </thead>
 		                    <tbody>
 		                    	<tr th:each="subcategory : ${subcategories}">
 		                    		<td th:text="${subcategory.name}"></td>
-		                    		<td th:text="${subcategory.description}"></td>
+		                    		<!--<td th:text="${subcategory.description}"></td>-->
 		                    		<td th:text="${subcategory.category.name}"></td>
-		                    		<td>
-		                    			<button title="Delete" class="btn btn-xs btn-danger" th:onclick="'Category.deleteSubCategory('+${subcategory.id}+')'"><i class="fa fa-fw fa-trash"></i>Delete</button>
-										<button title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#newSubCategoryModal" th:onclick="'Category.findSubCategoryById('+${subcategory.id}+')'"><i class="fa fa-fw fa-edit"></i>Edit</button>
+		                    		<td align="right">
+		                    			<button title="Delete" class="btn btn-xs btn-danger btn-flat" th:onclick="'Category.deleteSubCategory('+${subcategory.id}+')'"><i class="fa fa-fw fa-trash"></i>Delete</button>
+										<button title="Edit" class="btn btn-xs btn-primary btn-flat" data-toggle="modal" data-target="#newSubCategoryModal" th:onclick="'Category.findSubCategoryById('+${subcategory.id}+')'"><i class="fa fa-fw fa-edit"></i>Edit</button>
 		                    		</td>
 		                    	</tr>
 		                    </tbody>
@@ -104,8 +103,8 @@
     		<p>One fine body&hellip;</p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+            <button type="button" class="btn btn-default pull-left btn-flat" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary btn-flat">Save changes</button>
           </div>
         </div>
       </div>
@@ -152,8 +151,8 @@
             <span class="form-group has-error pull-left">
               <label class="control-label" for="inputError" id="errorMsg"></label>
             </span>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary btn-flat">Save</button>
           </div>
           </form>	
         </div>

@@ -8,25 +8,25 @@
 	<div th:include="left-side"></div>
 	<div class="container-fluid content-wrapper">
 		<div class="">
-			<div align="center">
-				<h2 th:text="${title}" ></h2>
-			</div>
+
+				<h3 th:text="${title}" ></h3>
+
 			<div>
 				<span>
-					<button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#salesManagerRegisterModal">Create New</button>
+					<button class="btn btn-primary btn-flat pull-right" data-toggle="modal" data-target="#salesManagerRegisterModal"> <i class="fa fa-plus-circle"></i> Create New </button>
 				</span>
 				<span class="form-group has-error pull-left">
               		<label class="control-label" for="inputError" id="errorMsg"></label>
 	            </span>
 			</div>
 			<div class="box">
-				 <table id="userTable" class="table table-bordered table-hover">
+				 <table id="userTable" class="table table-striped">
 				 	<thead>
                       <tr>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Mobile</th>
-                        <th>Action</th>
+                        <th align="right">Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -34,9 +34,9 @@
                     		<td th:text="${salesManager.name}"></td>
                     		<td th:text="${salesManager.email}"></td>
                     		<td th:text="${salesManager.mobile}"></td>
-                    		<td>
-                    			<button title="Delete" class="btn btn-xs btn-danger" th:onclick="'SalesManager.deleteSalesManager('+${salesManager.id}+')'"><i class="fa fa-fw fa-trash"></i>Delete</button>
-								<button title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#salesManagerRegisterModal" th:onclick="'SalesManager.findSalesManager('+${salesManager.id}+')'"><i class="fa fa-fw fa-edit"></i>Edit</button>
+                    		<td align="right">
+                    			<button title="Delete" class="btn btn-xs btn-danger btn-flat" th:onclick="'SalesManager.deleteSalesManager('+${salesManager.id}+')'"><i class="fa fa-fw fa-trash"></i> Delete</button>
+								<button title="Edit" class="btn btn-xs btn-primary btn-flat" data-toggle="modal" data-target="#salesManagerRegisterModal" th:onclick="'SalesManager.findSalesManager('+${salesManager.id}+')'"><i class="fa fa-fw fa-edit"></i> Edit</button>
                     		</td>
                     	</tr>
                     </tbody>

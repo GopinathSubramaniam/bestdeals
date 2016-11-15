@@ -9,32 +9,32 @@
 	<div th:include="left-side"></div>
 	<div class="container-fluid content-wrapper">
 		<div class="form-group">
-			<div align="center">
-				<h2 th:text="${title}" ></h2>
-			</div>
+
+				<h3 th:text="${title}" ></h3>
+
 			<div>
-				 <button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#userRegisterationModal">Create New</button>
+				 <button class="btn btn-primary btn-flat pull-right" data-toggle="modal" data-target="#userRegisterationModal"> <i class="fa fa-plus-circle"></i> Create New </button>
 			</div>
 		</div>
 		<div class="">
 			<div class="nav-tabs-custom">
 				<ul class="nav nav-tabs">
 					<li class="active">
-						<a href="#tab_1" data-toggle="tab"><i class="fa fa-fw fa-bank text-aqua"></i>Merchant</a>
+						<a href="#tab_1" data-toggle="tab"><i class="fa fa-fw fa-industry"></i> Merchant </a>
 					</li>
-					<li><a href="#tab_2" data-toggle="tab"><i class="fa fa-fw fa-bank text-aqua"></i>Franchise</a></li>
-					<li><a href="#tab_3" data-toggle="tab"><i class="fa fa-fw fa-users text-aqua"></i>Public</a></li>
+					<li><a href="#tab_2" data-toggle="tab"><i class="fa fa-fw fa-group"></i> Franchise </a></li>
+					<li><a href="#tab_3" data-toggle="tab"><i class="fa fa-fw fa-user"></i> Public </a></li>
 				</ul>
 				<div class="tab-content">
 					<div class="tab-pane active" id="tab_1" th:if="${merchants} != null">
-						<table id="merchantTable" class="table table-bordered table-hover">
+						<table id="merchantTable" class="table table-striped">
 							<thead>
 								<tr>
 									<th>Name</th>
 									<th>Email</th>
 									<th>Mobile</th>
 									<th>Plan Name</th>
-									<th>Action</th>
+									<th align="right">Action</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -44,16 +44,16 @@
 									<td th:text="${merchant.mobile}"></td>
 									<td
 										th:text="${merchant.plan} != null ? (${merchant.plan.name}+' - '+${merchant.plan.planType}) : ''"></td>
-									<td>
-										<button title="Delete" class="btn btn-xs btn-danger"
+									<td align="right">
+										<button title="Delete" class="btn btn-xs btn-danger btn-flat"
 											th:onclick="'User.deleteUser('+${merchant.id}+')'">
-											<i class="fa fa-fw fa-trash"></i>Delete
+											<i class="fa fa-fw fa-trash"></i> Delete
 										</button>
 										<button th:id="${merchant.userType}" title="Edit"
-											class="btn btn-xs btn-primary" data-toggle="modal"
+											class="btn btn-xs btn-primary btn-flat" data-toggle="modal"
 											data-target="#editUserModal"
 											th:onclick="'User.findUserById('+${merchant.id}+')'">
-											<i class="fa fa-fw fa-edit"></i>Edit
+											<i class="fa fa-fw fa-edit"></i> Edit
 										</button>
 									</td>
 								</tr>
@@ -61,14 +61,14 @@
 						</table>
 					</div>
 					<div class="tab-pane" id="tab_2" th:if="${franchises} != null">
-						<table id="franchiseTable" class="table table-bordered table-hover">
+						<table id="franchiseTable" class="table table-striped">
 							<thead>
 								<tr>
 									<th>Name</th>
 									<th>Email</th>
 									<th>Mobile</th>
 									<th>Plan Name</th>
-									<th>Action</th>
+									<th align="right" >Action</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -78,13 +78,13 @@
 									<td th:text="${franchise.mobile}"></td>
 									<td
 										th:text="${franchise.plan} != null ? (${franchise.plan.name}+' - '+${franchise.plan.planType}) : ''"></td>
-									<td>
-										<button title="Delete" class="btn btn-xs btn-danger"
+									<td align="right">
+										<button title="Delete" class="btn btn-xs btn-danger btn-flat"
 											th:onclick="'User.deleteUser('+${franchise.id}+')'">
 											<i class="fa fa-fw fa-trash"></i>Delete
 										</button>
 										<button th:id="${franchise.userType}" title="Edit"
-											class="btn btn-xs btn-primary" data-toggle="modal"
+											class="btn btn-xs btn-primary btn-flat" data-toggle="modal"
 											data-target="#editUserModal"
 											th:onclick="'User.findUserById('+${franchise.id}+')'">
 											<i class="fa fa-fw fa-edit"></i>Edit
@@ -95,14 +95,14 @@
 						</table>
 					</div>
 					<div class="tab-pane" id="tab_3" th:if="${publicUsers} != null">
-						<table id="publicUserTable" class="table table-bordered table-hover">
+						<table id="publicUserTable" class="table table-striped">
 							<thead>
 								<tr>
 									<th>Name</th>
 									<th>Email</th>
 									<th>Mobile</th>
 									<th>Plan Name</th>
-									<th>Action</th>
+									<th align="right">Action</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -112,13 +112,13 @@
 									<td th:text="${publicUser.mobile}"></td>
 									<td
 										th:text="${publicUser.plan} != null ? (${publicUser.plan.name}+' - '+${publicUser.plan.planType}) : ''"></td>
-									<td>
-										<button title="Delete" class="btn btn-xs btn-danger"
+									<td align="right">
+										<button title="Delete" class="btn btn-xs btn-danger btn-flat"
 											th:onclick="'User.deleteUser('+${publicUser.id}+')'">
-											<i class="fa fa-fw fa-trash"></i>Delete
+											<i class="fa fa-fw fa-trash"></i> Delete
 										</button>
 										<button th:id="${publicUser.userType}" title="Edit"
-											class="btn btn-xs btn-primary" data-toggle="modal"
+											class="btn btn-xs btn-primary btn-flat" data-toggle="modal"
 											data-target="#editUserModal"
 											th:onclick="'User.findUserById('+${publicUser.id}+')'">
 											<i class="fa fa-fw fa-edit"></i>Edit

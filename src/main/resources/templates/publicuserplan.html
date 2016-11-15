@@ -6,11 +6,11 @@
 	<div th:include="left-side"></div>
 	<div class="container-fluid content-wrapper">
 		<div class="">
-			<div align="center">
-				<h2 th:text="${title}" ></h2>
-			</div>
+
+				<h3 th:text="${title}" ></h3>
+
 			<div class="box" style="max-height: 740px; overflow-y: scroll;">
-				 <table id="userTable" class="table table-hover">
+				 <table id="userTable" class="table table-striped">
 				 	<thead>
                       <tr>
                       	<th>User Name</th>
@@ -22,7 +22,7 @@
                         <th>Description</th>
                         <th>Plan Start Date</th>
                         <th>Plan End Date</th>
-                        <th>Action</th>
+                        <th align="right">Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -36,9 +36,9 @@
                     		<td th:text="${publicUserPlan.description}"></td>
                     		<td th:text="${publicUserPlan.startDate}"></td>
                     		<td th:text="${publicUserPlan.endDate}"></td>
-                    		<td>
-                    			<button title="Delete" class="btn btn-xs btn-danger" th:onclick="'Plan.deletePlan('+${publicUserPlan.id}+')'"><i class="fa fa-fw fa-trash"></i>Delete</button>
-								<button title="Edit" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#planUpdateModal" th:onclick="'PublicUserPlan.findPlan('+${publicUserPlan.id}+')'"><i class="fa fa-fw fa-edit"></i>Edit</button>
+                    		<td align="right">
+                    			<button title="Delete" class="btn btn-xs btn-danger btn-flat" th:onclick="'Plan.deletePlan('+${publicUserPlan.id}+')'"><i class="fa fa-fw fa-trash"></i>Delete</button>
+								<button title="Edit" class="btn btn-xs btn-primary btn-flat" data-toggle="modal" data-target="#planUpdateModal" th:onclick="'PublicUserPlan.findPlan('+${publicUserPlan.id}+')'"><i class="fa fa-fw fa-edit"></i>Edit</button>
                     		</td>
                     	</tr>
                     </tbody>
