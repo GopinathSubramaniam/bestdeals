@@ -33,13 +33,16 @@
 			                <div class="box-body">
 			                	<table>
 			                		<tr>
-			                			<td>Name</td><td th:text="${p.name}"></td>
+			                			<td> Name </td><td th:text="${p.name}"></td>
 			                		</tr>
 			                		<tr>
-			                			<td>Type</td><td th:text="${p.planType}"></td>
+			                			<td> Type </td><td th:text="${p.planType}"></td>
+			                		</tr>
+									<tr>
+			                			<td> Amount </td><td th:text="${'₹ '+p.amount}"></td>
 			                		</tr>
 			                		<tr>
-			                			<td>Description</td><td th:text="${p.description}"></td>
+			                			<td> Description </td><td th:text="${p.description}"></td>
 			                		</tr>
 			                	</table>
 			                </div>

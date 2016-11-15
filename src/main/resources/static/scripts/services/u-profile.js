@@ -85,10 +85,12 @@ var UserProfile = (function(){
 		
 		if(userDetailEditFormElem.hasClass('hidden')){
 			userDetailEditFormElem.removeClass('hidden');
+			$('#pac-input').removeClass('hidden');
 			userDetailHeadDiv.addClass('hidden');
 			userDetailEditDiv.addClass('hidden');
 		}else{
 			userDetailEditFormElem.addClass('hidden');
+			$('#pac-input').addClass('hidden');
 			userDetailHeadDiv.removeClass('hidden');
 			userDetailEditDiv.removeClass('hidden');
 		}
@@ -130,6 +132,9 @@ function initMap() {
     placeMarker({'lat': parseFloat(lat), 'lng':parseFloat(lng)}, map);
     //google.maps.event.addListener(map,'click',function(event) {
     map.addListener('click',function(event) {
+		if ($('#userDetailEditForm').hasClass('hidden')) {
+			return;
+		}
         //document.getElementById('latlongclicked').value = event.latLng.lat() + ', ' + event.latLng.lng();
         $('#latitude').val(event.latLng.lat());
         $('#longitude').val(event.latLng.lng());

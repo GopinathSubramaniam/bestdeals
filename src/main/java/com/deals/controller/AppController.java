@@ -52,6 +52,7 @@ import com.deals.service.UserService;
 import com.deals.util.App;
 import com.deals.vo.RegisterVo;
 import com.deals.vo.UserVO;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class AppController {
@@ -116,7 +117,7 @@ public class AppController {
 	private PublicUserPlanService publicUserPlanservice;
 	
 	
-	@RequestMapping(value="/login")
+	@RequestMapping(value="/login", method = RequestMethod.POST)
 	public String dologin(Model model, User user){
 		user = (User)loginService.login(user).getData();
 		String page = "u-login";
