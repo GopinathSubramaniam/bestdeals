@@ -144,7 +144,7 @@
 			            <label for="inputEmail3" class="col-sm-2 control-label">Category</label>
 			            <div class="col-sm-10">
 			            	<select id="inputCategory" name="category" class="form-control" onchange="App.findAllSubCateByState($('#inputCategory').val()); Deal.onChangeCat()">
-			            		<option value="">--- Select ---</option>
+			            		<option value=""> Select Category </option>
 			            		<option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
 		            		</select>
 		            	</div>
@@ -153,7 +153,7 @@
 		            	<label for="inputEmail3" class="col-sm-2 control-label">Sub Category</label>
 		            	<div class="col-sm-10">
 		            		<select id="inputSubCategory" name="subCategory" class="form-control" onchange="Deal.onChangeCat()">
-			            		<option value="">--- Select ---</option>
+			            		<option value=""> Select Sub Category </option>
 		            		</select>
 	            		</div>
           			</div>
@@ -186,8 +186,8 @@
             <span class="form-group has-error pull-left">
               <label class="control-label" for="inputError" id="errorMsg"></label>
             </span>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary" id="modalSubmitBtn">Save</button>
+            <button type="button" class="btn btn-default btn-flat" data-dismiss="modal"> Close </button>
+            <button type="submit" class="btn btn-primary btn-flat" id="modalSubmitBtn"> Save </button>
           </div>
           </form>	
         </div>
