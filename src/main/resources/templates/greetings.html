@@ -3,29 +3,132 @@
 <head th:include="base-css">
 </head>
 <body>
-	<div th:include="header"></div>
-	<div th:include="left-side"></div>
-	<div class="container-fluid content-wrapper">
-		<div class="row">
-			<section class="content">
-				<div class="row">
-					<div class="col-md-12 " th:each="detail : ${details}">
-						<div th:classappend="${detail.colorName}" class="small-box">
-							<div class="inner">
-								<h3 th:text="${detail.count}"></h3>
-								<p th:text="${detail.name}"> </p>
-							</div>
-							<div class="icon">
-								<i th:classappend="${detail.iconName}"></i>
-							</div>
-							<a th:href="${detail.landingPath}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+<div th:include="header"></div>
+<div th:include="left-side"></div>
+<div class="container-fluid content-wrapper">
+	<div class="row">
+		<section class="content-header">
+			<h1>
+				Dashboard
+				<small> GoMyShoppy.com Admin</small>
+			</h1>
+			<ol class="breadcrumb">
+				<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+				<li class="active">Dashboard</li>
+			</ol>
+		</section>
+		<section class="content">
+			<div class="row">
+				<div class="col-md-3 col-sm-6 col-xs-12" th:each="detail : ${details}">
+					<div th:classappend="${detail.colorName}" class="small-box">
+						<div class="inner">
+							<h3 th:text="${detail.count}"></h3>
+							<p th:text="${detail.name}"> </p>
 						</div>
+						<div class="icon">
+							<i th:classappend="${detail.iconName}"></i>
+						</div>
+						<a th:href="${detail.landingPath}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
 					</div>
 				</div>
-			</section>	
-		</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="box">
+						<div class="box-header with-border">
+							<h3 class="box-title">Activity overview</h3>
+
+							<div class="box-tools pull-right">
+								<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+								</button>
+								<div class="btn-group">
+									<button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown">
+										<i class="fa fa-wrench"></i></button>
+									<ul class="dropdown-menu" role="menu">
+										<li><a href="#">Action</a></li>
+										<li><a href="#">Another action</a></li>
+										<li><a href="#">Something else here</a></li>
+										<li class="divider"></li>
+										<li><a href="#">Separated link</a></li>
+									</ul>
+								</div>
+								<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+							</div>
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body" style="display: block;">
+							<div class="row">
+								<div class="col-md-8">
+									<p class="text-center">
+										<strong>Activity overview</strong>
+									</p>
+
+								</div>
+								<!-- /.col -->
+								<div class="col-md-4">
+									<p class="text-center">
+										<strong>Goal Completion</strong>
+									</p>
+
+									<!-- /.progress-group -->
+									<div class="progress-group">
+										<span class="progress-text">Users</span>
+										<span class="progress-number"><b>95</b>/100+</span>
+
+										<div class="progress sm">
+											<div class="progress-bar progress-bar-aqua" style="width: 30%"></div>
+										</div>
+									</div>
+
+									<!-- /.progress-group -->
+									<div class="progress-group">
+										<span class="progress-text">Sales Mans</span>
+										<span class="progress-number"><b>02</b>/100+</span>
+
+										<div class="progress sm">
+											<div class="progress-bar progress-bar-green" style="width: 2%"></div>
+										</div>
+									</div>
+
+									<!-- /.progress-group -->
+									<div class="progress-group">
+										<span class="progress-text">Sales Managers</span>
+										<span class="progress-number"><b>02</b>/100+</span>
+
+										<div class="progress sm">
+											<div class="progress-bar progress-bar-yellow" style="width: 2%"></div>
+										</div>
+									</div>
+
+									<!-- /.progress-group -->
+									<div class="progress-group">
+										<span class="progress-text">Plans</span>
+										<span class="progress-number"><b>5</b>/10</span>
+
+										<div class="progress sm">
+											<div class="progress-bar progress-bar-red" style="width: 50%"></div>
+										</div>
+									</div>
+								</div>
+								<!-- /.col -->
+							</div>
+							<!-- /.row -->
+						</div>
+						<!-- ./box-body -->
+						<div class="box-footer" style="display: block;">
+
+						</div>
+						<!-- /.box-footer -->
+					</div>
+					<!-- /.box -->
+				</div>
+				<!-- /.col -->
+			</div>
+		</section>
 	</div>
-	<div th:include="footer"></div>
-	<div th:include="base-js"></div>
+</div>
+<div th:include="footer"></div>
+<div th:include="base-js"></div>
 </body>
 </html>
