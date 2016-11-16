@@ -123,7 +123,7 @@ public class AppController {
 		String page = "u-login";
 		int maxAdvCount = 0;
 		if(user != null){
-			boolean isAdmin = user.getUserType().name().equals(UserType.ADMIN);
+			boolean isAdmin = user.getUserType().equals(UserType.ADMIN);
 			session.setAttribute("userId", user.getId());
 			session.setAttribute("username", user.getName());
 			log.info("Logged In Plan ::: "+user.getPlan());
@@ -135,7 +135,7 @@ public class AppController {
 			}
 			model.addAttribute("message", "Welcome to BestDeals!!!");
 			model.addAttribute("username", user.getName());
-			if(!isAdmin) page = "redirect:greetings";
+			page = isAdmin ? "forward:home" : "redirect:greetings";
 		}else{
 			model.addAttribute("message", "Login in BestDeals");
 			model.addAttribute("errorMsg", "Invalid username and password");
@@ -156,7 +156,7 @@ public class AppController {
 		if(session != null){
 			session.invalidate();
 		}
-		return "u-login";
+		return "redirect:";
 	}
 	
 	
