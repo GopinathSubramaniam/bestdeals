@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.deals.enums.PlanType;
@@ -105,7 +106,7 @@ public class DealService {
 		return dealVOs;
 	}
 
-	public Status findAll(String categoryName, String subCatName, String cityName, String placeName){
+	public Status findDealsForDashboard(String categoryName, String subCatName, String cityName, String placeName){
 		List<Deal> platinumDeals = new ArrayList<>();
 		List<Deal> goldDeals = new ArrayList<>();
 		List<Deal> silverDeals = new ArrayList<>();
@@ -127,20 +128,20 @@ public class DealService {
 	
 	}
 	
-	public Status findAll(){
+	public Status findDealsForDashboard(int page, int max){
 		List<Deal> platinumDeals = new ArrayList<>();
 		List<Deal> goldDeals = new ArrayList<>();
 		List<Deal> silverDeals = new ArrayList<>();
 		
-		platinumDeals = dealRepository.findAllByUserPlanPlanTypeAndIsDefault(PlanType.PLATINUM, true);
+		platinumDeals = dealRepository.findAllByUserPlanPlanTypeAndIsDefault(PlanType.PLATINUM, true, new PageRequest(page, max));
 		
 		if(platinumDeals.size() == 0 ){
-			goldDeals = dealRepository.findAllByUserPlanPlanTypeAndIsDefault(PlanType.GOLD, true);
+			goldDeals = dealRepository.findAllByUserPlanPlanTypeAndIsDefault(PlanType.GOLD, true, new PageRequest(page, max));
 			platinumDeals = goldDeals;
 		}
 		
 		if(platinumDeals.size() == 0 && goldDeals.size() == 0){
-			silverDeals = dealRepository.findAllByUserPlanPlanTypeAndIsDefault(PlanType.SILVER, true);
+			silverDeals = dealRepository.findAllByUserPlanPlanTypeAndIsDefault(PlanType.SILVER, true, new PageRequest(page, max));
 			platinumDeals = silverDeals;
 		}
 		List<DealVO> dealVOs = mergeDealVOs(platinumDeals);

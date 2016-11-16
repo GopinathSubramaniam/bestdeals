@@ -6,6 +6,7 @@ import javax.transaction.Transactional;
 
 import com.deals.model.City;
 import com.deals.model.SubCategory;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.deals.enums.PlanType;
@@ -26,6 +27,7 @@ public interface DealRepository extends JpaRepository<Deal, Long>{
 	public List<Deal> findAllByUserId(Long id);
 	public List<Deal> findAllByPriorityAndUserPlanPlanType(Priority priority, PlanType planType);
 	public List<Deal> findAllByUserPlanPlanTypeAndIsDefault(PlanType planType, boolean isDefault);
+	public List<Deal> findAllByUserPlanPlanTypeAndIsDefault(PlanType planType, boolean isDefault, Pageable pageable);
 	public List<Deal> findAllBySubCategoryId(Long id);
 	public List<Deal> findAllBySubCategoryIdAndIsDefault(Long id, boolean isDefault);
 

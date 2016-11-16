@@ -4,7 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.deals.util.App;
 import com.deals.vo.DealVO;
-import com.deals.vo.UserVO;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +25,6 @@ import com.deals.service.AppService;
 import com.deals.service.DealService;
 import com.deals.util.Status;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -41,7 +39,12 @@ public class DealController {
 	
 	@Autowired
 	private AppService appService;
-	
+
+	@RequestMapping(value="/", method= RequestMethod.GET)
+	public Status findAll(){
+		return dealService.findDealsForDashboard(0,20);
+	}
+
 	@RequestMapping(value="/", method= RequestMethod.POST, consumes = "multipart/form-data", produces = { "application/json", "application/xml" })
 	public Status create(@RequestParam("file") MultipartFile file, @RequestParam("deal") String stringDeal) throws Exception{
 		JSONObject jsonDeal = new JSONObject(stringDeal);
@@ -102,7 +105,7 @@ public class DealController {
 			String subCatName = req.getParameter("scname");
 			String cityName = req.getParameter("cityName");
 			String placeName = req.getParameter("placeName");
-			return dealService.findAll(categoryName, subCatName, cityName, placeName); 
+			return dealService.findDealsForDashboard(categoryName, subCatName, cityName, placeName);
 		}
 	}
 
