@@ -2,32 +2,41 @@
 
 var Login = (function(){
 	var URL = App.URL().BASE+App.URL().LOGIN;
-	
+
+	var initUserData = function (response) {
+		if(response.statusMsg == 'OK'){
+			var obj = response.data;
+			var userType = obj.userType;
+			if(userType == 'MERCHANT' && obj.plan != null){
+				window.sessionStorage.setItem('planId', obj.plan.id);
+				window.sessionStorage.setItem('planRule', obj.plan.rules);
+			}
+
+			window.sessionStorage.setItem('username', obj.name);
+			window.sessionStorage.setItem('loginState', obj.loginState);
+			window.sessionStorage.setItem('email', obj.email);
+			window.sessionStorage.setItem('userType', userType);
+			window.sessionStorage.setItem('userId', obj.id);
+			if(userType == 'ADMIN'){
+				window.sessionStorage.setItem('isAdmin', true);
+				//window.location.href='home';
+			}else{
+				//window.location.href='greetings';
+			}
+		}else{
+			$('.message').html('<span class="error">Invalid Username and Password</span>').fadeIn(3000).fadeOut(5000);
+		}
+	};
+
+	var getUserData= function(userId){
+		App.GetRequest(App.URL().BASE+App.URL().USER + '/'+ userId).then(function(response){
+			initUserData(response);
+		});
+	};
 	var doLogin= function(ev){
 		var obj = App.serializeObject('loginform');
 		App.PostRequest(URL, obj).then(function(response){
-			if(response.statusMsg == 'OK'){
-				var obj = response.data;
-				var userType = obj.userType;
-				if(userType == 'MERCHANT' && obj.plan != null){
-					window.sessionStorage.setItem('planId', obj.plan.id);
-					window.sessionStorage.setItem('planRule', obj.plan.rules);
-				}
-				
-				window.sessionStorage.setItem('username', obj.name);
-				window.sessionStorage.setItem('loginState', obj.loginState);
-				window.sessionStorage.setItem('email', obj.email);
-				window.sessionStorage.setItem('userType', userType);
-				window.sessionStorage.setItem('userId', obj.id);
-				if(userType == 'ADMIN'){
-					window.sessionStorage.setItem('isAdmin', true);
-					window.location.href='home';
-				}else{
-					window.location.href='greetings';
-				}
-			}else{
-				$('.message').html('<span class="error">Invalid Username and Password</span>').fadeIn(3000).fadeOut(5000);
-			}
+			initUserData(response);
 		});
 	};
 	var  doLogout = function(){
@@ -58,7 +67,8 @@ var Login = (function(){
 	return {
 		doLogin: doLogin,
 		doLogout: doLogout,
-		doLogoutForUser: doLogoutForUser
+		doLogoutForUser: doLogoutForUser,
+		getUserData :getUserData
 	}
 	
 })();

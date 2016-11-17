@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="base-css">
 </head>
-<body>
+<body class="hold-transition skin-blue sidebar-mini">
 	<div th:include="u-header"></div>
 	<div th:include="u-left-side"></div>
 	<div class="container-fluid content-wrapper">
@@ -35,7 +35,7 @@
 								<input type="hidden" name="user_deal_id" th:id="${deal.id}+'_'+${deal.user.id}" th:value="${deal.user.id}"/>
 
 								<div class="caption">
-									<p><strong th:text="${deal.name}" ></strong></p>
+									<p><strong th:text="${deal.description}" ></strong></p>
 
 									<p><div class="overlay" th:onclick="'Deal.selectDefault('+${deal.id}+')'">
 									<input type="radio" name="isDefault" class="minimal" th:checked="${deal.default}"/> Select as default
@@ -61,7 +61,8 @@
 	</div>
 	<div th:include="footer"></div>
 	<div th:include="base-js"></div>
-	<script type="text/javascript" src="scripts/services/deal.js"></script>
+	<script src="plugins/iCheck/icheck.min.js"></script>
+	<script src="scripts/services/deal.js"></script>
 	
 	<!-- Update advertisement modal START -->
 	<div id="editAdvModal" class="modal">

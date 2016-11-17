@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="base-css">
 </head>
-<body>
+<body class="hold-transition skin-blue sidebar-mini">
 <div th:include="header"></div>
 <div th:include="left-side"></div>
 <div class="container-fluid content-wrapper">
@@ -129,6 +129,15 @@
 	</div>
 </div>
 <div th:include="footer"></div>
-<div th:include="base-js"></div>
+<script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="scripts/app.js"></script>
+<script type="text/javascript" src="scripts/services/login.js"></script>
+<!--<div th:include="base-js"></div>-->
+<script type="text/javascript">
+	jQuery(document).ready(function() {
+		var x=$('#hiddenUserId').val();
+		Login.getUserData(x);
+	});
+</script>
 </body>
 </html>

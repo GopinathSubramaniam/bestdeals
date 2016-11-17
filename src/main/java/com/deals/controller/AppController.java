@@ -148,7 +148,7 @@ public class AppController {
 		if(session != null){
 			session.invalidate();
 		}
-		return "login";
+		return "redirect:admin";
 	}
 	
 	@RequestMapping(value="/out")
@@ -156,7 +156,7 @@ public class AppController {
 		if(session != null){
 			session.invalidate();
 		}
-		return "redirect:";
+		return "redirect:/";
 	}
 	
 	
