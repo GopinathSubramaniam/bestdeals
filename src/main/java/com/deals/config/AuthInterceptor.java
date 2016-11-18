@@ -23,12 +23,11 @@ public class AuthInterceptor implements HandlerInterceptor {
         if( !httpServletRequest.getRequestURI().equals("/BestDeals/") &&
                 !httpServletRequest.getRequestURI().equals("/BestDeals/login") &&
                 !httpServletRequest.getRequestURI().equals("/BestDeals/login/") &&
+                !httpServletRequest.getRequestURI().equals("/BestDeals/registerPage") &&
+                !httpServletRequest.getRequestURI().equals("/BestDeals/registerPage/") &&
                 !httpServletRequest.getRequestURI().equals("/BestDeals/admin") &&
                 !httpServletRequest.getRequestURI().equals("/BestDeals/admin/") &&
-                !httpServletRequest.getRequestURI().startsWith("/BestDeals/rest")
-            /*!httpServletRequest.getRequestURI().equals("/sample-interc/") &&
-                !httpServletRequest.getRequestURI().equals("/sample-interc/login.do") &&
-                !httpServletRequest.getRequestURI().equals("/sample-interc/login.failed")*/)
+                !httpServletRequest.getRequestURI().startsWith("/BestDeals/rest"))
         {
             if( httpServletRequest.getSession().getAttribute("userId") == null) {
                 log.info("AuthInterceptor: invalid session");
