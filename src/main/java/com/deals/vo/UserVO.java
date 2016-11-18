@@ -55,6 +55,7 @@ public class UserVO {
 	}
 	public UserVO(User user, UserDetail userDetail, PublicUserPlan publicUserPlan, List<Deal> deals) {
 		this.setId(user.getId());
+		this.setMobile(user.getMobile());
 		this.setEmail(user.getEmail());
 		this.setName(user.getName());
 		this.setUserType(user.getUserType());
@@ -69,10 +70,12 @@ public class UserVO {
 						this.setCityName(userDetail.getVillage().getTaluka().getCity().getName());
 			this.setLatitude(userDetail.getLatitude());
 			this.setLongitude(userDetail.getLongitude());
-
+			this.phoneNumbers.add(userDetail.getPhoneNumbers());
 			this.setShopName(userDetail.getShopName());
 //			this.setStateName(userDetail.getVillage().getTaluka().getCity().getState().getName());
 			this.setTimings(userDetail.getDescription());
+			this.setLikes(userDetail.getLikes());
+			this.setViews(userDetail.getViews());
 		}
 
 		if(user.getPlan() != null){
