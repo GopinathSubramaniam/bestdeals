@@ -9,7 +9,7 @@
 		<div class="row">
 			<section class="content">
 				<div class="col-lg-12 col-xs-12">
-					<h3>Advertisements <div th:if="${maxAdvCount} &gt; 0">
+					<h3>Advertisements <div th:if="${maxAdvCount - deals.size()} &gt; 0">
 						<button class="btn btn-primary btn-flat pull-right" data-toggle="modal" data-target="#advertisementModal"> <i class="fa fa-plus-circle"></i> Create New </button>
 					</div> </h3>
 					<div class="row" style="margin-left: 0%; margin-right: 0%;">
@@ -129,9 +129,9 @@
     </div>
 	<!-- Update advertisement modal END -->
 	<!--  Create Advertisement Modal START -->
-	<div id="advertisementModal" class="modal">
+	<div id="advertisementModal" class="modal" th:if="${maxAdvCount - deals.size()} &gt; 0">
      <div class="modal-dialog" style="width: 75%;">
-        <div class="modal-content">
+        <div class="modal-content" >
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="modalTitle"> Create New Advertisement </h4>
@@ -140,7 +140,7 @@
           <div class="modal-body">
 	        <div class="box-body">
 	        	<div>
-		        	<div class="form-group" th:if="${maxAdvCount} &gt; 0">
+		        	<div class="form-group" >
 		         		<input type="hidden" name="id" id="advId"/>
 			            <label for="inputEmail3" class="col-sm-2 control-label">Category</label>
 			            <div class="col-sm-10">
@@ -150,7 +150,7 @@
 		            		</select>
 		            	</div>
 		          	</div>
-		          	<div class="form-group" th:if="${maxAdvCount} &gt; 0">
+		          	<div class="form-group" >
 		            	<label for="inputEmail3" class="col-sm-2 control-label">Sub Category</label>
 		            	<div class="col-sm-10">
 		            		<select id="inputSubCategory" name="subCategory" class="form-control" onchange="Deal.onChangeCat()">
@@ -158,8 +158,8 @@
 		            		</select>
 	            		</div>
           			</div>
-          			<div style="max-height: 600px; overflow-y: scroll;" th:if="${maxAdvCount} &gt; 0">
-		        		<div th:each="i : ${#numbers.sequence(1, maxAdvCount)}">
+          			<div style="max-height: 600px; overflow-y: scroll;" >
+		        		<div th:each="i : ${#numbers.sequence(1, maxAdvCount - deals.size())}">
 		          			<div class="form-group" style="margin-right: 0px;">
 				            	<label for="inputEmail3" class="col-sm-2 control-label" th:text="'Caption '+${i}">Caption</label>
 				            	<div class="col-sm-10">

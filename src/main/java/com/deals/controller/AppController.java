@@ -217,10 +217,16 @@ public class AppController {
 			model.addAttribute("message", "Please update your plan to create advertisement");
 		}else if(isError != null && isError.equals("1")){
 			model.addAttribute("message", "You limit exceed");
+		} else {
+			User user = userService.findOne((long) getSessionVal("userId"));
+			JSONObject rule = new JSONObject(user.getPlan().getRules());
+			int maxAdvCount = rule.getInt("max_adv_count");
+			model.addAttribute("maxAdvCount", maxAdvCount);
+
+			model = getAdvertisementModel(model, maxAdvCount);
+//			model.addAttribute("userId", getSessionVal("userId"));
+//			model.addAttribute("userName", getSessionVal("username"));
 		}
-		model = getAdvertisementModel(model);
-		model.addAttribute("userId", getSessionVal("userId"));
-		model.addAttribute("userName", getSessionVal("username"));
 		return "u-advertisement";
 	}
 	
@@ -605,7 +611,7 @@ public class AppController {
 	}
 	
 	
-	private Model getAdvertisementModel(Model model){
+	private Model getAdvertisementModel(Model model, int maxAdvCount){
 		Long userId = (Long) getSessionVal("userId");
 		List<Deal> deals = (List<Deal>)dealService.findAllByUserId(userId).getData();
 		List<Category> categories = (List<Category>)categoryService.findAllCategory().getData();
@@ -614,14 +620,11 @@ public class AppController {
 		model.addAttribute("deals", deals);
 		model.addAttribute("states", states);
 		model.addAttribute("categories", categories);
-		model.addAttribute("userId", userId);
-		
-		if(session.getAttribute("maxAdvCount") != null){
-			Long maxAdvCount = (Long.parseLong(session.getAttribute("maxAdvCount").toString()) - deals.size());
-			Long count = (maxAdvCount <= 0) ? 0 : (maxAdvCount);
+
+		if(maxAdvCount > 0){
+			int availableAdvCount = maxAdvCount - deals.size();
+			int count = (availableAdvCount <= 0) ? 0 : (availableAdvCount);
 			log.info("Adv Count Left :::: "+count);
-			model.addAttribute("maxAdvCount", count);
-			
 			if(count == 0){
 				model.addAttribute("message", "Your is limit exceed. Your can create only "+session.getAttribute("maxAdvCount")+" advertisement.");
 			}
