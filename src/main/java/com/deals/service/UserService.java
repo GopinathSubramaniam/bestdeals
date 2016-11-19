@@ -41,7 +41,7 @@ public class UserService {
 	@Autowired
 	private UserDetailRepository userDetailRepository;
 	
-	@Autowired
+	//@Autowired
 	private MailService mailService;
 	
 	@Autowired
@@ -245,6 +245,7 @@ public class UserService {
 		return users;
 	}
 	
+	/*We doesn't provide this functionality by mail, we must use SMS gateway
 	public Status forgotPassword(String email){
 		log.info("Email :::: "+email);
 		if(!email.contains(".com")){
@@ -265,7 +266,7 @@ public class UserService {
 			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_USER_INVALID_EMAIL, null);
 		}
 		return status;
-	}
+	}*/
 	
 	public Status likeOrView(Long userId, Long merchantId, String type){
 		type = type.equalsIgnoreCase("like") ? "LIKE" : "VIEW";

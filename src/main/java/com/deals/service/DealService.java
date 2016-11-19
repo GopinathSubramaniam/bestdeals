@@ -2,6 +2,7 @@ package com.deals.service;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -92,14 +93,15 @@ public class DealService {
 			//deals = dealRepository.findBySubCategoryIdIn(subCategoryIds);
 
 			deals = dealRepository.findBySubCategoryIdInOnePerUser(subCategoryIds);
-		} else if (latPoint > -90 && latPoint < 90 && lngPoint > -180 && lngPoint < 180) {
+		} else if (latPoint > -90 && latPoint < 90 && lngPoint > -180 && lngPoint < 180 && distance > 0 ) {
 			List<BigInteger> userIds = userDetailService.findNearByUserIdsByLatLongInRange(latPoint,lngPoint,distance,pageable);
 			List<Long> users = new ArrayList<>(userIds.size());
 			for (Iterator<BigInteger> itr1 = userIds.iterator(); itr1.hasNext();) {
 				BigInteger bi = itr1.next();
 				if (bi != null) users.add(bi.longValue() );
 			}
-			deals = dealRepository.findByUserIdInGroupByUser(users);
+			if (users.size() > 0 )
+				deals = dealRepository.findByUserIdInGroupByUser(users);
 		} else if (!cityName.isEmpty()) {
 			deals = dealRepository.findByCityName(cityName);
 		} else if (!placeName.isEmpty()) {
@@ -115,6 +117,8 @@ public class DealService {
 				List<Deal> userDeals = dealRepository.findAllByUserId(deal.getUser().getId());
 				dealVOs.add(new DealVO(deal, new UserVO(deal.getUser(), userDetail, null, userDeals)));
 			}
+		} else {
+			dealVOs = Collections.emptyList();
 		}
 		return dealVOs;
 	}

@@ -171,11 +171,12 @@ public class UserController {
 		return userService.findUsersByUserType(userType);
 	}
 	
+	/* We doesn't provide this functionality by mail, we must use SMS gateway
 	@RequestMapping(value="/forgotPassword/{emailAddress}", method=RequestMethod.GET)
 	public Status forgotPassword(@PathVariable("emailAddress") String emailAddress){
 		System.out.println("Email Address ::::: "+emailAddress);
 		return userService.forgotPassword(emailAddress);
-	}
+	}*/
 	
 	@RequestMapping(value="/likeOrView/{userId}/{merchantId}/{type}", method=RequestMethod.GET)
 	public Status like(@PathVariable Long userId, @PathVariable Long merchantId, @PathVariable String type){

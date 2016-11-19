@@ -13,10 +13,10 @@ import com.deals.service.MailService;
 import com.deals.util.App;
 import com.deals.util.Status;
 
-@RestController
-@RequestMapping("/rest/mail")
+//@RestController
+//@RequestMapping("/rest/mail")
 public class MailController {
-
+/*
 	@Autowired
 	private MailService mailService;
 	
@@ -50,5 +50,5 @@ public class MailController {
 		eMail.getEmailDetail().setSubject(subject);
 		
 		return mailService.sendMail(eMail);
-	}
+	}*/
 }

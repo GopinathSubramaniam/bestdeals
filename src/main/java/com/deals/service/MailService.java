@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.mail.internet.InternetAddress;
+//import javax.mail.internet.InternetAddress;
 
 import org.assertj.core.util.Lists;
 import org.slf4j.Logger;
@@ -18,14 +18,14 @@ import com.deals.model.EMail;
 import com.deals.util.App;
 import com.deals.util.Status;
 
-import it.ozimov.springboot.templating.mail.model.Email;
-import it.ozimov.springboot.templating.mail.model.impl.EmailImpl;
-import it.ozimov.springboot.templating.mail.service.EmailService;
-import it.ozimov.springboot.templating.mail.service.exception.CannotSendEmailException;
+//import it.ozimov.springboot.templating.mail.model.Email;
+//import it.ozimov.springboot.templating.mail.model.impl.EmailImpl;
+//import it.ozimov.springboot.templating.mail.service.EmailService;
+//import it.ozimov.springboot.templating.mail.service.exception.CannotSendEmailException;
 
-@Service
+//@Service
 public class MailService {
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
+/*	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	private static Status status = new Status();
 	
 	@Autowired
@@ -57,5 +57,5 @@ public class MailService {
 		
 		return status;
 	}
-	
+	*/
 }

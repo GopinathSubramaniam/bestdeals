@@ -121,7 +121,7 @@ public class DealController {
 		}else{
 			double latPoint = 1000.00d;
 			double lngPoint = 1000.00d;
-			int radius = 5;
+			int radius = 0;
 			log.info("Advanced Search");
 			String categoryName = req.getParameter("cname");
 			if (categoryName == null) categoryName = "";
