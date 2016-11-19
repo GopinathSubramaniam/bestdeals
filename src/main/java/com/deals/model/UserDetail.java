@@ -1,10 +1,6 @@
 package com.deals.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import groovy.transform.ToString;
 import lombok.Getter;
@@ -24,8 +20,10 @@ public class UserDetail {
 	private String address1;
 	private String address2;
 	private String address3;
-	private String latitude;
-	private String longitude;
+	@Column(precision=10, scale=8)
+	private double latitude;
+	@Column(precision=11, scale=8)
+	private double longitude;
 	private String description;
 	private Long likes;
 	private Long views;

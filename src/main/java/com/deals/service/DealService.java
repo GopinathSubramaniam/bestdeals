@@ -1,10 +1,14 @@
 package com.deals.service;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import com.deals.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.deals.enums.PlanType;
@@ -72,7 +76,8 @@ public class DealService {
 		return status;
 	}
 
-	public List<DealVO> searchOr(String categoryName, String subCatName, String cityName, String placeName){
+	public List<DealVO> searchOr(String categoryName, String subCatName, String cityName, String placeName,
+								 double latPoint, double lngPoint, int distance, Pageable pageable){
 		List<Deal> deals = null;
 		if (!subCatName.isEmpty()) {
 			List<Long> subCategoryIds = subCategoryRepository.findIdByNameLike(subCatName);
@@ -87,6 +92,14 @@ public class DealService {
 			//deals = dealRepository.findBySubCategoryIdIn(subCategoryIds);
 
 			deals = dealRepository.findBySubCategoryIdInOnePerUser(subCategoryIds);
+		} else if (latPoint > -90 && latPoint < 90 && lngPoint > -180 && lngPoint < 180) {
+			List<BigInteger> userIds = userDetailService.findNearByUserIdsByLatLongInRange(latPoint,lngPoint,distance,pageable);
+			List<Long> users = new ArrayList<>(userIds.size());
+			for (Iterator<BigInteger> itr1 = userIds.iterator(); itr1.hasNext();) {
+				BigInteger bi = itr1.next();
+				if (bi != null) users.add(bi.longValue() );
+			}
+			deals = dealRepository.findByUserIdInGroupByUser(users);
 		} else if (!cityName.isEmpty()) {
 			deals = dealRepository.findByCityName(cityName);
 		} else if (!placeName.isEmpty()) {

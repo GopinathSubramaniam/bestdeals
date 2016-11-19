@@ -17,8 +17,8 @@ public class RegisterVo {
 	private String email;
 	private String password;
 	private String description; // Show discription
-	private String latitude;
-	private String longitude;
+	private double latitude;
+	private double longitude;
 	
 	private String shopName;
 	private String address1;

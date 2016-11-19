@@ -8,6 +8,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -117,12 +119,31 @@ public class DealController {
 			String searchKey = req.getParameter("key");
 			return dealService.searchGlobal(searchKey);
 		}else{
+			double latPoint = 1000.00d;
+			double lngPoint = 1000.00d;
+			int radius = 5;
 			log.info("Advanced Search");
 			String categoryName = req.getParameter("cname");
+			if (categoryName == null) categoryName = "";
 			String subCatName = req.getParameter("scname");
+			if (subCatName == null) subCatName = "";
 			String cityName = req.getParameter("cityName");
+			if (cityName == null) cityName = "";
 			String placeName = req.getParameter("placeName");
-			List<DealVO> dealVOs = dealService.searchOr(categoryName, subCatName, cityName, placeName);
+			if (placeName == null) placeName = "";
+
+			try {
+				String latitude = req.getParameter("latPoint");
+				String lngitude = req.getParameter("lngPoint");
+				String distance = req.getParameter("distance");
+				if (latitude!= null && !latitude.isEmpty()) latPoint = Double.parseDouble(latitude);
+				if (lngitude!= null && !lngitude.isEmpty()) lngPoint = Double.parseDouble(lngitude);
+				if (distance!= null && !distance.isEmpty()) radius = Integer.parseInt(distance);
+			} catch (Exception e){}
+
+			Pageable pageable = new PageRequest(0, 5);
+			List<DealVO> dealVOs = dealService.searchOr(categoryName, subCatName, cityName, placeName,
+				latPoint, lngPoint, radius, pageable);
 			return App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, dealVOs);
 		}
 	}

@@ -33,8 +33,8 @@ public class UserVO {
 	private String timings;
 	private Long likes;
 	private Long views;
-	private String latitude;
-	private String longitude;
+	private double latitude;
+	private double longitude;
 	private List<Deal> deals;
 	private List<ImageVo> imageUrls;
 	

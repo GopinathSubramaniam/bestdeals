@@ -1,11 +1,13 @@
 package com.deals.service;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import com.deals.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.deals.model.UserDetail;
@@ -48,12 +50,9 @@ public class UserDetailService {
 				}
 				existsUserDetail.setPhoneNumbers(phoneNumbers);
 			}
-			if( userDetail.getLatitude() != null ){
-				existsUserDetail.setLatitude(userDetail.getLatitude());
-			}
-			if( userDetail.getLongitude() != null ){
-				existsUserDetail.setLongitude(userDetail.getLongitude());
-			}
+			existsUserDetail.setLatitude(userDetail.getLatitude());
+			existsUserDetail.setLongitude(userDetail.getLongitude());
+
 			if( userDetail.getAddress1() != null ){
 				existsUserDetail.setAddress1(userDetail.getAddress1());
 			}
@@ -91,5 +90,12 @@ public class UserDetailService {
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, userDetail);
 		return status;
 	}
-	
+
+	public List<BigInteger> findNearByUserIdsByLatLongInRange(double latpoint, double longpoint, double radius, Pageable pageable) {
+		return userDetailRepository.findNearByUserIdsByLatLongInRadius(latpoint,longpoint,radius/*, pageable*/);
+	}
+
+	public List<UserDetail> findNearByUserDetailsByLatLongInRange(double latpoint, double longpoint, double radius) {
+		return userDetailRepository.findNearByUserDetailsByLatLongInRange(latpoint,longpoint,radius);
+	}
 }

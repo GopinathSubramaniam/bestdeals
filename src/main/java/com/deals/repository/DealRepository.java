@@ -1,11 +1,13 @@
 package com.deals.repository;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
 import com.deals.model.City;
 import com.deals.model.SubCategory;
+import com.deals.model.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -25,6 +27,12 @@ public interface DealRepository extends JpaRepository<Deal, Long>{
 	public Deal findByUserIdAndIsDefault(Long id, boolean isDefault);
 	
 	public List<Deal> findAllByUserId(Long id);
+
+	@Query( "select d from Deal d where d.user.id in :ids group by d.user" )
+	public List<Deal> findByUserIdInGroupByUser(@Param("ids") List<Long> userIdList);
+
+	public List<Deal> findByUserIn(Collection<User> user);
+
 	public List<Deal> findAllByPriorityAndUserPlanPlanType(Priority priority, PlanType planType);
 	public List<Deal> findAllByUserPlanPlanTypeAndIsDefault(PlanType planType, boolean isDefault);
 	public List<Deal> findAllByUserPlanPlanTypeAndIsDefault(PlanType planType, boolean isDefault, Pageable pageable);
