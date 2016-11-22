@@ -65,7 +65,12 @@ public class UserDetailService {
 			if( userDetail.getDescription() != null ){
 				existsUserDetail.setDescription(userDetail.getDescription());
 			}
-			
+			if( userDetail.getPlaceName() != null ){
+				existsUserDetail.setPlaceName(userDetail.getPlaceName());
+			}
+			if( userDetail.getShopName() != null ){
+				existsUserDetail.setShopName(userDetail.getShopName());
+			}
 			existsUserDetail.setUser(userDetail.getUser());
 			userDetailRepository.saveAndFlush(existsUserDetail);
 			status = App.getResponse(App.CODE_OK, App.STATUS_CREATE, App.MSG_CREATE, existsUserDetail);

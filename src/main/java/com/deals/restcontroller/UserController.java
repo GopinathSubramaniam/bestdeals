@@ -99,7 +99,7 @@ public class UserController {
 			status.setStatusMsg(App.MSG_FAIL);
 		}
 
-		status = userService.createOnlyUser(user);
+		/*status = userService.createOnlyUser(user);
 		if (status.getStatusCode() != App.CODE_OK || status.getData() == null) {
 			return status;
 		}
@@ -124,7 +124,7 @@ public class UserController {
 		userDetail.setLikes(new Long(0));
 		userDetail.setViews(new Long(0));
 
-		userDetailService.create(userDetail);
+		userDetailService.create(userDetail);*/
 		return status;
 	}
 	

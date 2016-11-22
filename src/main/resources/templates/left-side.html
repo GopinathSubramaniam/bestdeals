@@ -1,17 +1,45 @@
-
-	<aside class="main-sidebar">
-        <!-- sidebar: style can be found in sidebar.less -->
-        <section class="sidebar">
-          <!-- sidebar menu: : style can be found in sidebar.less -->
-          <ul class="sidebar-menu">
-          	<li th:class="${tab} == 'DASHBOARD' ? 'active' : ''"><a href="home"><i class="fa fa-fw fa-dashboard text-aqua"></i><span>Dashboard</span></a></li>
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar" th:switch="${session.usertype}">
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <!--<div >
+            <p th:case="'admin'">User is an administrator</p>
+            <p th:case="#{roles.manager}">User is a manager</p>
+            <p th:case="*">User is some other thing</p>
+        </div>-->
+        <ul class="sidebar-menu" th:case="'ADMIN'">
+            <li th:class="${tab} == 'DASHBOARD' ? 'active' : ''"><a href="/BestDeals/"><i class="fa fa-fw fa-dashboard text-aqua"></i><span>Dashboard</span></a></li>
             <li th:class="${tab} == 'USER' ? 'active' : ''"><a href="user"><i class="fa fa-fw fa-users text-aqua"></i><span>Users</span></a></li>
             <li th:class="${tab} == 'SALES_MANAGER' ? 'active' : ''"><a href="salesManager"><i class="fa fa-fw fa-sticky-note text-aqua"></i> <span>Sales Manager</span></a></li>
             <li th:class="${tab} == 'SALE' ? 'active' : ''"><a href="salesman"><i class="fa fa-fw fa-money text-aqua"></i> <span>Sales People</span></a></li>
-            <li th:class="${tab} == 'PLAN' ? 'active' : ''"><a href="plan"><i class="fa fa-fw fa-sticky-note text-aqua"></i> <span>Plans</span></a></li>
+            <li th:class="${tab} == 'PLAN' ? 'active' : ''"><a href="plan"><i class="fa fa-fw fa-sticky-note text-aqua"></i> <span>My Plan</span></a></li>
             <li th:class="${tab} == 'CATEGORY' ? 'active' : ''"><a href="category"><i class="fa fa-fw fa-sticky-note text-aqua"></i> <span>Category</span></a></li>
             <li th:class="${tab} == 'PUBLIC_USER_PLAN' ? 'active' : ''"><a href="publicUserPlan"><i class="fa fa-fw fa-sticky-note text-aqua"></i> <span>Public User Plan</span></a></li>
-          </ul>
-        </section>
-        <!-- /.sidebar -->
-      </aside>
+        </ul>
+        <ul class="sidebar-menu" th:case="'PUBLIC'">
+            <li th:class="${tab} == 'GREETINGS' ? 'active' : ''"><a href="home"><i class="fa fa-fw fa-dashboard text-aqua"></i><span>Dashboard</span></a></li>
+            <li th:class="${tab} == 'USERPROFILE' ? 'active' : ''"><a class="userProfile" href="profile"><i class="fa fa-fw fa-user text-aqua"></i><span>Profile</span></a></li>
+            <li th:class="${tab} == 'USERPLAN' ? 'active' : ''"><a class="userProfile" href="userplan"><i class="fa fa-fw fa-user text-aqua"></i><span>My Plan</span></a></li>
+            <li th:class="${tab} == 'ADVERTISEMENT' ? 'active' : ''"><a class="advertisement" href="advertisement"><i class="fa fa-fw fa-list-alt text-aqua"></i><span>Advertisement</span></a></li>
+        </ul>
+        <ul class="sidebar-menu" th:case="'MERCHANT'">
+            <li th:class="${tab} == 'GREETINGS' ? 'active' : ''"><a href="home"><i class="fa fa-fw fa-dashboard text-aqua"></i><span>Dashboard</span></a></li>
+            <li th:class="${tab} == 'USERPROFILE' ? 'active' : ''"><a class="userProfile" href="profile"><i class="fa fa-fw fa-user text-aqua"></i><span>Profile</span></a></li>
+            <li th:class="${tab} == 'USERPLAN' ? 'active' : ''"><a class="userProfile" href="userplan"><i class="fa fa-fw fa-user text-aqua"></i><span>My Plan</span></a></li>
+            <li th:class="${tab} == 'ADVERTISEMENT' ? 'active' : ''"><a class="advertisement" href="advertisement"><i class="fa fa-fw fa-list-alt text-aqua"></i><span>Advertisement</span></a></li>
+        </ul>
+        <ul class="sidebar-menu" th:case="'FRANCHISE'">
+            <li th:class="${tab} == 'GREETINGS' ? 'active' : ''"><a href="home"><i class="fa fa-fw fa-dashboard text-aqua"></i><span>Dashboard</span></a></li>
+            <li th:class="${tab} == 'USERPROFILE' ? 'active' : ''"><a class="userProfile" href="profile"><i class="fa fa-fw fa-user text-aqua"></i><span>Profile</span></a></li>
+            <li th:class="${tab} == 'USERPLAN' ? 'active' : ''"><a class="userProfile" href="userplan"><i class="fa fa-fw fa-user text-aqua"></i><span> My Plan</span></a></li>
+            <li th:class="${tab} == 'ADVERTISEMENT' ? 'active' : ''"><a class="advertisement" href="advertisement"><i class="fa fa-fw fa-list-alt text-aqua"></i><span>Advertisement</span></a></li>
+        </ul>
+        <ul class="sidebar-menu" th:case="'SALES_MAN'">
+            <li th:class="${tab} == 'GREETINGS' ? 'active' : ''"><a href="home"><i class="fa fa-fw fa-dashboard text-aqua"></i><span>Dashboard</span></a></li>
+            <li th:class="${tab} == 'USERPROFILE' ? 'active' : ''"><a class="userProfile" href="profile"><i class="fa fa-fw fa-user text-aqua"></i><span>Profile</span></a></li>
+            <li th:class="${tab} == 'USERPLAN' ? 'active' : ''"><a class="userProfile" href="userplan"><i class="fa fa-fw fa-user text-aqua"></i><span>My Plan</span></a></li>
+            <li th:class="${tab} == 'ADVERTISEMENT' ? 'active' : ''"><a class="advertisement" href="advertisement"><i class="fa fa-fw fa-list-alt text-aqua"></i><span>Advertisement</span></a></li>
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>

@@ -18,16 +18,22 @@
               <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image"/>
-                    <input type="hidden" id="hiddenUserId" th:value="${session.userId}" th:unless="${session == null}"/>
-                  <span class="hidden-xs" id="username" th:text="${session.username}" th:unless="${session == null}">Ayyaj</span>
+                  <input type="hidden" id="hiddenUserId" th:value="${userId}" />
+                  <input type="hidden" id="hiddenUserType" th:value="${userType}" />
+                  <span class="hidden-xs" id="hiddenUsername" th:text="${userName}" ></span>
                 </a>
-                <ul class="dropdown-menu">
-                  <li class="user-body">
-                  	<div class="col-xs-4 text-center">
-                  		<a href="profile">Profile</a>
+                <!-- <ul class="dropdown-menu">
+                   <li class="user-body">
+                  	<div class="text-center">
+                  		<a class="userProfile">Profile</a>
                   	</div>
                   </li>
-                </ul>
+                  <li class="user-body">
+                  	<div class="text-center">
+                  		<a class="advertisement">Advertisement</a>
+                  	</div>
+                  </li>
+                </ul> -->
               </li>
               <!-- Control Sidebar Toggle Button -->
               <li>

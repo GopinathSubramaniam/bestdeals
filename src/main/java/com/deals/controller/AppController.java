@@ -20,7 +20,7 @@ import com.deals.enums.DealType;
 import com.deals.enums.Page;
 import com.deals.enums.PlanType;
 import com.deals.enums.Priority;
-import com.deals.enums.UserType;
+import com.deals.enums.UserType.*;
 import com.deals.model.Category;
 import com.deals.model.City;
 import com.deals.model.Deal;
@@ -56,76 +56,94 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class AppController {
-	
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	
 	@Autowired
 	private HttpSession session;
-	
 	@Autowired
 	private AppService appService;
-	
 	@Autowired
 	private LoginService loginService;
-	
 	@Autowired
 	private UserService userService;
-	
 	@Autowired
 	private UserRepository userRepository;
-	
 	@Autowired
 	private UserDetailService userDetailService;
-	
 	@Autowired
 	private SalesmanService salesmanService;
-	
 	@Autowired
 	private PlanService planService;
-	
 	@Autowired
 	private CategoryService categoryService;
-	
 	@Autowired
 	private SubCategoryService subcategoryService;
-	
 	@Autowired
 	private DealService dealService;
-	
 	@Autowired
 	private StateRepository stateRepository;
-	
 	@Autowired
 	private DealRepository dealRepository;
-	
 	@Autowired
 	private CategoryRepository categoryRepository;
-	
 	@Autowired
 	private SubCategoryRepository subCategoryRepository;
-	
 	@Autowired
 	private CityRepository cityRepository;
-	
 	@Autowired
 	private TalukaRepository talukaRepository;
-
 	@Autowired
 	private VillageRepository villageRepository;
-	
 	@Autowired
 	private PublicUserPlanService publicUserPlanservice;
-	
-	
-	@RequestMapping(value="/login", method = RequestMethod.POST)
+
+	@RequestMapping(value="/", method = RequestMethod.GET)
+	public String landingPage(Model model){
+		String page = "u-login";
+		Object objval = getSessionVal("userId");
+		if (objval != null) {
+			Long userId = (Long) objval;
+			User user = userService.findOne(userId);
+			if(user != null) {
+
+				model.addAttribute("userName", getSessionVal("username"));
+				model.addAttribute("userId", getSessionVal("userId"));
+				model.addAttribute("userType", getSessionVal("usertype"));
+
+				switch (user.getUserType()) {
+					case ADMIN:
+						page = "greetings";
+						model.addAttribute("tab", Page.DASHBOARD.toString());
+						model.addAttribute("message", "Welcome to BestDeals API Section!!!");
+						model.addAttribute("details", appService.getAdminDetail());
+						break;
+					case FRANCHISE:
+						page = "franchise/home";
+						break;
+					case MERCHANT:
+						page = "u-greetings";
+						break;
+					case SALES_MAN:
+						page = "salesman/home";
+						break;
+					case PUBLIC:
+						page = "redirect:greetings";
+						break;
+				}
+			} else
+				model.addAttribute("message", "Login in BestDeals");
+		}
+		return page;
+	}
+
+	@RequestMapping(value="/", method = RequestMethod.POST)
 	public String dologin(Model model, User user){
 		user = (User)loginService.login(user).getData();
 		String page = "u-login";
 		int maxAdvCount = 0;
 		if(user != null){
-			boolean isAdmin = user.getUserType().equals(UserType.ADMIN);
 			session.setAttribute("userId", user.getId());
 			session.setAttribute("username", user.getName());
+			session.setAttribute("usertype", user.getUserType().name());
 			log.info("Logged In Plan ::: "+user.getPlan());
 			if(user.getPlan() != null){
 				session.setAttribute("planType", user.getPlan().getPlanType());
@@ -133,66 +151,75 @@ public class AppController {
 				maxAdvCount = rule.getInt("max_adv_count");
 				session.setAttribute("maxAdvCount", maxAdvCount);
 			}
-			model.addAttribute("message", "Welcome to BestDeals!!!");
-			model.addAttribute("username", user.getName());
-			page = isAdmin ? "forward:home" : "redirect:greetings";
+			model.addAttribute("userName", user.getName());
+			model.addAttribute("userId", user.getId());
+			model.addAttribute("userType", user.getUserType().name());
+//			page = isAdmin ? "forward:home" : "redirect:greetings";
+			switch (user.getUserType()) {
+				case ADMIN:
+					page = "greetings";
+					model.addAttribute("tab", Page.DASHBOARD.toString());
+					model.addAttribute("message", "Welcome to BestDeals API Section!!!");
+					model.addAttribute("details", appService.getAdminDetail());
+					break;
+				case FRANCHISE:
+					model.addAttribute("message", "Welcome to BestDeals franchise!!!");
+					page = "franchise/home";
+					break;
+				case MERCHANT:
+					model.addAttribute("message", "Welcome to BestDeals merchants!!!");
+					page = "u-greetings";
+					break;
+				case SALES_MAN:
+					model.addAttribute("message", "Welcome to BestDeals salesman!!!");
+					page = "salesman/home";
+					break;
+				case PUBLIC:
+					page = "u-greetings";
+					model.addAttribute("message", "Welcome to BestDeals users!!!");
+					break;
+			}
 		}else{
 			model.addAttribute("message", "Login in BestDeals");
 			model.addAttribute("errorMsg", "Invalid username and password");
 		}
 		return page;
 	}
-	
+
+	@RequestMapping(value="/admin")
+	public String login(Model model){
+		model.addAttribute("message", "Login in BestDeals");
+		return "login";
+	}
+
 	@RequestMapping(value="/logout")
 	public String logout(HttpServletRequest req){
 		if(session != null){
 			session.invalidate();
 		}
-		return "redirect:admin";
-	}
-	
-	@RequestMapping(value="/out")
-	public String out(){
-		if(session != null){
-			session.invalidate();
-		}
 		return "redirect:/";
 	}
-	
-	
-	/*
-	 * Client Routing START 
-	 * 
-	 */
-	@RequestMapping(value="/")
-	public String loginForCustomer(Model model){
-		Object objval = getSessionVal("userId");
-		if (objval != null)
-			return "redirect:greetings";
 
-		model.addAttribute("message", "Login in BestDeals");
-		return "u-login";
-	}
-	
-	@RequestMapping(value="/greetings")
-	public String userLandingPage(Model model){
-		log.info("Session UserType ::::: "+session.getAttribute("planType"));
-		model.addAttribute("message", "Welcome to BestDeals !!!");
-		model.addAttribute("userName", getSessionVal("username"));
-		return "u-greetings";
-	}
+	/*
+	 * Client Routing START
+	 *
+	 */
 
 	@RequestMapping(value="/profile")
 	public String profile(Model model){
 		boolean displayAdvertisement = false;
 		boolean displayMap = false;
-		
+
+		model.addAttribute("userName", getSessionVal("username"));
+		model.addAttribute("userId", getSessionVal("userId"));
+		model.addAttribute("userType", getSessionVal("usertype"));
+
 		List<Plan> plans = (List<Plan>)planService.findAll().getData();
 		Long userId = (Long) getSessionVal("userId");
 		UserVO userVO = (UserVO)userService.findUser(userId).getData();
 		log.info("UserVO getPhoneNumbers :::: "+userVO.getPhoneNumbers());
 		Plan plan = (Plan)planService.findOne(userVO.getPlanId()).getData();
-		
+
 		if(plan != null){
 			displayAdvertisement = !(plan.getPlanType().equals(PlanType.FREE));
 			displayMap = plan.getPlanType().equals(PlanType.PLATINUM);
@@ -204,7 +231,6 @@ public class AppController {
 		model.addAttribute("plan", plan);
 		model.addAttribute("plans", plans);
 		model.addAttribute("displayAdvertisement", displayAdvertisement);
-		model.addAttribute("userName", getSessionVal("username"));
 		model.addAttribute("displayMap", displayMap);
 		log.info("User Timings :::: "+userVO.getTimings());
 		return "u-profile";
@@ -212,6 +238,11 @@ public class AppController {
 
 	@RequestMapping("/advertisement")
 	public String advertisement(HttpServletRequest req, Model model){
+
+		model.addAttribute("userName", getSessionVal("username"));
+		model.addAttribute("userId", getSessionVal("userId"));
+		model.addAttribute("userType", getSessionVal("usertype"));
+
 		String isError = req.getParameter("error");
 		if(isError != null && isError.equals("0")){
 			model.addAttribute("message", "Please update your plan to create advertisement");
@@ -224,12 +255,10 @@ public class AppController {
 			model.addAttribute("maxAdvCount", maxAdvCount);
 
 			model = getAdvertisementModel(model, maxAdvCount);
-//			model.addAttribute("userId", getSessionVal("userId"));
-//			model.addAttribute("userName", getSessionVal("username"));
 		}
 		return "u-advertisement";
 	}
-	
+
 	@RequestMapping("/updatePlan")
 	public String updatePlan(HttpServletRequest req, Model model){
 		Long userId = (Long) getSessionVal("userId");
@@ -239,12 +268,12 @@ public class AppController {
 		planService.assignPlanToUser(userId, planId);
 		return "redirect:userplan";
 	}
-	
+
 	@RequestMapping("/error")
 	public String error(){
 		return "error";
 	}
-	
+
 	/**
 	 * User Plan Page
 	 * @param model
@@ -252,19 +281,23 @@ public class AppController {
 	 */
 	@RequestMapping(value="/userplan")
 	public String uplan(Model model){
+
+		model.addAttribute("userName", getSessionVal("username"));
+		model.addAttribute("userId", getSessionVal("userId"));
+		model.addAttribute("userType", getSessionVal("usertype"));
+
 		Long userId = (Long) getSessionVal("userId");
 		UserVO userVO = (UserVO)userService.findUser(userId).getData();
 		List<Plan> plans = (List<Plan>)planService.findAll().getData();
 		log.info("Plan id ::: "+userVO.getPlanId());
 		log.info("Plans ::: "+plans.size());
 		Plan plan = (Plan)planService.findOne(userVO.getPlanId()).getData();
-		
+
 		model.addAttribute("tab", Page.USERPLAN.toString());
 		model.addAttribute("user", userVO);
 		model.addAttribute("plan", plan);
 		model.addAttribute("plans", plans);
-		model.addAttribute("userName", getSessionVal("username"));
-		
+
 		return "u-plan";
 	}
 
@@ -274,7 +307,7 @@ public class AppController {
 		List<Taluka> talukas = new ArrayList<Taluka>();
 		List<Village> villages = new ArrayList<Village>();
 		List<State> states = stateRepository.findAll();
-		
+
 		if(states.size() > 0){
 			model.addAttribute("states", states);
 			cities = cityRepository.findAllByStateId(states.get(0).getId());
@@ -287,15 +320,15 @@ public class AppController {
 			model.addAttribute("talukas", talukas);
 			villages = villageRepository.findAllByTalukaId(talukas.get(0).getId());
 		}
-		
+
 		if(villages.size() > 0){
 			model.addAttribute("villages", villages);
 		}
-		
+
 		model.addAttribute("message", null);
 		return "u-register";
 	}
-	
+
 	@RequestMapping(value="/register")
 	public String register(HttpServletRequest req, Model model, RegisterVo register){
 		log.info("Mobile ::: "+register.getMobile());
@@ -310,7 +343,7 @@ public class AppController {
 			user.setMobile(register.getMobile());
 			user.setPassword(register.getPassword());
 			user = (User) userService.create(user).getData();
-			
+
 			UserDetail userDetail = new UserDetail();
 			userDetail.setAddress1(register.getAddress1());
 			userDetail.setDescription(register.getDescription());
@@ -321,9 +354,9 @@ public class AppController {
 			userDetail.setVillage(new Village(register.getVillage()));
 			userDetail.setLatitude(register.getLatitude());
 			userDetail.setLongitude(register.getLongitude());
-			
+
 			userDetail = (UserDetail)userDetailService.create(userDetail).getData();
-			
+
 			model.addAttribute("states", stateRepository.findAll());
 			if(userDetail.getId() > 0){
 				model.addAttribute("message", "You have registered successfully.");
@@ -344,7 +377,7 @@ public class AppController {
 		List<Taluka> talukas = new ArrayList<Taluka>();
 		List<Village> villages = new ArrayList<Village>();
 		List<State> states = stateRepository.findAll();
-		
+
 		if(states.size() > 0){
 			model.addAttribute("states", states);
 			cities = cityRepository.findAllByStateId(states.get(0).getId());
@@ -357,62 +390,57 @@ public class AppController {
 			model.addAttribute("talukas", talukas);
 			villages = villageRepository.findAllByTalukaId(talukas.get(0).getId());
 		}
-		
+
 		if(villages.size() > 0){
 			model.addAttribute("villages", villages);
 		}
-		
+
 		return "u-register";
 	}
-	
+
 	/*
-	 * Client Routing END 
-	 * 
-	 */	
-	
-	@RequestMapping(value="/admin")
-	public String login(Model model){
-		model.addAttribute("message", "Login in BestDeals");
-		return "login";
-	}
-	
-	@RequestMapping(value="/home")
-	public String home(Model model){
-		model.addAttribute("tab", Page.DASHBOARD.toString());
-		model.addAttribute("message", "Welcome to BestDeals API Section!!!");
-		model.addAttribute("details", appService.getAdminDetail());
-		return "greetings";
-	}
-	
+	 * Client Routing END
+	 *
+	 */
+
 	@RequestMapping(value="/salesman")
 	public String salespeople(Model model){
-		
+
+		model.addAttribute("userName", getSessionVal("username"));
+		model.addAttribute("userId", getSessionVal("userId"));
+		model.addAttribute("userType", getSessionVal("usertype"));
+
 		model.addAttribute("title", "Sales List");
 		model.addAttribute("popupTitle", "Creaet New SalesMan");
 		model.addAttribute("salesmans", salesmanService.findAllSalesMan().getData());
 		model.addAttribute("salesManagers", salesmanService.findAllSalesManager().getData());
-		
+
 		model.addAttribute("tab", Page.SALE.toString());
 		return "salesman";
 	}
-	
+
 	@RequestMapping(value="/salesManager")
 	public String salesManager(Model model){
-		
+
 		model.addAttribute("title", "SalesManager List");
 		model.addAttribute("popupTitle", "Creaet New SalesManager");
 		model.addAttribute("salesManagers", salesmanService.findAllSalesManager().getData());
 		model.addAttribute("tab", Page.SALES_MANAGER.toString());
 		return "salesmanager";
 	}
-	
+
 	@RequestMapping(value="/user")
 	public String user(Model model){
+
+		model.addAttribute("userName", getSessionVal("username"));
+		model.addAttribute("userId", getSessionVal("userId"));
+		model.addAttribute("userType", getSessionVal("usertype"));
+
 		List<City> cities = new ArrayList<City>();
 		List<Taluka> talukas = new ArrayList<Taluka>();
 		List<Village> villages = new ArrayList<Village>();
 		List<State> states = stateRepository.findAll();
-		
+
 		if(states.size() > 0){
 			model.addAttribute("states", states);
 			cities = cityRepository.findAllByStateId(states.get(0).getId());
@@ -425,33 +453,33 @@ public class AppController {
 			model.addAttribute("talukas", talukas);
 			villages = villageRepository.findAllByTalukaId(talukas.get(0).getId());
 		}
-		
+
 		if(villages.size() > 0){
 			model.addAttribute("villages", villages);
 		}
-		
+
 		model.addAttribute("message", null);
-		
-		
+
+
 		List<String> userTypes = App.getUserTypes();
 		List<User> merchants = userService.findAllMerchant();
 		List<User> franchises = userService.findAllFranchise();
 		List<User> publicUsers = userService.findAllPublic();
-		
+
 		model.addAttribute("merchants", merchants);
 		model.addAttribute("franchises", franchises);
 		model.addAttribute("publicUsers", publicUsers);
-		
+
 		model.addAttribute("plans", planService.findAll().getData());
 		model.addAttribute("title", "Users List");
 		model.addAttribute("popupTitle", "Create New User");
 		model.addAttribute("tab", Page.USER.toString());
 		model.addAttribute("addNewBtnText", "Add New User");
 		model.addAttribute("userTypes", userTypes);
-		
+
 		return "user";
 	}
-	
+
 	@RequestMapping(value="/plan")
 	public String plan(Model model){
 		model.addAttribute("tab", Page.PLAN.toString());
@@ -460,12 +488,17 @@ public class AppController {
 		model.addAttribute("popupTitle", "Create New Plan");
 		model.addAttribute("plans", planService.findAll().getData());
 		model.addAttribute("planTypes", App.getPlanTypes());
-		
+
 		return "plan";
 	}
-	
+
 	@RequestMapping(value="/category")
 	public String category(Model model){
+
+		model.addAttribute("userName", getSessionVal("username"));
+		model.addAttribute("userId", getSessionVal("userId"));
+		model.addAttribute("userType", getSessionVal("usertype"));
+
 		model.addAttribute("tab", Page.CATEGORY.toString());
 		model.addAttribute("title", "Category And SubCategory List");
 		model.addAttribute("addNewBtnText", "Add New Category");
@@ -474,7 +507,7 @@ public class AppController {
 		model.addAttribute("subcategories", subCategoryRepository.findAll());
 		return "category";
 	}
-	
+
 	@RequestMapping(value="/subcategory")
 	public String subcategory(Model model){
 		model.addAttribute("tab", Page.SUB_CATEGORY.toString());
@@ -484,38 +517,43 @@ public class AppController {
 		model.addAttribute("subcategories", subcategoryService.findAll().getData());
 		return "category";
 	}
-	
+
 	@RequestMapping(value="/publicUserPlan")
 	public String publicUserPlan(Model model){
+
+		model.addAttribute("userName", getSessionVal("username"));
+		model.addAttribute("userId", getSessionVal("userId"));
+		model.addAttribute("userType", getSessionVal("usertype"));
+
 		model.addAttribute("tab", Page.PUBLIC_USER_PLAN.toString());
 		model.addAttribute("title", "Public User Plan List");
 		model.addAttribute("publicUserPlans", publicUserPlanservice.getPublicUserPlans());
 		return "publicuserplan";
 	}
-	
+
 	@RequestMapping(value="/deleteDeal")
 	public String deleteDeal(Model model, HttpServletRequest req){
 		Long dealId = req.getParameter("id") != null ? Long.parseLong(req.getParameter("id")) : 0;
 		dealService.delete(dealId);
 		return "redirect:advertisement";
 	}
-	
+
 	@RequestMapping(value="/createDeal")
 	public String createDeal(HttpServletRequest req, HttpServletResponse res, Model model){
-		
+
 		String page = "redirect:advertisement";
 		int dealCount = 0;
 		int maxAdvCount = 0;
-		
+
 		try {
 			Long userId = (Long) getSessionVal("userId");
 			User user = userService.findOne(userId);
 			List<UserDetail> userDetails =(List<UserDetail>)userDetailService.findAllByUserId(userId).getData();
 			UserDetail userDetail = userDetails.get(0);
-			
+
 			JSONObject rule = null;
 			boolean isAllowedToCreateDeal = false;
-			
+
 			if(user != null && user.getPlan() != null && user.getPlan().getAmount() > 0){
 				rule = new JSONObject(user.getPlan().getRules());
 				maxAdvCount = rule.getInt("max_adv_count");
@@ -523,13 +561,13 @@ public class AppController {
 					isAllowedToCreateDeal = true;
 				}
 			}
-			
+
 			if(isAllowedToCreateDeal){
 				String id = req.getParameter("id");
 				String subCat = req.getParameter("subCategory");
 				Long subCatId = subCat.isEmpty() ? 0 : Long.parseLong(subCat);
 				String name = req.getParameter("name");
-				
+
 				if(id != null && !(id.isEmpty())){
 					Deal deal = (Deal)dealService.findOne(Long.parseLong(id)).getData();
 					Part part = req.getPart("file");
@@ -550,7 +588,7 @@ public class AppController {
 							dealCount++;
 							log.info("Part File :::: "+fileSize);
 							log.info("Id ::: "+id);
-							
+
 							String uploadedImgUrl = appService.copyFileInputstream(part, res);
 							log.info("File Url ::: "+uploadedImgUrl);
 							deal.setImgUrl(uploadedImgUrl);
@@ -565,14 +603,14 @@ public class AppController {
 							if(userDetail.getVillage() != null){
 								deal.setCity(userDetail.getVillage().getTaluka().getCity());
 							}
-							
+
 							dealService.create(deal);
 						}
 					}
 				}
-				
-				
-				
+
+
+
 				/*for (Part part : parts) {
 //					Part part = req.getPart("file");
 					Deal deal = new Deal();
@@ -583,34 +621,34 @@ public class AppController {
 						if(id != null && !(id.isEmpty())){
 							deal = (Deal)dealService.findOne(Long.parseLong(id)).getData();
 						}
-						
+
 						if(part != null && part.getSize() > 0){
 							String uploadedImgUrl = appService.copyFileInputstream(part, res);
 							log.info("File Url ::: "+uploadedImgUrl);
 							deal.setImgUrl(uploadedImgUrl);
 						}
-						
+
 						deal.setDescription(description);
 						deal.setName(name);
 						deal.setPriority(Priority.LOW);
 						deal.setSubCategory(new SubCategory(subCatId));
 						deal.setType(DealType.ADVERTISEMENT);
 						deal.setUser(new User(userId));
-						
+
 						dealService.create(deal);
 					}
 				}*/
 			}else{
 				page = user.getPlan() == null ? page+"?error=0" : page+"?error=1";
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		}
 		return page;
 	}
-	
-	
+
+
 	private Model getAdvertisementModel(Model model, int maxAdvCount){
 		Long userId = (Long) getSessionVal("userId");
 		List<Deal> deals = (List<Deal>)dealService.findAllByUserId(userId).getData();
@@ -632,10 +670,10 @@ public class AppController {
 			model.addAttribute("maxAdvCount", 0);
 			model.addAttribute("message", "Buy plan to post advertisement!!!. Go to plan section and purchase.");
 		}
-		
+
 		return model;
 	}
-	
+
 	public Object getSessionVal(String key){
 		Object val = session.getAttribute(key);
 		if(val != null){
@@ -647,6 +685,6 @@ public class AppController {
 		}
 		return val;
 	}
-	
+
 	
 }
