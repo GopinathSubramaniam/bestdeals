@@ -5,7 +5,7 @@ var Register = (function(){
 	var merchantFields = {
 			userType : App.validateRules.dropdown,
 			name : App.validateRules.name,
-			email : App.validateRules.email,
+			// email : App.validateRules.email, // email is not mandatory
 			password : App.validateRules.name,
 			confirmPassword : App.validateRules.confirmPassword,
 			mobile : App.validateRules.mobile,
@@ -15,7 +15,7 @@ var Register = (function(){
 			village : App.validateRules.dropdown,
 			shopName : App.validateRules.name,
 			address1 : App.validateRules.name,
-			contactNumber : App.validateRules.name,
+			// phoneNumbers : App.validateRules.name,
 			description : App.validateRules.name
 		};
 	
@@ -27,7 +27,7 @@ var Register = (function(){
 	var franchiseFields = {
 			userType : App.validateRules.dropdown,
 			name : App.validateRules.name,
-			email : App.validateRules.email,
+			// email : App.validateRules.email,  // email is not mandatory
 			password : App.validateRules.name,
 			confirmPassword : App.validateRules.confirmPassword,
 			mobile : App.validateRules.mobile,
@@ -55,24 +55,24 @@ var Register = (function(){
 				}
 				App.PostRequest(registerUrl, registerObj).then(function(res){
 					if(window.location.pathname == '/BestDeals/registerPage'){
-						if(res.statusCode == '200'){
+						if(res.statusCode && res.statusCode == '200'){
 							$('#registerMerchantForm').bootstrapValidator('resetForm', true);
 							$('#registerFranchiseForm').bootstrapValidator('resetForm', true);
-							$('#successMessage').html('<i class="fa fa-check"></i>Registeration successfully.').fadeOut(10000);
-						}else if(res.statusCode == '500'){
+							$('#successMessage').html('<i class="fa fa-check"></i>Registration successfull.').fadeOut(10000);
+						}else if(res.statusCode && res.statusCode == '500'){
 							$('#errorMessage').html('<i class="fa fa-times-circle-o"></i>'+res.message).fadeOut(10000);
-						}else{
-							window.location.reload();
+						} else {
+							$('#errorMessage').html('<i class="fa fa-times-circle-o"></i> Server Error').fadeOut(10000);
 						}
 					}else{
-						if(res.statusCode == '200'){
+						if(res.statusCode && res.statusCode == '200'){
 							window.location.reload();
-						}else{
+						}else if(res.statusCode){
 							$('#errorMessage').html('<i class="fa fa-times-circle-o"></i>'+res.message).fadeOut(10000);
+						}else{
+							$('#errorMessage').html('<i class="fa fa-times-circle-o"></i>'+res.statusText).fadeOut(10000);
 						}
-						
 					}
-					
 				});
 			});
 		}else{

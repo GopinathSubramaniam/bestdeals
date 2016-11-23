@@ -1,251 +1,255 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="ISO-8859-1"/>
-	<title>Login</title>
-	<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"/>
-	<link rel="stylesheet" href="css/font-awesome.min.css"/>
-	<link rel="stylesheet" href="dist/css/AdminLTE.min.css"/>
-  	<link rel="stylesheet" href="dist/css/skins/_all-skins.min.css"/>
-	<link rel="stylesheet" href="plugins/iCheck/flat/blue.css"/>
- 	<link rel="stylesheet" href="plugins/morris/morris.css"/>
-	<link rel="stylesheet" href="bootstrap-validator/css/bootstrapValidator.css"/>
-	<style type="text/css">
-		footer.main-footer {
-			margin-left : 0px !important;
-		}
-	</style>
+    <meta charset="ISO-8859-1"/>
+    <title>Register to GMS</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="dist/css/AdminLTE.min.css"/>
+    <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css"/>
+    <link rel="stylesheet" href="plugins/iCheck/flat/blue.css"/>
+    <link rel="stylesheet" href="plugins/morris/morris.css"/>
+    <link rel="stylesheet" href="bootstrap-validator/css/bootstrapValidator.css"/>
+    <style type="text/css">
+        footer.main-footer {
+            margin-left: 0px !important;
+        }
+    </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-	<div class="wrapper">
-		<header class="main-header">
+<div class="wrapper">
+    <header class="main-header">
         <a href="index2.html" class="logo">
-          <span class="logo-mini"><b>G</b>MS</span>
-          <span class="logo-lg"><b>Go</b>MyShoppy</span>
+            <span class="logo-mini"><b>G</b>MS</span>
+            <span class="logo-lg"><b>Go</b>MyShoppy</span>
         </a>
         <nav class="navbar navbar-static-top" role="navigation">
-          <a href="#" data-toggle="offcanvas" role="button">
-            <span class="sr-only">Toggle navigation</span>
-          </a>
+            <a href="#" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
         </nav>
-      </header>	
-	</div>
-	<div class="col-lg-12 col-md-12 col-sm-12">
-		&nbsp;
-	</div>
-	<div class="col-lg-12 col-md-12 col-sm-12">
-		<div class="col-sm-12 col-md-8 col-lg-8 col-md-offset-2">
-			<div class="box box-info">
-		       <div class="box-header with-border">
-		       		<div class="row col-md-12 col-sm-12 col-lg-12">
-		       			<div class="col-lg-6">
-		       				<h3 class="box-title">Register</h3>
-		       			</div>
-		       			<div class="col-lg-6">
+    </header>
+</div>
+<div class="col-lg-12 col-md-12 col-sm-12">
+    &nbsp;
+</div>
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="col-sm-12 col-md-8 col-lg-8 col-md-offset-2">
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <div class="row col-md-12 col-sm-12 col-lg-12">
+                    <div class="col-lg-6">
+                        <h3 class="box-title">Register</h3>
+                    </div>
+                    <div class="col-lg-6">
 		       				<span class="form-group has-error">
 		       					<label class="control-label box-title"><span id="errorMessage"></span></label>
 		       				</span>
 		       				<span class="form-group has-success">
 		       					<label class="control-label box-title"><span id="successMessage"></span></label>
 		       				</span>
-		       			</div>
-		       			<div class="col-lg-6" th:if="${message != null}">
+                    </div>
+                    <div class="col-lg-6" th:if="${message != null}">
 		       				<span class="form-group" th:class="${messageClass}">
-		       					<label class="control-label box-title"><i th:class="${icon}"></i><span th:text="${message}"></span></label>
+		       					<label class="control-label box-title"><i th:class="${icon}"></i><span
+                                        th:text="${message}"></span></label>
 		       				</span>
-		       			</div>
-		       		</div>
-		       </div><!-- /.box-header -->
-		      <!-- form start -->
-				<form id="registerMerchantForm" class="form-horizontal merchantForm" method="post" th:submit="Register.doRegister(); return false;">
-					<div class="box-body">
-						<div class="col-sm-6 col-md-4 col-lg-4">
-							<div class="col-md-12">
-							<div class="form-group">
-								<label for="userType" class="control-label">User Type</label>
-									<select name="userType" id="userType" class="form-control" onchange="Register.changeRegisterForm($('#registerMerchantForm #userType').val())">
-										<option value="">-- Select --</option>
-										<option value="MERCHANT" selected="selected">MERCHANT</option>
-										<option value="FRANCHISE">FRANCHISE</option>
-									</select>
-							</div>
-							<div class="form-group">
-								<label for="inputName" class="control-label">Name <small>(Proprieter Name)</small></label>
-									<input type="text" name="name" class="form-control"
-										id="inputName" placeholder="Name" />
-							</div>
-							<div class="form-group">
-								<label for="inputEmail" class="control-label">Email</label>
-									<input type="email" name="email" class="form-control"
-										id="inputEmail" placeholder="Email" />
-							</div>
-							<div class="form-group">
-								<label for="inputPassword" class="control-label">Password</label>
-									<input type="password" name="password" class="form-control"
-										id="inputPassword" placeholder="Password" />
-							</div>
-							<div class="form-group">
-								<label for="inputConfirmPassword" class="control-label">Confirm
-									Password</label>
-									<input type="password" name="confirmPassword"
-										class="form-control" id="inputConfirmPassword"
-										placeholder="Confirm Password" />
-							</div>
-							<div class="form-group">
-								<label for="inputMobile" class="control-label">Mobile</label>
-									<input type="number" name="mobile" class="form-control"
-										id="inputMobile" placeholder="Mobile" />
-							</div>
-							</div>
-						</div>
-						<div class="col-sm-6 col-md-4 col-lg-4">
-							<div class="col-md-12">
-							<div class="form-group">
-								<label for="inputState" class="control-label">State</label>
-								<select name="state" id="inputState" class="form-control" onchange="Register.findAllCitiesByStateId($('#inputState').val());">
-									<option th:each="state : ${states}" th:value="${state.id}"
-											th:text="${state.name}"></option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label for="inputCity" class="control-label">District</label>
-									<select name="city" id="inputCity" class="form-control" onchange="Register.findAllTalukasByCityId($('#inputCity').val());">
-										<option th:each="city : ${cities}" th:value="${city.id}" th:text="${city.name}"></option>
-									</select>
-							</div>
-							<div class="form-group">
-								<label for="inputTaluka" class="control-label">Taluka</label>
-									<select name="taluka" id="inputTaluka" class="form-control" onchange="Register.findAllVillagesByTalukaId($('#inputTaluka').val());">
-										<option th:each="taluka : ${talukas}" th:value="${taluka.id}" th:text="${taluka.name}"></option>
-									</select>
-							</div>
-							<div class="form-group">
-								<label for="inputVillage" class="control-label">Village</label>
-									<select name="village" id="inputVillage" class="form-control">
-										<option th:each="village : ${villages}" th:value="${village.id}" th:text="${village.name}"></option>
-									</select>
-							</div>
-							</div>
-							</div>
-						<div class="col-sm-6 col-md-4 col-lg-4">
-							<div class="col-md-12">
-							<div class="form-group">
-								<label for="inputShopName" class="control-label">Shop Name</label>
+                    </div>
+                </div>
+            </div><!-- /.box-header -->
+            <!-- form start -->
+            <form id="registerMerchantForm" class="form-horizontal merchantForm" method="post">
+                <div class="box-body">
+                    <div class="col-sm-6 col-md-4 col-lg-4">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="userType" class="control-label">User Type</label>
+                                <select name="userType" id="userType" class="form-control"
+                                        onchange="Register.changeRegisterForm($('#registerMerchantForm #userType').val())">
+                                    <option value="">-- Select --</option>
+                                    <option value="MERCHANT" selected="selected">MERCHANT</option>
+                                    <option value="FRANCHISE">FRANCHISE</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputName" class="control-label">Name
+                                    <small>(Proprieter Name)</small>
+                                </label>
+                                <input type="text" name="name" class="form-control"
+                                       id="inputName" placeholder="Name"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputMobile" class="control-label">Mobile</label>
+                                <input type="number" name="mobile" class="form-control"
+                                       id="inputMobile" placeholder="Mobile"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword" class="control-label">Password</label>
+                                <input type="password" name="password" class="form-control"
+                                       id="inputPassword" placeholder="Password"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputConfirmPassword" class="control-label">Confirm
+                                    Password</label>
+                                <input type="password" name="confirmPassword"
+                                       class="form-control" id="inputConfirmPassword"
+                                       placeholder="Confirm Password"/>
+                            </div>
 
-									<input type="text" name="shopName" id="inputShopName"
-										class="form-control" placeholder="Shop Name" />
-							</div>
-							<div class="form-group">
-								<label for="inputAddress" class=" control-label">Shop Address</label>
-									<input type="text" name="address1" id="inputAddress"
-										class="form-control" placeholder="Shop Address" />
-							</div>
-							<div class="form-group">
-								<label for="inputPhoneNumbers" class="control-label">Shop Contact Number</label>
-									<input type="text" name="phoneNumbers" id="inputPhoneNumbers"
-										class="form-control" placeholder="Shop Contact Number" />
-							</div>
-							<div class="form-group">
-								<label for="inputDescription" class="control-label">Shop Description/Timing</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-lg-4">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="inputState" class="control-label">State</label>
+                                <select name="state" id="inputState" class="form-control"
+                                        onchange="Register.findAllCitiesByStateId($('#inputState').val());">
+                                    <option th:each="state : ${states}" th:value="${state.id}"
+                                            th:text="${state.name}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputCity" class="control-label">District</label>
+                                <select name="city" id="inputCity" class="form-control"
+                                        onchange="Register.findAllTalukasByCityId($('#inputCity').val());">
+                                    <option th:each="city : ${cities}" th:value="${city.id}"
+                                            th:text="${city.name}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputTaluka" class="control-label">Taluka</label>
+                                <select name="taluka" id="inputTaluka" class="form-control"
+                                        onchange="Register.findAllVillagesByTalukaId($('#inputTaluka').val());">
+                                    <option th:each="taluka : ${talukas}" th:value="${taluka.id}"
+                                            th:text="${taluka.name}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputVillage" class="control-label">Village</label>
+                                <select name="village" id="inputVillage" class="form-control">
+                                    <option th:each="village : ${villages}" th:value="${village.id}"
+                                            th:text="${village.name}"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-lg-4">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="inputShopName" class="control-label">Shop Name</label>
+
+                                <input type="text" name="shopName" id="inputShopName"
+                                       class="form-control" placeholder="Shop Name"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputAddress" class=" control-label">Shop Address</label>
+                                <input type="text" name="address1" id="inputAddress"
+                                       class="form-control" placeholder="Shop Address"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPhoneNumbers" class="control-label">Shop Contact Number</label>
+                                <input type="text" name="phoneNumbers" id="inputPhoneNumbers" data-validate="false"
+                                       class="form-control" placeholder="Shop Contact Number"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail" class="control-label">Email</label>
+                                <input type="email" name="email" class="form-control" data-validate="false"
+                                       id="inputEmail" placeholder="Email"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputDescription" class="control-label">Shop Description/Timing</label>
 									<textarea name="description" id="inputDescription"
-										class="form-control" placeholder="Shop Description/Timing"></textarea>
-							</div>
-							</div>
-						</div>
-					</div>
-					<!-- /.box-body -->
-					<div class="box-footer pull-right">
-						<a href="/BestDeals/" class="btn btn-default">Back To Login</a>
-						<button type="submit" class="btn btn-primary">Register</button>
-					</div>
-					<!-- /.box-footer -->
-				</form>
-				
-				<form id="registerFranchiseForm" class="form-horizontal frachiseForm" method="post"
-					th:submit="Register.doRegister(); return false;">
-					<div class="box-body">
-						<div class="col-sm-6 col-md-4 col-lg-4">
-							<div class="col-md-12">
-							<div class="form-group">
-								<label for="inputEmail3" class="control-label">User
-									Type</label>
+                                              class="form-control" placeholder="Shop Description/Timing"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer pull-right">
+                    <a href="/BestDeals/" class="btn btn-default">Back To Login</a>
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+                <!-- /.box-footer -->
+            </form>
 
-									<select name="userType" id="userType" class="form-control" onchange="Register.changeRegisterForm($('#registerFranchiseForm #userType').val())">
-										<option value="">-- Select --</option>
-										<option value="MERCHANT">MERCHANT</option>
-										<option value="FRANCHISE" selected="selected">FRANCHISE</option>
-									</select>
+            <form id="registerFranchiseForm" class="form-horizontal frachiseForm" method="post"
+                  >
+                <div class="box-body">
+                    <div class="col-sm-6 col-md-4 col-lg-4">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="inputEmail3" class="control-label">User
+                                    Type</label>
 
-							</div>
-							<div class="form-group">
-								<label for="inputName" class="control-label">Name <small>(Proprieter Name)</small></label>
+                                <select name="userType" id="userType" class="form-control"
+                                        onchange="Register.changeRegisterForm($('#registerFranchiseForm #userType').val())">
+                                    <option value="">-- Select --</option>
+                                    <option value="MERCHANT">MERCHANT</option>
+                                    <option value="FRANCHISE" selected="selected">FRANCHISE</option>
+                                </select>
 
-									<input type="text" name="name" class="form-control"
-										id="inputName" placeholder="Name" />
+                            </div>
+                            <div class="form-group">
+                                <label for="inputName" class="control-label">Name
+                                    <small>(Proprieter Name)</small>
+                                </label>
+                                <input type="text" name="name" class="form-control"
+                                       id="inputName" placeholder="Name"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputMobile" class="control-label">Mobile</label>
+                                <input type="number" name="mobile" class="form-control"
+                                       id="inputMobile" placeholder="Mobile"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword" class="control-label">Password</label>
+                                <input type="password" name="password" class="form-control"
+                                       id="inputPassword" placeholder="Password"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputConfirmPassword" class="control-label">Confirm
+                                    Password</label>
+                                <input type="password" name="confirmPassword"
+                                       class="form-control" id="inputConfirmPassword"
+                                       placeholder="Confirm Password"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail" class="control-label">Email</label>
+                                <input type="email" name="email" class="form-control" data-validate="false"
+                                       id="inputEmail" placeholder="Email"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-lg-4">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="inputState" class="control-label">State</label>
+                                <select name="state" id="inputState" class="form-control"
+                                        onchange="Register.findAllCitiesByStateId($('#inputState').val());">
+                                    <option th:each="state : ${states}" th:value="${state.id}"
+                                            th:text="${state.name}"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer pull-right">
+                    <a href="/BestDeals/" class="btn btn-lg btn-default">Cancel</a>
+                    <button type="submit" class="btn btn-lg btn-primary">Register</button>
+                </div>
+                <!-- /.box-footer -->
+            </form>
+        </div>
+    </div>
+</div>
 
-							</div>
-							<div class="form-group">
-								<label for="inputEmail" class="control-label">Email</label>
-
-									<input type="email" name="email" class="form-control"
-										id="inputEmail" placeholder="Email" />
-
-							</div>
-							<div class="form-group">
-								<label for="inputPassword" class="control-label">Password</label>
-
-									<input type="password" name="password" class="form-control"
-										id="inputPassword" placeholder="Password" />
-
-							</div>
-							<div class="form-group">
-								<label for="inputConfirmPassword" class="control-label">Confirm
-									Password</label>
-
-									<input type="password" name="confirmPassword"
-										class="form-control" id="inputConfirmPassword"
-										placeholder="Confirm Password" />
-
-							</div>
-							<div class="form-group">
-								<label for="inputMobile" class="control-label">Mobile</label>
-
-									<input type="number" name="mobile" class="form-control"
-										id="inputMobile" placeholder="Mobile" />
-
-							</div>
-								</div>
-							</div>
-						<div class="col-sm-6 col-md-4 col-lg-4">
-							<div class="col-md-12">
-							<div class="form-group">
-								<label for="inputState" class="control-label">State</label>
-
-									<select name="state" id="inputState" class="form-control" onchange="Register.findAllCitiesByStateId($('#inputState').val());">
-										<option th:each="state : ${states}" th:value="${state.id}"
-											th:text="${state.name}"></option>
-									</select>
-
-							</div>
-								</div>
-						</div>
-					</div>
-					<!-- /.box-body -->
-					<div class="box-footer pull-right">
-						<a href="/BestDeals/" class="btn btn-lg btn-default">Cancel</a>
-						<button type="submit" class="btn btn-lg btn-primary">Register</button>
-					</div>
-					<!-- /.box-footer -->
-				</form>
-			</div>
-		</div>
-	</div>
-	
-	<div th:include="footer"></div>
- 	<script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
- 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwelkrFN__LksGXcg-Sy_kWecvrEpFzvU&amp;sensor=false" defer="defer" async="async"></script>
- 	<script src="bootstrap-validator/js/bootstrapValidator.js"></script>
- 	<script src="scripts/app.js"></script>
-	<script type="text/javascript" src="scripts/services/register.js"></script>
+<div th:include="footer"></div>
+<script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwelkrFN__LksGXcg-Sy_kWecvrEpFzvU&amp;sensor=false"
+        defer="defer" async="async"></script>
+<script src="bootstrap-validator/js/bootstrapValidator.js"></script>
+<script src="scripts/app.js"></script>
+<script type="text/javascript" src="scripts/services/register.js"></script>
 </body>
 </html>

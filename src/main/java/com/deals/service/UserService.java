@@ -143,6 +143,21 @@ public class UserService {
 	public Status findUser(Long id){
 		if(id != null && id !=0){
 			User user = userRepository.findOne(id);
+			List<UserDetail > userDetails = userDetailRepository.findAllByUserId(user.getId());
+			log.info("User Details ::: "+userDetails);
+			log.info("User ::: "+user);
+			UserVO userVO = App.setUserVo(user, userDetails.size() > 0 ? userDetails.get(0): null, null);
+			log.info("UserDetailsId :: "+userVO.getUserDetailId());
+			status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, userVO);
+		}else{
+			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_FAIL, null);
+		}
+		return status; 
+	}
+
+	public Status findUserWithDeals(Long id){
+		if(id != null && id !=0){
+			User user = userRepository.findOne(id);
 			List<Deal> deals = dealRepository.findAllByUserId(user.getId());
 			List<UserDetail > userDetails = userDetailRepository.findAllByUserId(user.getId());
 			log.info("User Details ::: "+userDetails);
@@ -153,7 +168,7 @@ public class UserService {
 		}else{
 			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_FAIL, null);
 		}
-		return status; 
+		return status;
 	}
 	
 	public Status findAllByType(UserType userType){

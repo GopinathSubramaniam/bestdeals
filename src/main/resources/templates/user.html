@@ -228,7 +228,7 @@
        			</div>
 				<div class="modal-body">
 					<div class="box-body">
-						<form id="registerMerchantForm" class="form-horizontal merchantForm" method="post" th:submit="Register.doRegister(); return false;">
+						<form id="registerMerchantForm" class="form-horizontal merchantForm" method="post">
 							<div class="box-body">
 								<div class="col-sm-6 col-md-6 col-lg-6">
 									<div class="form-group">
@@ -334,7 +334,7 @@
 										<label for="inputDistrict" class="col-sm-2 control-label">Shop
 											Contact Number</label>
 										<div class="col-sm-10">
-											<input type="text" name="contactNumber" id="inputContactNumber"
+											<input type="text" name="phoneNumbers" id="inputPhoneNumbers"
 												class="form-control" placeholder="Shop Contact Number" />
 										</div>
 									</div>
@@ -353,9 +353,8 @@
 								<button type="submit" class="btn btn-primary">Register</button>
 							</div>
 							<!-- /.box-footer -->
-						</form>			
-						<form id="registerFranchiseForm" class="form-horizontal frachiseForm" method="post"
-							th:submit="Register.doRegister(); return false;">
+						</form>
+						<form id="registerFranchiseForm" class="form-horizontal frachiseForm" method="post">
 							<div class="box-body">
 								<div class="col-sm-3 col-md-3 col-lg-3"></div>
 								<div class="col-sm-6 col-md-6 col-lg-6">
@@ -438,6 +437,7 @@
 	<script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
 	
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwelkrFN__LksGXcg-Sy_kWecvrEpFzvU&amp;sensor=false" defer="defer" async="async"></script>
+	<script src="bootstrap-validator/js/bootstrapValidator.js"></script>
 	<script src="scripts/services/register.js"></script>
 	<script src="scripts/services/user.js"></script>
 	

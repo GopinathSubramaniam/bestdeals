@@ -152,8 +152,6 @@ public class App {
 		List<ImageVo> imgUrls = new ArrayList<ImageVo>();
 		if(deals != null ){
 			for (Deal deal : deals) {
-				System.out.println("Deal ::: "+deal);
-				System.out.println("Deal Image Url ::: "+deal.getImgUrl());
 				ImageVo imgUrl = new ImageVo();
 				imgUrl.setImgUrl(deal.getImgUrl());
 				imgUrl.setDescription( deal.getDescription());

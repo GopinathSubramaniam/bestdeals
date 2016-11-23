@@ -27,7 +27,7 @@ public class User extends BaseEntity{
 	
 	private String name;
 	
-	@Column(unique=true)
+	@Column(unique=true, nullable = false)
 	private String mobile;
 	
 	private String email;
