@@ -2,6 +2,7 @@ package com.deals.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.deals.enums.UserType;
@@ -15,7 +16,7 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	User findByEmail(String email);
 	User findByMobile(String mobile);
 	User findByMobileOrEmail(String mobile, String email);
-	List<User> findAllByUserType(UserType userType);
+	List<User> findAllByUserType(UserType userType, Pageable pageable);
 	
 	User findByPlanId(Long id);
 }

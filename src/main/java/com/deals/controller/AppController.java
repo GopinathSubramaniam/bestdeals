@@ -1,6 +1,7 @@
 package com.deals.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,10 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import static org.springframework.data.domain.Sort.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -104,29 +109,37 @@ public class AppController {
 			Long userId = (Long) objval;
 			User user = userService.findOne(userId);
 			if(user != null) {
-
-				model.addAttribute("userName", getSessionVal("username"));
-				model.addAttribute("userId", getSessionVal("userId"));
-				model.addAttribute("userType", getSessionVal("usertype"));
-
+				model.addAttribute("userName", user.getName());
+				model.addAttribute("userId", user.getId());
+				model.addAttribute("userType", user.getUserType().name());
+				model.addAttribute("tab", Page.DASHBOARD.toString());
+//			page = isAdmin ? "forward:home" : "redirect:greetings";
 				switch (user.getUserType()) {
 					case ADMIN:
 						page = "greetings";
-						model.addAttribute("tab", Page.DASHBOARD.toString());
 						model.addAttribute("message", "Welcome to BestDeals API Section!!!");
 						model.addAttribute("details", appService.getAdminDetail());
 						break;
 					case FRANCHISE:
+						Pageable pageable = new PageRequest(0, 20, new Sort(
+								new Order(Direction.DESC, "id")	//,new Order(Direction.DESC, "salary")
+						));
+						model.addAttribute("publicUsers", userService.findAllPublic(pageable));
+						model.addAttribute("plans", planService.findAll());
+						model.addAttribute("message", "Welcome to BestDeals franchise!!!");
 						page = "franchise/home";
 						break;
 					case MERCHANT:
+						model.addAttribute("message", "Welcome to BestDeals merchants!!!");
 						page = "u-greetings";
 						break;
 					case SALES_MAN:
+						model.addAttribute("message", "Welcome to BestDeals salesman!!!");
 						page = "salesman/home";
 						break;
 					case PUBLIC:
-						page = "redirect:greetings";
+						page = "u-greetings";
+						model.addAttribute("message", "Welcome to BestDeals users!!!");
 						break;
 				}
 			} else
@@ -151,34 +164,7 @@ public class AppController {
 				maxAdvCount = rule.getInt("max_adv_count");
 				session.setAttribute("maxAdvCount", maxAdvCount);
 			}
-			model.addAttribute("userName", user.getName());
-			model.addAttribute("userId", user.getId());
-			model.addAttribute("userType", user.getUserType().name());
-//			page = isAdmin ? "forward:home" : "redirect:greetings";
-			switch (user.getUserType()) {
-				case ADMIN:
-					page = "greetings";
-					model.addAttribute("tab", Page.DASHBOARD.toString());
-					model.addAttribute("message", "Welcome to BestDeals API Section!!!");
-					model.addAttribute("details", appService.getAdminDetail());
-					break;
-				case FRANCHISE:
-					model.addAttribute("message", "Welcome to BestDeals franchise!!!");
-					page = "franchise/home";
-					break;
-				case MERCHANT:
-					model.addAttribute("message", "Welcome to BestDeals merchants!!!");
-					page = "u-greetings";
-					break;
-				case SALES_MAN:
-					model.addAttribute("message", "Welcome to BestDeals salesman!!!");
-					page = "salesman/home";
-					break;
-				case PUBLIC:
-					page = "u-greetings";
-					model.addAttribute("message", "Welcome to BestDeals users!!!");
-					break;
-			}
+			page = "redirect:/";
 		}else{
 			model.addAttribute("message", "Login in BestDeals");
 			model.addAttribute("errorMsg", "Invalid username and password");
@@ -243,6 +229,12 @@ public class AppController {
 		model.addAttribute("userId", getSessionVal("userId"));
 		model.addAttribute("userType", getSessionVal("usertype"));
 
+		model.addAttribute("tab", Page.ADVERTISEMENT.toString());
+		List<State> states = stateRepository.findAll();
+		model.addAttribute("states", states);
+		List<Category> categories = (List<Category>)categoryService.findAllCategory().getData();
+		model.addAttribute("categories", categories);
+
 		String isError = req.getParameter("error");
 		if(isError != null && isError.equals("0")){
 			model.addAttribute("message", "Please update your plan to create advertisement");
@@ -250,11 +242,14 @@ public class AppController {
 			model.addAttribute("message", "You limit exceed");
 		} else {
 			User user = userService.findOne((long) getSessionVal("userId"));
-			JSONObject rule = new JSONObject(user.getPlan().getRules());
-			int maxAdvCount = rule.getInt("max_adv_count");
-			model.addAttribute("maxAdvCount", maxAdvCount);
-
-			model = getAdvertisementModel(model, maxAdvCount);
+			if (user.getPlan() != null) {
+				JSONObject rule = new JSONObject(user.getPlan().getRules());
+				int maxAdvCount = rule.getInt("max_adv_count");
+				model.addAttribute("maxAdvCount", maxAdvCount);
+				model = getAdvertisementModel(model, maxAdvCount);
+			} else {
+				model = getAdvertisementModel(model, 0);
+			}
 		}
 		return "u-advertisement";
 	}
@@ -342,6 +337,7 @@ public class AppController {
 			user.setEmail(register.getEmail());
 			user.setMobile(register.getMobile());
 			user.setPassword(register.getPassword());
+			user.setPlan(planService.getByPlanType(PlanType.FREE));
 			user = (User) userService.create(user).getData();
 
 			UserDetail userDetail = new UserDetail();
@@ -462,9 +458,10 @@ public class AppController {
 
 
 		List<String> userTypes = App.getUserTypes();
-		List<User> merchants = userService.findAllMerchant();
-		List<User> franchises = userService.findAllFranchise();
-		List<User> publicUsers = userService.findAllPublic();
+		Pageable pageable = new PageRequest(0,20);
+		List<User> merchants = userService.findAllMerchant(pageable);
+		List<User> franchises = userService.findAllFranchise(pageable);
+		List<User> publicUsers = userService.findAllPublic(pageable);
 
 		model.addAttribute("merchants", merchants);
 		model.addAttribute("franchises", franchises);
@@ -652,12 +649,9 @@ public class AppController {
 	private Model getAdvertisementModel(Model model, int maxAdvCount){
 		Long userId = (Long) getSessionVal("userId");
 		List<Deal> deals = (List<Deal>)dealService.findAllByUserId(userId).getData();
-		List<Category> categories = (List<Category>)categoryService.findAllCategory().getData();
-		List<State> states = stateRepository.findAll();
-		model.addAttribute("tab", Page.ADVERTISEMENT.toString());
+		if (deals == null )
+			deals = Collections.emptyList();
 		model.addAttribute("deals", deals);
-		model.addAttribute("states", states);
-		model.addAttribute("categories", categories);
 
 		if(maxAdvCount > 0){
 			int availableAdvCount = maxAdvCount - deals.size();

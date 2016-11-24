@@ -1,12 +1,16 @@
 package com.deals.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import com.deals.enums.PlanType;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.deals.enums.AuthType;
@@ -61,7 +65,7 @@ public class UserService {
 	
 	@Autowired
 	private PublicUserPlanService userPlanService;
-	
+	@Autowired PlanService planService;
 	
 	public User userExists(String mobile){
 		return userRepository.findByMobile(mobile);
@@ -118,6 +122,7 @@ public class UserService {
 			}else{
 				log.info("NOT EXISTS :::: ");
 				user.setAuthType(AuthType.OK);
+				user.setPlan(planService.getByPlanType(PlanType.FREE));
 				user = userRepository.saveAndFlush(user);
 				
 				userPlanService.create(user);
@@ -170,11 +175,11 @@ public class UserService {
 		}
 		return status;
 	}
-	
+	/*
 	public Status findAllByType(UserType userType){
 		status = App.getResponse(App.CODE_OK, App.STATUS_UPDATE, App.MSG_UPDATE, userRepository.findAllByUserType(userType));
 		return status;
-	}
+	}*/
 	
 	public Status saveUserDetail(UserDetail userDetail){
 		if(userDetail != null){
@@ -230,10 +235,10 @@ public class UserService {
 		return status;
 	}
 	
-	public Status findUsersByUserType(UserType userType){
-		List<User> users = userRepository.findAllByUserType(userType);
+	public Status findAllByUserType(UserType userType, Pageable pageable){
+		if (pageable == null) pageable = new PageRequest(0, 20);
+		List<User> users = userRepository.findAllByUserType(userType, pageable);
 		return App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, users);
-		
 	}
 	
 	public Status findAll(){
@@ -242,21 +247,23 @@ public class UserService {
 		return status;
 	}
 	
-	public List<User> findAllFranchise(){
-		List<User> users =  new ArrayList<User>();
-		users = userRepository.findAllByUserType(UserType.FRANCHISE);
+	public List<User> findAllFranchise(Pageable pageable){
+		if (pageable == null) pageable = new PageRequest(0, 20);
+		List<User> users = userRepository.findAllByUserType(UserType.FRANCHISE, pageable);
 		return users;
 	}
 	
-	public List<User> findAllMerchant(){
-		List<User> users = new ArrayList<User>();
-		users = userRepository.findAllByUserType(UserType.MERCHANT);
+	public List<User> findAllMerchant(Pageable pageable){
+		if (pageable == null) pageable = new PageRequest(0, 20);
+		List<User> users = userRepository.findAllByUserType(UserType.MERCHANT, pageable);
+		if (users == null) users = Collections.<User>emptyList();
 		return users;
 	}
 	
-	public List<User> findAllPublic(){
-		List<User> users = new ArrayList<User>();
-		users = userRepository.findAllByUserType(UserType.PUBLIC);
+	public List<User> findAllPublic(Pageable pageable){
+		if (pageable == null) pageable = new PageRequest(0, 20);
+		List<User> users = userRepository.findAllByUserType(UserType.PUBLIC, pageable);
+		if (users == null) users = Collections.<User>emptyList();
 		return users;
 	}
 	

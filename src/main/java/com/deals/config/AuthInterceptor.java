@@ -17,7 +17,8 @@ public class AuthInterceptor implements HandlerInterceptor {
     static Logger log = LoggerFactory.getLogger(AuthInterceptor.class);
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-        log.info("AuthInterceptor: Pre-handle");
+
+        if(log.isDebugEnabled()) log.debug("AuthInterceptor: "+httpServletRequest.getRequestURI());
 
         // Avoid a redirect loop for some urls
         if( !httpServletRequest.getRequestURI().equals("/BestDeals/") &&
@@ -40,7 +41,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
-
+        if(log.isDebugEnabled()) log.debug("AuthInterceptor: "+httpServletRequest.getRequestURI());
     }
 
     @Override

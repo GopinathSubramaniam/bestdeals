@@ -6,11 +6,9 @@ import com.deals.util.App;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
 
 import com.deals.enums.AuthType;
 import com.deals.enums.UserType;
@@ -22,7 +20,6 @@ import com.deals.repository.VillageRepository;
 import com.deals.service.PublicUserPlanService;
 import com.deals.service.UserDetailService;
 import com.deals.service.UserService;
-import com.deals.util.App;
 import com.deals.util.Status;
 import com.deals.vo.RegisterVo;
 
@@ -150,8 +147,9 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/findAllByUserType/{userType}", method=RequestMethod.GET)
-	public Status findAllByUserType(@PathVariable UserType userType){
-		return userService.findAllByType(userType);
+	public Status findAllByUserType(@PathVariable UserType userType, @RequestParam(defaultValue = "0", required = false) int page){
+		Pageable pageable = new PageRequest(page, 20);
+		return userService.findAllByUserType(userType, pageable);
 	}
 	
 	@RequestMapping(value="/saveUserDetail", method=RequestMethod.POST, produces={"application/json"})
@@ -167,8 +165,8 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/findByUserType/{userType}", method=RequestMethod.GET)
-	public Status findUsersByUserType(@PathVariable UserType userType){
-		return userService.findUsersByUserType(userType);
+	public Status findUsersByUserType(@PathVariable UserType userType, @RequestParam(defaultValue = "0", required = false) int page){
+		return userService.findAllByUserType(userType, new PageRequest(page, 20));
 	}
 	
 	/* We doesn't provide this functionality by mail, we must use SMS gateway

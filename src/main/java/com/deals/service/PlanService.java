@@ -2,6 +2,7 @@ package com.deals.service;
 
 import java.util.List;
 
+import com.deals.enums.PlanType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,5 +84,9 @@ public class PlanService {
 	public Plan getPlanByUser(Long userId){
 		User user = userRepository.findOne(userId);
 		return user.getPlan();
+	}
+
+	public Plan getByPlanType(PlanType planType){
+		return planRepository.findByPlanType( planType);
 	}
 }
