@@ -534,10 +534,11 @@ public class AppController {
 			model.addAttribute("message", "No users found");
 		} else {
 			model.addAttribute("users", users);
-			if (page > 0)
-				model.addAttribute("prev", page - 1);
 			model.addAttribute("next", page + 1);
 		}
+		if (page > 0)
+			model.addAttribute("prev", page - 1);
+
 		model.addAttribute("plans", planService.findAll().getData());
 		model.addAttribute("title", userType +" Users List");
 		model.addAttribute("popupTitle", "Create New User");
