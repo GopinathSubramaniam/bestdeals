@@ -15,7 +15,7 @@ var Register = (function(){
 			village : App.validateRules.dropdown,
 			shopName : App.validateRules.name,
 			address1 : App.validateRules.name,
-			// phoneNumbers : App.validateRules.name,
+			phoneNumbers : App.validateRules.mobile,
 			description : App.validateRules.name
 		};
 	

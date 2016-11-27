@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
+import com.deals.enums.*;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +20,8 @@ import org.springframework.data.domain.Sort;
 import static org.springframework.data.domain.Sort.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import com.deals.enums.DealType;
-import com.deals.enums.Page;
-import com.deals.enums.PlanType;
-import com.deals.enums.Priority;
 import com.deals.enums.UserType.*;
 import com.deals.model.Category;
 import com.deals.model.City;
@@ -57,7 +54,6 @@ import com.deals.service.UserService;
 import com.deals.util.App;
 import com.deals.vo.RegisterVo;
 import com.deals.vo.UserVO;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class AppController {
@@ -323,7 +319,7 @@ public class AppController {
 		model.addAttribute("message", null);
 		return "u-register";
 	}
-
+/*
 	@RequestMapping(value="/register")
 	public String register(HttpServletRequest req, Model model, RegisterVo register){
 		log.info("Mobile ::: "+register.getMobile());
@@ -392,7 +388,7 @@ public class AppController {
 		}
 
 		return "u-register";
-	}
+	}*/
 
 	/*
 	 * Client Routing END
@@ -424,10 +420,14 @@ public class AppController {
 		model.addAttribute("tab", Page.SALES_MANAGER.toString());
 		return "salesmanager";
 	}
+/*
 
 	@RequestMapping(value="/user")
 	public String user(Model model){
-
+		if (getSessionVal("usertype") != UserType.ADMIN) {
+			model.addAttribute("message", "Not authorized admin pages.");
+			return "/";
+		}
 		model.addAttribute("userName", getSessionVal("username"));
 		model.addAttribute("userId", getSessionVal("userId"));
 		model.addAttribute("userType", getSessionVal("usertype"));
@@ -475,6 +475,77 @@ public class AppController {
 		model.addAttribute("userTypes", userTypes);
 
 		return "user";
+	}
+*/
+
+//	@RequestMapping(value="/user/{userType}")
+	@RequestMapping(value="/user")
+	public String userPage(//@PathVariable UserType userType,
+						   Model model,
+						   @RequestParam( name = "userType", required = true) UserType userType,
+						   @RequestParam(defaultValue = "0", name = "page", required = false) int page,
+						   @RequestParam(defaultValue = "20", name = "size", required = false) int size) {
+		if (!UserType.ADMIN.name().equals(getSessionVal("usertype"))) {
+			model.addAttribute("message", "Not authorized admin pages.");
+			return "greetings";
+		}
+		model.addAttribute("userName", getSessionVal("username"));
+		model.addAttribute("userId", getSessionVal("userId"));
+		model.addAttribute("userType", getSessionVal("usertype"));
+
+		model.addAttribute("pageUserType", userType);
+
+		List<City> cities = new ArrayList<City>();
+		List<Taluka> talukas = new ArrayList<Taluka>();
+		List<Village> villages = new ArrayList<Village>();
+		List<State> states = stateRepository.findAll();
+
+		if (states.size() > 0) {
+			model.addAttribute("states", states);
+			cities = cityRepository.findAllByStateId(states.get(0).getId());
+		}
+		if (cities.size() > 0) {
+			model.addAttribute("cities", cities);
+			talukas = talukaRepository.findAllByCityId(cities.get(0).getId());
+		}
+		if (talukas.size() > 0) {
+			model.addAttribute("talukas", talukas);
+			villages = villageRepository.findAllByTalukaId(talukas.get(0).getId());
+		}
+
+		if (villages.size() > 0) {
+			model.addAttribute("villages", villages);
+		}
+
+		List<String> userTypes = App.getUserTypes();
+		Pageable pageable = new PageRequest(page, size);
+
+		List<User> users = null;
+		if (userType == UserType.MERCHANT) {
+			users = userService.findAllMerchant(pageable);
+		}
+		if (userType == UserType.FRANCHISE) {
+			users = userService.findAllFranchise(pageable);
+		}
+		if (userType == UserType.PUBLIC) {
+			users = userService.findAllPublic(pageable);
+		}
+		if (users == null || users.size() == 0){
+			model.addAttribute("message", "No users found");
+		} else {
+			model.addAttribute("users", users);
+			if (page > 0)
+				model.addAttribute("prev", page - 1);
+			model.addAttribute("next", page + 1);
+		}
+		model.addAttribute("plans", planService.findAll().getData());
+		model.addAttribute("title", userType +" Users List");
+		model.addAttribute("popupTitle", "Create New User");
+		model.addAttribute("tab", userType);
+		model.addAttribute("addNewBtnText", "Add New User");
+		model.addAttribute("userTypes", userTypes);
+
+		return "userList";
 	}
 
 	@RequestMapping(value="/plan")

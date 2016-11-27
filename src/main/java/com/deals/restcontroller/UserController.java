@@ -2,6 +2,8 @@ package com.deals.restcontroller;
 
 import java.util.List;
 
+import com.deals.enums.PlanType;
+import com.deals.service.PlanService;
 import com.deals.util.App;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +36,9 @@ public class UserController {
 	
 	@Autowired
 	private UserDetailService userDetailService;
-	
+
+	@Autowired
+	PlanService planService;
 	@Autowired
 	private VillageRepository villageRepository;
 	
@@ -64,7 +68,8 @@ public class UserController {
 			user.setAuthType(AuthType.OK);
 			user.setPassword(registerVo.getPassword());
 			user.setUserType(registerVo.getUserType());
-			
+			user.setPlan(planService.getByPlanType(PlanType.FREE));
+
 			status = userService.createOnlyUser(user);
 			user = (User)status.getData();
 			
@@ -75,20 +80,18 @@ public class UserController {
 			UserDetail userDetail = new UserDetail();
 			if(status.getStatusCode() != "500" && registerVo.getShopName() != null && registerVo.getAddress1() != null){
 				userDetail.setAddress1(registerVo.getAddress1());
-				userDetail.setLatitude(registerVo.getLatitude());
-				userDetail.setLongitude(registerVo.getLongitude());
 				userDetail.setDescription(registerVo.getDescription());
-				userDetail.setLikes(new Long(0));
-				userDetail.setViews(new Long(0));
 				userDetail.setPhoneNumbers(registerVo.getPhoneNumbers());
 				userDetail.setPlaceName(registerVo.getPlaceName());
 				userDetail.setShopName(registerVo.getShopName());
-				userDetail.setUser(user);
 				userDetail.setVillage(new Village(registerVo.getVillage()));
-			}else{
-				userDetail.setLikes(new Long(0));
-				userDetail.setViews(new Long(0));
 			}
+			userDetail.setUser(user);
+			userDetail.setLikes(new Long(0));
+			userDetail.setViews(new Long(0));
+			userDetail.setLatitude(registerVo.getLatitude());
+			userDetail.setLongitude(registerVo.getLongitude());
+
 			userDetailService.create(userDetail);
 		}else{
 			status.setMessage(App.MSG_USER_EXISTS);

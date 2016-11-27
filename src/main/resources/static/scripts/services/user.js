@@ -30,7 +30,7 @@ var User = (function(){
 			$('#editPlan').val(obj.planId);
 		});
 	};
-	
+
 	var create = function(userObj){
 		if(userObj.plan){
 			userObj.plan = {id: parseInt(userObj.plan)};
@@ -70,7 +70,7 @@ var User = (function(){
 			window.location.reload();
 		});
 	};
-	
+
 	 $('#merchantTable').DataTable({
          "paging": true,
          "lengthChange": false,
@@ -95,7 +95,7 @@ var User = (function(){
          "info": true,
          "autoWidth": false
        });
-	
+
 	return {
 		create: create,
 		update: update,

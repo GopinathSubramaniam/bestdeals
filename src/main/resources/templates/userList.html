@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="base-css">
+<!-- 	<link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css"/> -->
+</head>
+<link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css"/>
+<body class="hold-transition skin-blue sidebar-mini">
+	<div th:include="header"></div>
+	<div th:include="left-side"></div>
+	<div class="container-fluid content-wrapper">
+		<div class="form-group">
+			<h3 th:text="${title}" ></h3>
+			<div class="col-sm-6">
+				<ul class="pagination pagination-sm">
+					<li><a th:if="${prev != null}" th:href="'user?userType='+ ${pageUserType} +'&amp;page='+${prev}">Previous</a></li>
+					<li><a th:if="${next != null}" th:href="'user?userType='+ ${pageUserType} +'&amp;page='+${next}">Next</a></li>
+				</ul>
+			</div>
+			<div class="col-sm-6">
+				 <button class="btn btn-primary btn-flat pull-right" data-toggle="modal" data-target="#userRegisterationModal"> <i class="fa fa-plus-circle"></i> Create New </button>
+			</div>
+		</div>
+		<h5 th:text="${message}" ></h5>
+		<div class="tab-pane active" id="tab_1" th:if="${users} != null">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Shop Name</th>
+						<th>Mobile</th>
+						<th>Email</th>
+						<th>Plan Name</th>
+						<th align="right">Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="user : ${users}">
+						<td th:text="${user.name}"></td>
+						<td th:text="${user.mobile}"></td>
+						<td th:text="${user.email}"></td>
+						<td
+							th:text="${user.plan} != null ? (${user.plan.name}+' - '+${user.plan.planType}) : ''"></td>
+						<td align="right">
+							<button title="Delete" class="btn btn-xs btn-danger btn-flat"
+								th:onclick="'User.deleteUser('+${user.id}+')'">
+								<i class="fa fa-fw fa-trash"></i> Delete
+							</button>
+							<button th:id="${user.userType}" title="Edit"
+								class="btn btn-xs btn-primary btn-flat" data-toggle="modal"
+								data-target="#editUserModal"
+								th:onclick="'User.findUserById('+${user.id}+')'">
+								<i class="fa fa-fw fa-edit"></i> Edit
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div th:include="footer"></div>
+	<div th:include="base-js"></div>
+	
+	<!-- Edit user model start -->
+	<div id="editUserModal" class="modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Update User</h4>
+          </div>
+          <form id="editUserform" class="form-horizontal" action="javascript:void(0);" method="post" th:onsubmit="'User.update(this);'">
+          <div class="modal-body">
+	        <div class="box-body">
+	         <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">Name</label>
+	            <div class="col-sm-10">
+	            	<input type="hidden" name="id" class="form-control" id="editId" placeholder="Name"/>
+	              	<input type="text" name="name" class="form-control" id="editName" placeholder="Name"/>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+	            <div class="col-sm-10">
+	              <input type="email" name="email" class="form-control" id="editEmail" placeholder="Email"/>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">Mobile</label>
+	            <div class="col-sm-10">
+	              <input type="text" name="mobile" class="form-control" id="editMobile" placeholder="Mobile"/>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">User Type</label>
+	            <div class="col-sm-10">
+	            	<select name="userType" class="form-control" id="editUserType">
+	            		<option value="">--- Select ---</option>
+	            		<option th:each="userType : ${userTypes}" th:value="${userType}" th:text="${userType}"></option>
+	            	</select>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label for="inputEmail3" class="col-sm-2 control-label">Plan</label>
+	            <div class="col-sm-10">
+	            	<select name="plan" class="form-control" id="editPlan">
+	            		<option value="">--- Select ---</option>
+	            		<option th:each="plan : ${plans}" th:value="${plan.id}" th:text="${plan.name}"></option>
+	            	</select>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+	            <div class="col-sm-10">
+	              <input type="text" name="password" class="form-control" id="editPassword" placeholder="Password"/>
+	            </div>
+	          </div>
+	        </div>
+          </div>
+          <div class="modal-footer">
+          	<span class="form-group has-success pull-left">
+              <label class="control-label" for="inputSuccess" id="successMsg"></label>
+            </span>
+            <span class="form-group has-error pull-left">
+              <label class="control-label col-md-12" for="inputError" id="updateErrorMsg"></label>
+            </span>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Update</button>
+          </div>
+          </form>	
+        </div>
+      </div>
+    </div>
+	<!-- Edit user model end -->
+	
+	<!-- Create new user model start -->
+	<div id="userRegisterationModal" class="modal">
+		<div class="modal-dialog" style="width: 85%;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Create User</h4>
+				</div>
+				<div class="col-lg-6">
+       				<span class="form-group has-error">
+       					<label class="control-label box-title"><span id="errorMessage"></span></label>
+       				</span>
+       				<span class="form-group has-success">
+       					<label class="control-label box-title"><span id="successMessage"></span></label>
+       				</span>
+       			</div>
+				<div class="modal-body">
+					<div class="box-body">
+						<form id="registerMerchantForm" class="form-horizontal merchantForm" method="post">
+							<div class="box-body">
+								<div class="col-sm-6 col-md-6 col-lg-6">
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-2 control-label">User
+											Type</label>
+										<div class="col-sm-10">
+											<select name="userType" id="userType" class="form-control" onchange="Register.changeRegisterForm($('#registerMerchantForm #userType').val())">
+												<option value="">-- Select --</option>
+												<option value="MERCHANT" selected="selected">MERCHANT</option>
+												<option value="FRANCHISE">FRANCHISE</option>
+												<option value="PUBLIC">PUBLIC</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputName" class="col-sm-2 control-label">Name</label>
+										<div class="col-sm-10">
+											<input type="text" name="name" class="form-control"
+												id="inputName" placeholder="Name" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputEmail" class="col-sm-2 control-label">Email</label>
+										<div class="col-sm-10">
+											<input type="email" name="email" class="form-control"
+												id="inputEmail" placeholder="Email" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputPassword" class="col-sm-2 control-label">Password</label>
+										<div class="col-sm-10">
+											<input type="password" name="password" class="form-control"
+												id="inputPassword" placeholder="Password" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputConfirmPassword" class="col-sm-2 control-label">Confirm
+											Password</label>
+										<div class="col-sm-10">
+											<input type="password" name="confirmPassword"
+												class="form-control" id="inputConfirmPassword"
+												placeholder="Confirm Password" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputMobile" class="col-sm-2 control-label">Mobile</label>
+										<div class="col-sm-10">
+											<input type="number" name="mobile" class="form-control"
+												id="inputMobile" placeholder="Mobile" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputState" class="col-sm-2 control-label">State</label>
+										<div class="col-sm-10">
+											<select name="state" id="inputState" class="form-control" onchange="Register.findAllCitiesByStateId($('#inputState').val());">
+												<option th:each="state : ${states}" th:value="${state.id}"
+													th:text="${state.name}"></option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6 col-md-6 col-lg-6">
+									<div class="form-group">
+										<label for="inputDistrict" class="col-sm-2 control-label">District</label>
+										<div class="col-sm-10">
+											<select name="city" id="inputCity" class="form-control" onchange="Register.findAllTalukasByCityId($('#inputCity').val());">
+												<option th:each="city : ${cities}" th:value="${city.id}" th:text="${city.name}"></option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputDistrict" class="col-sm-2 control-label">Taluka</label>
+										<div class="col-sm-10">
+											<select name="taluka" id="inputTaluka" class="form-control" onchange="Register.findAllVillagesByTalukaId($('#inputTaluka').val());">
+												<option th:each="taluka : ${talukas}" th:value="${taluka.id}" th:text="${taluka.name}"></option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputDistrict" class="col-sm-2 control-label">Village</label>
+										<div class="col-sm-10">
+											<select name="village" id="inputVillage" class="form-control">
+												<option th:each="village : ${villages}" th:value="${village.id}" th:text="${village.name}"></option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputDistrict" class="col-sm-2 control-label">Shop
+											Name</label>
+										<div class="col-sm-10">
+											<input type="text" name="shopName" id="inputShopName"
+												class="form-control" placeholder="Shop Name" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputDistrict" class="col-sm-2 control-label">Shop
+											Address</label>
+										<div class="col-sm-10">
+											<input type="text" name="address1" id="inputAddress"
+												class="form-control" placeholder="Shop Address" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputDistrict" class="col-sm-2 control-label">Shop
+											Contact Number</label>
+										<div class="col-sm-10">
+											<input type="text" name="phoneNumbers" id="inputPhoneNumbers"
+												class="form-control" placeholder="Shop Contact Number" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputDistrict" class="col-sm-2 control-label">Shop Description/Timing</label>
+										<div class="col-sm-10">
+											<textarea name="description" id="inputDescription"
+												class="form-control" placeholder="Shop Description/Timing"></textarea>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- /.box-body -->
+							<div class="box-footer pull-right">
+								<button class="btn btn-default" data-dismiss="modal">Close</button>
+								<button type="submit" class="btn btn-primary">Register</button>
+							</div>
+							<!-- /.box-footer -->
+						</form>
+						<form id="registerFranchiseForm" class="form-horizontal frachiseForm" method="post">
+							<div class="box-body">
+								<div class="col-sm-3 col-md-3 col-lg-3"></div>
+								<div class="col-sm-6 col-md-6 col-lg-6">
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-2 control-label">User
+											Type</label>
+										<div class="col-sm-10">
+											<select name="userType" id="userType" class="form-control" onchange="Register.changeRegisterForm($('#registerFranchiseForm #userType').val())">
+												<option value="">-- Select --</option>
+												<option value="MERCHANT">MERCHANT</option>
+												<option value="FRANCHISE" selected="selected">FRANCHISE</option>
+												<option value="PUBLIC">PUBLIC</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputName" class="col-sm-2 control-label">Name</label>
+										<div class="col-sm-10">
+											<input type="text" name="name" class="form-control"
+												id="inputName" placeholder="Name" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputEmail" class="col-sm-2 control-label">Email</label>
+										<div class="col-sm-10">
+											<input type="email" name="email" class="form-control"
+												id="inputEmail" placeholder="Email" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputPassword" class="col-sm-2 control-label">Password</label>
+										<div class="col-sm-10">
+											<input type="password" name="password" class="form-control"
+												id="inputPassword" placeholder="Password" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputConfirmPassword" class="col-sm-2 control-label">Confirm
+											Password</label>
+										<div class="col-sm-10">
+											<input type="password" name="confirmPassword"
+												class="form-control" id="inputConfirmPassword"
+												placeholder="Confirm Password" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputMobile" class="col-sm-2 control-label">Mobile</label>
+										<div class="col-sm-10">
+											<input type="number" name="mobile" class="form-control"
+												id="inputMobile" placeholder="Mobile" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputState" class="col-sm-2 control-label">State</label>
+										<div class="col-sm-10">
+											<select name="state" id="inputState" class="form-control" onchange="Register.findAllCitiesByStateId($('#inputState').val());">
+												<option th:each="state : ${states}" th:value="${state.id}"
+													th:text="${state.name}"></option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-3 col-md-3 col-lg-3"></div>
+							</div>
+							<!-- /.box-body -->
+							<div class="box-footer pull-right">
+								<button class="btn btn-default" data-dismiss="modal">Close</button>
+								<button type="submit" class="btn btn-primary">Register</button>
+							</div>
+							<!-- /.box-footer -->
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Create new user model end -->
+	<script src="plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
+	<script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+	ss
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwelkrFN__LksGXcg-Sy_kWecvrEpFzvU&amp;sensor=false" defer="defer" async="async"></script>
+	<script src="bootstrap-validator/js/bootstrapValidator.js"></script>
+	<script src="scripts/services/register.js"></script>
+	<script src="scripts/services/user.js"></script>
+	
+</body>
+</html>
