@@ -53,7 +53,7 @@ public class UserVO {
 
 	public UserVO() {
 	}
-	public UserVO(User user, UserDetail userDetail, PublicUserPlan publicUserPlan, List<Deal> deals) {
+	/*public UserVO(User user, UserDetail userDetail, PublicUserPlan publicUserPlan, List<Deal> deals) {
 		this.setId(user.getId());
 		this.setMobile(user.getMobile());
 		this.setEmail(user.getEmail());
@@ -102,5 +102,5 @@ public class UserVO {
 				imageUrls.add(iVo);
 			}
 		}
-	}
+	}*/
 }

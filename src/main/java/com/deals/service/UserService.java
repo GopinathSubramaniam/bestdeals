@@ -151,7 +151,7 @@ public class UserService {
 			List<UserDetail > userDetails = userDetailRepository.findAllByUserId(user.getId());
 			log.info("User Details ::: "+userDetails);
 			log.info("User ::: "+user);
-			UserVO userVO = App.setUserVo(user, userDetails.size() > 0 ? userDetails.get(0): null, null);
+			UserVO userVO = App.setUserVo(user, userDetails.size() > 0 ? userDetails.get(0): null, null, null);
 			log.info("UserDetailsId :: "+userVO.getUserDetailId());
 			status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, userVO);
 		}else{
@@ -167,7 +167,7 @@ public class UserService {
 			List<UserDetail > userDetails = userDetailRepository.findAllByUserId(user.getId());
 			log.info("User Details ::: "+userDetails);
 			log.info("User ::: "+user);
-			UserVO userVO = App.setUserVo(user, userDetails.size() > 0 ? userDetails.get(0): null, deals);
+			UserVO userVO = App.setUserVo(user, userDetails.size() > 0 ? userDetails.get(0): null, null, deals);
 			log.info("UserDetailsId :: "+userVO.getUserDetailId());
 			status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, userVO);
 		}else{

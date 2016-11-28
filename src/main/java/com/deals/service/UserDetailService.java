@@ -96,11 +96,8 @@ public class UserDetailService {
 		return status;
 	}
 
-	public List<BigInteger> findNearByUserIdsByLatLongInRange(double latpoint, double longpoint, double radius, Pageable pageable) {
-		return userDetailRepository.findNearByUserIdsByLatLongInRadius(latpoint,longpoint,radius/*, pageable*/);
+	public List<BigInteger> findNearByUserIdsByLatLongInRange(double latpoint, double longpoint, double radius) {
+		return userDetailRepository.findNearByUserIdsByLatLongInRadius(latpoint,longpoint,radius);
 	}
 
-	public List<UserDetail> findNearByUserDetailsByLatLongInRange(double latpoint, double longpoint, double radius) {
-		return userDetailRepository.findNearByUserDetailsByLatLongInRange(latpoint,longpoint,radius);
-	}
 }

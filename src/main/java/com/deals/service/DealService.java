@@ -94,7 +94,7 @@ public class DealService {
 
 			deals = dealRepository.findBySubCategoryIdInOnePerUser(subCategoryIds);
 		} else if (latPoint > -90 && latPoint < 90 && lngPoint > -180 && lngPoint < 180 && distance > 0 ) {
-			List<BigInteger> userIds = userDetailService.findNearByUserIdsByLatLongInRange(latPoint,lngPoint,distance,pageable);
+			List<BigInteger> userIds = userDetailService.findNearByUserIdsByLatLongInRange(latPoint,lngPoint,distance);
 			List<Long> users = new ArrayList<>(userIds.size());
 			for (Iterator<BigInteger> itr1 = userIds.iterator(); itr1.hasNext();) {
 				BigInteger bi = itr1.next();
@@ -115,7 +115,7 @@ public class DealService {
 				List<UserDetail> userDetails = userDetailService.findByUser(deal.getUser());
 				UserDetail userDetail = userDetails.size() > 0 ? userDetails.get(0) : null;
 				List<Deal> userDeals = dealRepository.findAllByUserId(deal.getUser().getId());
-				dealVOs.add(new DealVO(deal, new UserVO(deal.getUser(), userDetail, null, userDeals)));
+				dealVOs.add(new DealVO(deal, App.setUserVo(deal.getUser(), userDetail, null, userDeals)));
 			}
 		} else {
 			dealVOs = Collections.emptyList();
@@ -152,20 +152,61 @@ public class DealService {
 		
 		platinumDeals = dealRepository.findAllByUserPlanPlanTypeAndIsDefault(PlanType.PLATINUM, true, new PageRequest(page, max));
 		
-		if(platinumDeals.size() == 0 ){
-			goldDeals = dealRepository.findAllByUserPlanPlanTypeAndIsDefault(PlanType.GOLD, true, new PageRequest(page, max));
-			platinumDeals = goldDeals;
+		if(platinumDeals.size() < max ){
+			goldDeals = dealRepository.findAllByUserPlanPlanTypeAndIsDefault(PlanType.GOLD, true, new PageRequest(page, max - platinumDeals.size()));
+			if ( platinumDeals.size() == 0 )
+				platinumDeals = goldDeals;
+			else if ( goldDeals.size() > 0 )
+				platinumDeals.addAll(goldDeals);
 		}
 		
-		if(platinumDeals.size() == 0 && goldDeals.size() == 0){
-			silverDeals = dealRepository.findAllByUserPlanPlanTypeAndIsDefault(PlanType.SILVER, true, new PageRequest(page, max));
-			platinumDeals = silverDeals;
+		if ( platinumDeals.size() < max ){
+			silverDeals = dealRepository.findAllByUserPlanPlanTypeAndIsDefault(PlanType.SILVER, true, new PageRequest(page, max - platinumDeals.size() ));
+			if ( platinumDeals.size() == 0 )
+				platinumDeals = silverDeals;
+			else if ( silverDeals.size() > 0 )
+				platinumDeals.addAll(silverDeals);
 		}
 		List<DealVO> dealVOs = mergeDealVOs(platinumDeals);
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, dealVOs);
 		return status;
 	}
-	
+
+	public Status findNearByDealsForDashboard(int page, int max, double latPoint, double lngPoint, double radius){
+		List<Deal> platinumDeals = new ArrayList<>();
+		List<Deal> goldDeals = new ArrayList<>();
+		List<Deal> silverDeals = new ArrayList<>();
+
+		List<BigInteger> userIds = userDetailService.findNearByUserIdsByLatLongInRange(latPoint,lngPoint, radius);
+		if (userIds == null || userIds.size() == 0)
+			return App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, userIds);
+
+		List<User> userList = new ArrayList<>(userIds.size());
+		for (int i = 0; i < userIds.size(); i++) {
+			userList.add(new User(userIds.get(i).longValue()));
+		}
+		platinumDeals = dealRepository.findByUserInAndUserPlanPlanTypeAndIsDefault( userList, PlanType.PLATINUM, true, new PageRequest(page, max));
+
+		if(platinumDeals.size() < max ){
+			goldDeals = dealRepository.findByUserInAndUserPlanPlanTypeAndIsDefault( userList, PlanType.GOLD, true, new PageRequest(page, max - platinumDeals.size()));
+			if ( platinumDeals.size() == 0 )
+				platinumDeals = goldDeals;
+			else if ( goldDeals.size() > 0 )
+				platinumDeals.addAll(goldDeals);
+		}
+
+		if ( platinumDeals.size() < max ){
+			silverDeals = dealRepository.findByUserInAndUserPlanPlanTypeAndIsDefault( userList, PlanType.SILVER, true, new PageRequest(page, max - platinumDeals.size() ));
+			if ( platinumDeals.size() == 0 )
+				platinumDeals = silverDeals;
+			else if ( silverDeals.size() > 0 )
+				platinumDeals.addAll(silverDeals);
+		}
+		List<DealVO> dealVOs = mergeDealVOs(platinumDeals);
+		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, dealVOs);
+		return status;
+	}
+
 	public Status findAllBySubCat(Long subCatId, boolean isDefault){
 		List<Deal> deals = dealRepository.findAllBySubCategoryIdAndIsDefault(subCatId, isDefault);
 		if (deals == null || deals.size() < 1) {
@@ -184,7 +225,7 @@ public class DealService {
 			DealVO dealVO = App.setDealVO(deal);
 			List<UserDetail> userDetails = (List<UserDetail>) userDetailService.findAllByUserId(deal.getUser().getId()).getData();
 			UserDetail userDetail = userDetails.size() > 0 ? userDetails.get(0) : null;
-			UserVO user = App.setUserVo(deal.getUser(), userDetail , null);
+			UserVO user = App.setUserVo(deal.getUser(), userDetail , null, null);
 			dealVO.setUser(user);
 			
 			List<Deal> imgUrls = dealRepository.findImageUrlAndDescriptionByUserId(user.getId());

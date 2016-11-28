@@ -34,8 +34,12 @@ public interface DealRepository extends JpaRepository<Deal, Long>{
 	public List<Deal> findByUserIn(Collection<User> user);
 
 	public List<Deal> findAllByPriorityAndUserPlanPlanType(Priority priority, PlanType planType);
+
 	public List<Deal> findAllByUserPlanPlanTypeAndIsDefault(PlanType planType, boolean isDefault);
 	public List<Deal> findAllByUserPlanPlanTypeAndIsDefault(PlanType planType, boolean isDefault, Pageable pageable);
+
+	public List<Deal> findByUserInAndUserPlanPlanTypeAndIsDefault(Collection<User> users, PlanType planType, boolean isDefault, Pageable pageable);
+
 	public List<Deal> findAllBySubCategoryId(Long id);
 	public List<Deal> findAllBySubCategoryIdAndIsDefault(Long id, boolean isDefault);
 

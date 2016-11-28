@@ -43,7 +43,14 @@ public class DealController {
 	private AppService appService;
 
 	@RequestMapping(value="/", method= RequestMethod.GET)
-	public Status findAll(){
+	public Status findAllDealsForDashboard(HttpServletRequest req){
+		try {
+			String latitude = req.getParameter("latitude");
+			String lngitude = req.getParameter("longitude");
+			if (latitude!= null && !latitude.isEmpty() && lngitude!= null && !lngitude.isEmpty()) {
+				return dealService.findNearByDealsForDashboard( 0, 20, Double.parseDouble(latitude),Double.parseDouble(lngitude), 20);
+			}
+		} catch (Exception e){}
 		return dealService.findDealsForDashboard(0,20);
 	}
 

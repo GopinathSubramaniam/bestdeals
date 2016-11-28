@@ -7,20 +7,14 @@ import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.stereotype.Service;
+import com.deals.model.*;
 
 import com.deals.enums.EmailType;
-import com.deals.model.Deal;
-import com.deals.model.EMail;
-import com.deals.model.EmailDetail;
-import com.deals.model.User;
-import com.deals.model.UserDetail;
 import com.deals.vo.DealVO;
 import com.deals.vo.ImageVo;
 import com.deals.vo.UserVO;
 
 //import com.way2sms.SMS;
-@Service
 public class App {
 	
 	public static String CODE_OK = "200";
@@ -107,7 +101,7 @@ public class App {
 		return status;
 	}
 	
-	public static UserVO setUserVo(User user, UserDetail userDetail, List<Deal> deals){
+	public static UserVO setUserVo(User user, UserDetail userDetail, PublicUserPlan publicUserPlan, List<Deal> deals){
 		UserVO userVO = new UserVO();
 		
 		if(user != null){
@@ -116,12 +110,14 @@ public class App {
 			userVO.setMobile(user.getMobile());
 			userVO.setEmail(user.getEmail());
 			userVO.setUserType(user.getUserType());
-			userVO.setPassword(user.getPassword());
+//			userVO.setPassword(user.getPassword());
 			userVO.setCreatedDate(user.getCreatedDate().toString());
 			if(user.getPlan() != null){
 				userVO.setPlanId(user.getPlan().getId());
 				userVO.setPlanName(user.getPlan().getName());
+				userVO.setPlanDescription(user.getPlan().getDescription());
 			}
+
 		}
 		if(userDetail !=null){
 			userVO.setUserDetailId(userDetail.getId());
@@ -135,19 +131,29 @@ public class App {
 			userVO.setTimings(userDetail.getDescription());
 			userVO.setShopName(userDetail.getShopName());
 			userVO.setPlaceName(userDetail.getPlaceName());
-			if(userDetail.getVillage() != null ){
-				userVO.setCityName(userDetail.getVillage().getTaluka().getCity().getName());
-				userVO.setStateName(userDetail.getVillage().getTaluka().getCity().getState().getName());
-			}
-			
-			List<String> phoneNumbers = new ArrayList<>();
+			if (userDetail.getVillage() != null)
+				if (userDetail.getVillage().getTaluka() != null)
+					if (userDetail.getVillage().getTaluka().getCity() != null) {
+						userVO.setCityName(userDetail.getVillage().getTaluka().getCity().getName());
+						userVO.setStateName(userDetail.getVillage().getTaluka().getCity().getState().getName());
+					}
+
 			if(userDetail.getPhoneNumbers() != null){
+				List<String> phoneNumbers = new ArrayList<>();
 				String[] numbers = userDetail.getPhoneNumbers().split(",");
 				for (String number : numbers) {
 					phoneNumbers.add(number);
 				}
 				userVO.setPhoneNumbers(phoneNumbers);
 			}
+		}
+		if(publicUserPlan != null){
+			userVO.setQrCode(publicUserPlan.getQrCode().getNormalQrCode());
+			userVO.setEncryptedQrCode(publicUserPlan.getQrCode().getEncryptedQrCode());
+			userVO.setPlanId(publicUserPlan.getId());
+			userVO.setPlanName(publicUserPlan.getPlanType().toString());
+			userVO.setPlanDescription(publicUserPlan.getDescription());
+			userVO.setPlanExpiryDate(publicUserPlan.getEndDate().toString());
 		}
 		List<ImageVo> imgUrls = new ArrayList<ImageVo>();
 		if(deals != null ){
@@ -159,7 +165,7 @@ public class App {
 			}
 		}
 		userVO.setImageUrls(imgUrls);
-		userVO.setDeals(deals);
+		//userVO.setDeals(deals);
 		
 		return userVO;
 	}
@@ -170,7 +176,7 @@ public class App {
 		dealVO.setName(deal.getName());
 		dealVO.setType(deal.getType().toString());
 		dealVO.setDescription(deal.getDescription());
-		dealVO.setUser(setUserVo(deal.getUser(), null, null));
+		dealVO.setUser(setUserVo(deal.getUser(), null, null, null));
 		dealVO.setImgUrl(deal.getImgUrl());
 		return dealVO;
 	}

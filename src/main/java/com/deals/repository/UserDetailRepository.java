@@ -36,6 +36,7 @@ public interface UserDetailRepository extends JpaRepository<UserDetail, Long>{
 					"    AND z.longitude" +
 					"     BETWEEN p.longpoint - (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))" +
 					"         AND p.longpoint + (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))"
+					 + "  GROUP BY z.user_id"
 					// + "  ORDER BY distance_in_km" + "LIMIT 15"
 					)
 	List<BigInteger> findNearByUserIdsByLatLongInRadius(@Param("latpoint") double latpoint,
