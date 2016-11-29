@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="base-css">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+	<div th:include="u-header"></div>
+	<div th:include="u-left-side"></div>
+	<div class="content-wrapper">
+		<div class="row">
+			<section class="content">
+				<div class="row">
+					<div class="col-lg-3 col-xs-6" th:text="${message}">
+						
+					</div>
+					Welcome to Salesman
+				</div>
+			</section>	
+		</div>
+	</div>
+	<div th:include="footer"></div>
+	<div th:include="base-js"></div>
+</body>
+</html>

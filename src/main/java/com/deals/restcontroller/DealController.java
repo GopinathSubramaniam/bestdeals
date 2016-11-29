@@ -42,7 +42,7 @@ public class DealController {
 	@Autowired
 	private AppService appService;
 
-	@RequestMapping(value="/", method= RequestMethod.GET)
+	@RequestMapping(value={"/", ""}, method= RequestMethod.GET)
 	public Status findAllDealsForDashboard(HttpServletRequest req){
 		try {
 			String latitude = req.getParameter("latitude");

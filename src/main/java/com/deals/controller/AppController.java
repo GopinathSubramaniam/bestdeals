@@ -635,6 +635,10 @@ public class AppController {
 				String id = req.getParameter("id");
 				String subCat = req.getParameter("subCategory");
 				Long subCatId = subCat.isEmpty() ? 0 : Long.parseLong(subCat);
+				if (subCatId == 0) {
+					model.addAttribute("message", "Please select Subcategory");
+					return page;
+				}
 				String name = req.getParameter("name");
 
 				if(id != null && !(id.isEmpty())){
@@ -664,7 +668,6 @@ public class AppController {
 
 							String description = req.getParameter("description_"+i);
 							deal.setDescription(description);
-							deal.setName(name);
 							deal.setPriority(Priority.LOW);
 							deal.setSubCategory(new SubCategory(subCatId));
 							deal.setType(DealType.ADVERTISEMENT);
