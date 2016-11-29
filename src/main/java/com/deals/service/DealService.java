@@ -202,8 +202,12 @@ public class DealService {
 			else if ( silverDeals.size() > 0 )
 				platinumDeals.addAll(silverDeals);
 		}
-		List<DealVO> dealVOs = mergeDealVOs(platinumDeals);
-		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, dealVOs);
+		if (platinumDeals != null && platinumDeals.size() > 0) {
+			List<DealVO> dealVOs = mergeDealVOs(platinumDeals);
+			status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, dealVOs);
+		} else {
+			status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, null);
+		}
 		return status;
 	}
 

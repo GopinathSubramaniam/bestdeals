@@ -3,6 +3,7 @@ package com.deals.service;
 import java.math.BigInteger;
 import java.util.List;
 
+import com.deals.enums.UserType;
 import com.deals.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,11 @@ public class UserDetailService {
 	
 	@Autowired
 	private UserDetailRepository userDetailRepository;
-	
+
+	public UserDetail findOne(long id) {
+		return userDetailRepository.findOne(id);
+	}
+
 	public Status create(UserDetail userDetail){
 		System.out.println("Create UserDetails :::: "+userDetail);
 		if(userDetail != null){
@@ -82,6 +87,10 @@ public class UserDetailService {
 
 	public List<UserDetail> findByUser(User user){
 		return  userDetailRepository.findAllByUserId(user.getId());
+	}
+
+	public List<UserDetail> findByUserUserType(UserType userType){
+		return  userDetailRepository.findByUserUserType(userType);
 	}
 
 	public Status findAllByUserId(Long userId){

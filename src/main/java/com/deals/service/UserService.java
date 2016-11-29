@@ -197,10 +197,15 @@ public class UserService {
 			if(user.getChangedBy() != null) existingUser.setChangedBy(user.getChangedBy());
 			if(user.getUserType() != null) existingUser.setUserType(user.getUserType());
 			if(user.getPassword() != null) existingUser.setPassword(user.getPassword());
-			
-			existingUser.setName(user.getName());
-			existingUser.setEmail(user.getEmail());
-			existingUser.setMobile(user.getMobile());
+
+			if(user.getName() != null && !user.getName().isEmpty())
+				existingUser.setName(user.getName());
+			if(user.getEmail() != null && !user.getEmail().isEmpty())
+				existingUser.setEmail(user.getEmail());
+
+			// Never update number, it is unique identifier
+//			if(user.getPassword() != null && !user.getMobile().isEmpty())
+//				existingUser.setMobile(user.getMobile());
 			if(user.getPlan() != null){
 				existingUser.setPlan(user.getPlan());
 			}
@@ -318,5 +323,8 @@ public class UserService {
 	public User findUserByMobile(String mobile){
 		return userRepository.findByMobile(mobile);
 	}
-	
+
+	public List<User> findByUserType(UserType userType) {
+		return userRepository.findByUserType(userType);
+	}
 }

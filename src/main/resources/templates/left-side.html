@@ -10,9 +10,9 @@
         <ul class="sidebar-menu" th:case="'ADMIN'">
             <li th:class="${tab} == 'DASHBOARD' ? 'active' : ''"><a href="/BestDeals/"><i class="fa fa-fw fa-dashboard text-aqua"></i><span>Dashboard</span></a></li>
             <!--<li th:class="${tab} == 'USER' ? 'active' : ''"><a href="user"><i class="fa fa-fw fa-users text-aqua"></i><span>Users</span></a></li>-->
-            <li th:class="${tab} == 'FRANCHISE' ? 'active' : ''"><a href="user?userType=FRANCHISE"><i class="fa fa-fw fa-users text-aqua"></i><span>Franchises</span></a></li>
-            <li th:class="${tab} == 'MERCHANT' ? 'active' : ''"><a href="user?userType=MERCHANT"><i class="fa fa-fw fa-users text-aqua"></i><span>Merchants</span></a></li>
-            <li th:class="${tab} == 'PUBLIC' ? 'active' : ''"><a href="user?userType=PUBLIC"><i class="fa fa-fw fa-users text-aqua"></i><span>Public Users</span></a></li>
+            <li th:class="${tab} == 'FRANCHISE' ? 'active' : ''"><a href="userlist?userType=FRANCHISE"><i class="fa fa-fw fa-users text-aqua"></i><span>Franchises</span></a></li>
+            <li th:class="${tab} == 'MERCHANT' ? 'active' : ''"><a href="userlist?userType=MERCHANT"><i class="fa fa-fw fa-users text-aqua"></i><span>Merchants</span></a></li>
+            <li th:class="${tab} == 'PUBLIC' ? 'active' : ''"><a href="userlist?userType=PUBLIC"><i class="fa fa-fw fa-users text-aqua"></i><span>Public Users</span></a></li>
             <li th:class="${tab} == 'SALES_MANAGER' ? 'active' : ''"><a href="salesManager"><i class="fa fa-fw fa-sticky-note text-aqua"></i> <span>Sales Manager</span></a></li>
             <li th:class="${tab} == 'SALE' ? 'active' : ''"><a href="salesman"><i class="fa fa-fw fa-money text-aqua"></i> <span>Sales People</span></a></li>
             <li th:class="${tab} == 'PLAN' ? 'active' : ''"><a href="plan"><i class="fa fa-fw fa-sticky-note text-aqua"></i> <span>My Plan</span></a></li>

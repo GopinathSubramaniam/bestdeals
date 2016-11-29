@@ -21,11 +21,12 @@
 			</div>
 		</div>
 		<h5 th:text="${message}" ></h5>
-		<div class="tab-pane active" id="tab_1" th:if="${users} != null">
-			<table class="table table-striped">
+		<div class="tab-pane active" id="tab_1" th:if="${userDetails} != null">
+			<table id="userListTable" class="table table-striped">
 				<thead>
 					<tr>
 						<th>Shop Name</th>
+						<th>Owner</th>
 						<th>Mobile</th>
 						<th>Email</th>
 						<th>Plan Name</th>
@@ -33,21 +34,22 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="user : ${users}">
-						<td th:text="${user.name}"></td>
-						<td th:text="${user.mobile}"></td>
-						<td th:text="${user.email}"></td>
+					<tr th:each="userDetail : ${userDetails}">
+						<td th:text="${userDetail.shopName}"></td>
+						<td th:text="${userDetail.user.name}"></td>
+						<td th:text="${userDetail.user.mobile}"></td>
+						<td th:text="${userDetail.user.email}"></td>
 						<td
-							th:text="${user.plan} != null ? (${user.plan.name}+' - '+${user.plan.planType}) : ''"></td>
+							th:text="${userDetail.user.plan} != null ? (${userDetail.user.plan.name}+' - '+${userDetail.user.plan.planType}) : ''"></td>
 						<td align="right">
 							<button title="Delete" class="btn btn-xs btn-danger btn-flat"
-								th:onclick="'User.deleteUser('+${user.id}+')'">
+								th:onclick="'User.deleteUser('+${userDetail.user.id}+')'">
 								<i class="fa fa-fw fa-trash"></i> Delete
 							</button>
-							<button th:id="${user.userType}" title="Edit"
+							<button th:id="${userDetail.user.userType}" title="Edit"
 								class="btn btn-xs btn-primary btn-flat" data-toggle="modal"
 								data-target="#editUserModal"
-								th:onclick="'User.findUserById('+${user.id}+')'">
+								th:onclick="'User.findUserDetailById('+${userDetail.id}+')'">
 								<i class="fa fa-fw fa-edit"></i> Edit
 							</button>
 						</td>
@@ -67,50 +69,59 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">Update User</h4>
           </div>
-          <form id="editUserform" class="form-horizontal" action="javascript:void(0);" method="post" th:onsubmit="'User.update(this);'">
+          <form id="editUserform" class="form-horizontal" action="javascript:void(0);" method="post" th:onsubmit="'User.updateUserDetail(this);'">
           <div class="modal-body">
 	        <div class="box-body">
+				<div class="form-group">
+					<label for="id" class="col-sm-2 control-label">Shop Name</label>
+					<div class="col-sm-10">
+						<input type="hidden" name="id" class="form-control" id="editId"/>
+						<input type="hidden" name="latitude" class="form-control" id="editLatitude"/>
+						<input type="hidden" name="longitude" class="form-control" id="editLongitude"/>
+						<input type="text" name="shopName" class="form-control" id="editShopName" placeholder="Name"/>
+					</div>
+				</div>
 	         <div class="form-group">
-	            <label for="inputEmail3" class="col-sm-2 control-label">Name</label>
+	            <label for="editUserId" class="col-sm-2 control-label">Owner</label>
 	            <div class="col-sm-10">
-	            	<input type="hidden" name="id" class="form-control" id="editId" placeholder="Name"/>
-	              	<input type="text" name="name" class="form-control" id="editName" placeholder="Name"/>
+	            	<input type="hidden" name="user[id]" class="form-control" id="editUserId" placeholder="Name"/>
+	              	<input type="text" name="user[name]" class="form-control" id="editName" placeholder="Name"/>
 	            </div>
 	          </div>
 	          <div class="form-group">
-	            <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+	            <label for="editEmail" class="col-sm-2 control-label">Email</label>
 	            <div class="col-sm-10">
-	              <input type="email" name="email" class="form-control" id="editEmail" placeholder="Email"/>
+	              <input type="email" name="user[email]" class="form-control" id="editEmail" placeholder="Email"/>
 	            </div>
 	          </div>
 	          <div class="form-group">
-	            <label for="inputEmail3" class="col-sm-2 control-label">Mobile</label>
+	            <label for="editMobile" class="col-sm-2 control-label">Mobile</label>
 	            <div class="col-sm-10">
-	              <input type="text" name="mobile" class="form-control" id="editMobile" placeholder="Mobile"/>
+	              <input type="text" name="user[mobile]" class="form-control" id="editMobile" placeholder="Mobile" disabled="disabled"/>
 	            </div>
 	          </div>
 	          <div class="form-group">
-	            <label for="inputEmail3" class="col-sm-2 control-label">User Type</label>
+	            <label for="editUserType" class="col-sm-2 control-label">User Type</label>
 	            <div class="col-sm-10">
-	            	<select name="userType" class="form-control" id="editUserType">
+	            	<select name="user[userType]" class="form-control" id="editUserType">
 	            		<option value="">--- Select ---</option>
 	            		<option th:each="userType : ${userTypes}" th:value="${userType}" th:text="${userType}"></option>
 	            	</select>
 	            </div>
 	          </div>
 	          <div class="form-group">
-	            <label for="inputEmail3" class="col-sm-2 control-label">Plan</label>
+	            <label for="editPlan" class="col-sm-2 control-label">Plan</label>
 	            <div class="col-sm-10">
-	            	<select name="plan" class="form-control" id="editPlan">
+	            	<select name="user[plan][id]" class="form-control" id="editPlan">
 	            		<option value="">--- Select ---</option>
 	            		<option th:each="plan : ${plans}" th:value="${plan.id}" th:text="${plan.name}"></option>
 	            	</select>
 	            </div>
 	          </div>
 	          <div class="form-group">
-	            <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+	            <label for="editPassword" class="col-sm-2 control-label">Password</label>
 	            <div class="col-sm-10">
-	              <input type="text" name="password" class="form-control" id="editPassword" placeholder="Password"/>
+	              <input type="text" name="user[password]" class="form-control" id="editPassword" placeholder="Password"/>
 	            </div>
 	          </div>
 	        </div>
@@ -361,7 +372,7 @@
 	<script src="plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
-	ss
+
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwelkrFN__LksGXcg-Sy_kWecvrEpFzvU&amp;sensor=false" defer="defer" async="async"></script>
 	<script src="bootstrap-validator/js/bootstrapValidator.js"></script>
 	<script src="scripts/services/register.js"></script>

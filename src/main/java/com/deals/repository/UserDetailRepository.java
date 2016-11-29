@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.deals.enums.UserType;
 import com.deals.model.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,7 +18,7 @@ import org.springframework.data.repository.query.Param;
 public interface UserDetailRepository extends JpaRepository<UserDetail, Long>{
 
 	List<UserDetail> findAllByUserId(Long id);
-	List<UserDetail> findAllByUser(User user);
+	List<UserDetail> findByUserUserType(UserType userType);
 	UserDetail findByUserId(Long id); 
 	
 	UserDetail findByPlaceNameLikeAndVillageNameLike(String placeName, String cityName);

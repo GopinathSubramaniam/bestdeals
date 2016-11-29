@@ -479,7 +479,7 @@ public class AppController {
 */
 
 //	@RequestMapping(value="/user/{userType}")
-	@RequestMapping(value="/user")
+	@RequestMapping(value="/userlist")
 	public String userPage(//@PathVariable UserType userType,
 						   Model model,
 						   @RequestParam( name = "userType", required = true) UserType userType,
@@ -521,19 +521,26 @@ public class AppController {
 		Pageable pageable = new PageRequest(page, size);
 
 		List<User> users = null;
+		List<UserDetail> userDetails = null;
 		if (userType == UserType.MERCHANT) {
-			users = userService.findAllMerchant(pageable);
+//			users = userService.findAllMerchant(pageable);
+//			users = userService.findByUserType(UserType.MERCHANT);
+			userDetails = userDetailService.findByUserUserType(UserType.MERCHANT);
+		} else if (userType == UserType.FRANCHISE) {
+//			users = userService.findAllFranchise(pageable);
+//			users = userService.findByUserType(UserType.FRANCHISE);
+			userDetails = userDetailService.findByUserUserType(UserType.FRANCHISE);
+		} else if (userType == UserType.PUBLIC) {
+//			users = userService.findAllPublic(pageable);
+//			users = userService.findByUserType(UserType.PUBLIC);
+			userDetails = userDetailService.findByUserUserType(UserType.PUBLIC);
 		}
-		if (userType == UserType.FRANCHISE) {
-			users = userService.findAllFranchise(pageable);
-		}
-		if (userType == UserType.PUBLIC) {
-			users = userService.findAllPublic(pageable);
-		}
-		if (users == null || users.size() == 0){
+//		if (users == null || users.size() == 0){
+		if (userDetails == null || userDetails.size() == 0){
 			model.addAttribute("message", "No users found");
 		} else {
 			model.addAttribute("users", users);
+			model.addAttribute("userDetails", userDetails);
 			model.addAttribute("next", page + 1);
 		}
 		if (page > 0)
@@ -719,7 +726,6 @@ public class AppController {
 		}
 		return page;
 	}
-
 
 	private Model getAdvertisementModel(Model model, int maxAdvCount){
 		Long userId = (Long) getSessionVal("userId");

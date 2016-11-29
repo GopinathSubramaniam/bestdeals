@@ -46,7 +46,7 @@ var User = (function(){
 			}
 		});
 	};
-	
+
 	var update = function(){
 		var userObj = App.serializeObject('editUserform');
 		if(userObj.plan){
@@ -62,7 +62,45 @@ var User = (function(){
 				window.location.reload();
 			}
 		});
-		
+
+	};
+
+	var findUserDetailById = function(id){
+		var URL = App.URL().BASE + App.URL().USER_DETAIL;
+		App.GetRequest(URL+id).then(function(res){
+			var obj = res.data.user;
+			$('#editId').val(res.data.id);
+			$('#editShopName').val(res.data.shopName);
+			$('#editLatitude').val(res.data.latitude);
+			$('#editLongitude').val(res.data.longitude);
+
+			$('#editUserId').val(obj.id);
+			$('#editName').val(obj.name);
+			$('#editEmail').val(obj.email);
+			$('#editMobile').val(obj.mobile);
+			$('#editUserType').val(obj.userType);
+			$('#editPassword').val(obj.password);
+			$('#editPlan').val(obj.plan.id);
+		});
+	};
+	var updateUserDetail = function(){
+        var URL = App.URL().BASE + App.URL().USER_DETAIL;
+		// var userObj = App.serializeObject('editUserform');
+        var userObj = $('#editUserform').serializeObject();
+		/*if(userObj.user.plan){
+			userObj.user.plan = {'id': userObj.user.plan};
+		}else{
+			userObj.user.plan = null;
+		}*/
+		App.PutRequest(URL, userObj).then(function(res){
+			console.log('UserDetail Create ::: ', userObj);
+			if(res.statusCode == '500'){
+				$('#updateErrorMsg').html(res.message).fadeOut(10000);
+			}else{
+				window.location.reload();
+			}
+		});
+
 	};
 	
 	var deleteUser = function(userId){
@@ -71,7 +109,15 @@ var User = (function(){
 		});
 	};
 
-	 $('#merchantTable').DataTable({
+	 $('#userListTable').DataTable({
+         "paging": true,
+         "lengthChange": false,
+         "searching": true,
+         "ordering": true,
+         "info": true,
+         "autoWidth": false
+       });
+	 /*$('#merchantTable').DataTable({
          "paging": true,
          "lengthChange": false,
          "searching": true,
@@ -95,12 +141,14 @@ var User = (function(){
          "info": true,
          "autoWidth": false
        });
-
+*/
 	return {
 		create: create,
 		update: update,
 		findUserById: findUserById,
-		deleteUser: deleteUser
+		deleteUser: deleteUser,
+        findUserDetailById : findUserDetailById,
+        updateUserDetail : updateUserDetail
 	}
 })();
 

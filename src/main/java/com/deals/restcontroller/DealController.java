@@ -27,6 +27,8 @@ import com.deals.service.AppService;
 import com.deals.service.DealService;
 import com.deals.util.Status;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -48,13 +50,15 @@ public class DealController {
 			String latitude = req.getParameter("latitude");
 			String lngitude = req.getParameter("longitude");
 			if (latitude!= null && !latitude.isEmpty() && lngitude!= null && !lngitude.isEmpty()) {
-				return dealService.findNearByDealsForDashboard( 0, 20, Double.parseDouble(latitude),Double.parseDouble(lngitude), 20);
+				Status status = dealService.findNearByDealsForDashboard( 0, 20, Double.parseDouble(latitude),Double.parseDouble(lngitude), 20);
+				if (status.getData() == null)
+					return dealService.findDealsForDashboard(0,20);
 			}
 		} catch (Exception e){}
-		return dealService.findDealsForDashboard(0,20);
+		return App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, Collections.EMPTY_LIST);
 	}
 
-	@RequestMapping(value="/", method= RequestMethod.POST, consumes = "multipart/form-data", produces = { "application/json", "application/xml" })
+	@RequestMapping(value={"/", ""}, method= RequestMethod.POST, consumes = "multipart/form-data", produces = { "application/json", "application/xml" })
 	public Status create(@RequestParam("file") MultipartFile file, @RequestParam("deal") String stringDeal) throws Exception{
 		JSONObject jsonDeal = new JSONObject(stringDeal);
 		String fileUrl = "";
