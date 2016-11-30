@@ -50,10 +50,11 @@ public class DealController {
 			String latitude = req.getParameter("latitude");
 			String lngitude = req.getParameter("longitude");
 			if (latitude!= null && !latitude.isEmpty() && lngitude!= null && !lngitude.isEmpty()) {
-				Status status = dealService.findNearByDealsForDashboard( 0, 20, Double.parseDouble(latitude),Double.parseDouble(lngitude), 20);
-				if (status.getData() == null)
-					return dealService.findDealsForDashboard(0,20);
-			}
+				Status status = dealService.findNearByDealsForDashboard( 0, 20, Double.parseDouble(latitude),Double.parseDouble(lngitude), 50);
+				if (status.getData() != null)
+					return status;
+			} else
+				return dealService.findDealsForDashboard(0,20);
 		} catch (Exception e){}
 		return App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, Collections.EMPTY_LIST);
 	}
