@@ -60,9 +60,10 @@ public class DealService {
 		List<Deal> platinumDeals = new ArrayList<>();
 		List<Deal> goldDeals = new ArrayList<>();
 		List<Deal> silverDeals = new ArrayList<>();
-		
-		platinumDeals = dealRepository.findAllBySubCategoryCategoryNameOrSubCategoryNameOrCityNameOrPlaceNameOrDescriptionOrNameOrUserNameOrUserMobileOrUserPlanNameOrUserEmailAndUserPlanPlanType(searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey,PlanType.PLATINUM);
-		
+		if (searchKey != null && !searchKey.isEmpty())
+			platinumDeals = dealRepository.findByQuery(searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey);
+/*		platinumDeals = dealRepository.findAllBySubCategoryCategoryNameOrSubCategoryNameOrCityNameOrPlaceNameOrDescriptionOrNameOrUserNameOrUserMobileOrUserPlanNameOrUserEmailAndUserPlanPlanType(searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey,PlanType.PLATINUM);
+
 		if(platinumDeals.size() == 0 ){
 			goldDeals = dealRepository.findAllBySubCategoryCategoryNameOrSubCategoryNameOrCityNameOrPlaceNameOrDescriptionOrNameOrUserNameOrUserMobileOrUserPlanNameOrUserEmailAndUserPlanPlanType(searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, PlanType.GOLD);
 			platinumDeals = goldDeals;
@@ -71,7 +72,7 @@ public class DealService {
 		if(platinumDeals.size() == 0 && goldDeals.size() == 0){
 			silverDeals = dealRepository.findAllBySubCategoryCategoryNameOrSubCategoryNameOrCityNameOrPlaceNameOrDescriptionOrNameOrUserNameOrUserMobileOrUserPlanNameOrUserEmailAndUserPlanPlanType(searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, PlanType.SILVER);
 			platinumDeals = silverDeals;
-		}
+		}*/
 		List<DealVO> dealVOs = mergeDealVOs(platinumDeals);
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, dealVOs);
 		return status;
@@ -86,13 +87,14 @@ public class DealService {
 			// using default image
 //			deals = dealRepository.findDefaultDealsBySubCategoryIdInAndOnePerUser(subCategoryIds);
 			// any random deal image
-			deals = dealRepository.findBySubCategoryIdInAndOnePerUser(subCategoryIds);
+			if (subCategoryIds != null && subCategoryIds.size() > 0)
+				deals = dealRepository.findBySubCategoryIdInAndOnePerUser(subCategoryIds);
 		} else if (!categoryName.isEmpty()) {
 //			List<Long> categoryIds= categoryRepository.findIdByNameLike(categoryName);
 			List<Long> subCategoryIds = subCategoryRepository.findIdByCategoryNameLike(categoryName);
 			//deals = dealRepository.findBySubCategoryIdIn(subCategoryIds);
-
-			deals = dealRepository.findBySubCategoryIdInOnePerUser(subCategoryIds);
+			if (subCategoryIds != null && subCategoryIds.size() > 0)
+				deals = dealRepository.findBySubCategoryIdInOnePerUser(subCategoryIds);
 		} else if (latPoint > -90 && latPoint < 90 && lngPoint > -180 && lngPoint < 180 && distance > 0 ) {
 			List<BigInteger> userIds = userDetailService.findNearByUserIdsByLatLongInRange(latPoint,lngPoint,distance);
 			List<Long> users = new ArrayList<>(userIds.size());

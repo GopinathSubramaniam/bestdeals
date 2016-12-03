@@ -658,6 +658,9 @@ public class AppController {
 					}
 					deal.setDescription(req.getParameter("description"));
 					deal.setSubCategory(new SubCategory(subCatId));
+					if(userDetail.getVillage() != null){
+						deal.setCity(userDetail.getVillage().getTaluka().getCity());
+					}
 					dealService.create(deal);
 				}else{
 					for (int i = 1; i <= maxAdvCount; i++) {

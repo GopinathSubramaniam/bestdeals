@@ -24,11 +24,62 @@ public interface DealRepository extends JpaRepository<Deal, Long>{
 		"LOWER(t.title) LIKE LOWER(CONCAT('%',:searchTerm, '%')) OR " +
 		"LOWER(t.description) LIKE LOWER(CONCAT('%',:searchTerm, '%'))")
 	*/
+	@Query(nativeQuery = true, value = "select" +
+			"        deal0_.*" +
+			/*"        deal0_.id as id1_4_," +
+			"        deal0_.changed_by as changed_2_4_," +
+			"        deal0_.changed_date as changed_3_4_," +
+			"        deal0_.created_by as created_4_4_," +
+			"        deal0_.created_date as created_5_4_," +
+			"        deal0_.city_id as city_id14_4_," +
+			"        deal0_.contact as contact6_4_," +
+			"        deal0_.description as descript7_4_," +
+			"        deal0_.img_url as img_url8_4_," +
+			"        deal0_.is_default as is_defau9_4_," +
+			"        deal0_.name as name10_4_," +
+			"        deal0_.place_name as place_n11_4_," +
+			"        deal0_.priority as priorit12_4_," +
+			"        deal0_.sub_category_id as sub_cat15_4_," +
+			"        deal0_.type as type13_4_," +
+			"        deal0_.user_id as user_id16_4_ " +*/
+			"    from" +
+			"        deal deal0_ " +
+			"    left outer join" +
+			"        sub_category subcategor1_ " +
+			"            on deal0_.sub_category_id=subcategor1_.id " +
+			"    left outer join" +
+			"        category category2_ " +
+			"            on subcategor1_.category_id=category2_.id " +
+			"    left outer join" +
+			"        city city3_ " +
+			"            on deal0_.city_id=city3_.id " +
+			"    left outer join" +
+			"        user_detail userdetail4_ " +
+			"            on deal0_.user_id=userdetail4_.user_id " +
+			"    where " +
+			"        category2_.name LIKE LOWER(CONCAT('%',:categoryName, '%')) " +
+			"        or subcategor1_.name LIKE LOWER(CONCAT('%',:subcategoryName, '%')) " +
+			"        or city3_.name LIKE LOWER(CONCAT('%',:cityNme, '%')) " +
+			"        or deal0_.place_name LIKE LOWER(CONCAT('%',:placeName, '%'))  " +
+			"        or deal0_.description LIKE LOWER(CONCAT('%',:description, '%'))  " +
+			"        or deal0_.name LIKE LOWER(CONCAT('%',:dealName, '%'))  " +
+			"        or userdetail4_.shop_name LIKE LOWER(CONCAT('%',:shopname, '%'))  " +
+			"	order by deal0_.id DESC" +
+			"	LIMIT 50"
+			)
+	public List<Deal> findByQuery(@Param(value = "categoryName") String categoryName,
+								  @Param(value = "subcategoryName") String subcategoryName,
+								  @Param(value = "cityNme") String cityNme,
+								  @Param(value = "placeName") String placeName,
+								  @Param(value = "description") String description,
+								  @Param(value = "dealName") String dealName,
+								  @Param(value = "shopname") String shopname);
+
 	public Deal findByUserIdAndIsDefault(Long id, boolean isDefault);
-	
+
 	public List<Deal> findAllByUserId(Long id);
 
-	@Query( "select d from Deal d where d.user.id in :ids group by d.user" )
+	@Query( "select d from Deal d where d.user.id in :ids group by d.user order by d.id desc" )
 	public List<Deal> findByUserIdInGroupByUser(@Param("ids") List<Long> userIdList);
 
 	public List<Deal> findByUserIn(Collection<User> user);
@@ -54,7 +105,7 @@ public interface DealRepository extends JpaRepository<Deal, Long>{
 	@Query( "select d from Deal d where d.subCategory.id in :ids" )
 	public List<Deal> findBySubCategoryIdIn(@Param("ids") List<Long> subCategoryIdList);
 
-	@Query( "select d from Deal d where d.subCategory.id in :ids group by d.user" )
+	@Query( "select d from Deal d where d.subCategory.id in :ids group by d.user order by d.id desc" )
 	public List<Deal> findBySubCategoryIdInOnePerUser(@Param("ids") List<Long> subCategoryIdList);
 
 	@Query( "select d from Deal d where d.isDefault = true and d.subCategory.id in :ids " )
@@ -63,7 +114,7 @@ public interface DealRepository extends JpaRepository<Deal, Long>{
 	@Query( "select d from Deal d where d.isDefault = true and d.subCategory.id in :ids group by d.user" )
 	public List<Deal> findDefaultDealsBySubCategoryIdInAndOnePerUser(@Param("ids") List<Long> subCategoryIdList);
 
-	@Query( "select d from Deal d where d.subCategory.id in :ids group by d.user" )
+	@Query( "select d from Deal d where d.subCategory.id in :ids group by d.user order by d.id desc" )
 	public List<Deal> findBySubCategoryIdInAndOnePerUser(@Param("ids") List<Long> subCategoryIdList);
 
 	public List<Deal> findByPlaceName(String placeName);
