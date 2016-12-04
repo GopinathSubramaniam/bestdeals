@@ -67,13 +67,14 @@ public interface DealRepository extends JpaRepository<Deal, Long>{
 			"	order by deal0_.id DESC" +
 			"	LIMIT 50"
 			)
-	public List<Deal> findByQuery(@Param(value = "categoryName") String categoryName,
-								  @Param(value = "subcategoryName") String subcategoryName,
-								  @Param(value = "cityNme") String cityNme,
-								  @Param(value = "placeName") String placeName,
-								  @Param(value = "description") String description,
-								  @Param(value = "dealName") String dealName,
-								  @Param(value = "shopname") String shopname);
+	public List<Deal> findByAny(@Param(value = "categoryName") 		String categoryName,
+								@Param(value = "subcategoryName") 	String subcategoryName,
+								@Param(value = "cityNme") 			String cityNme,
+								@Param(value = "placeName")			String placeName,
+								@Param(value = "description") 		String description,
+								@Param(value = "dealName") 			String dealName,
+								@Param(value = "shopname") 			String shopname
+	);
 
 	public Deal findByUserIdAndIsDefault(Long id, boolean isDefault);
 
