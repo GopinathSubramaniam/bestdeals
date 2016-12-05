@@ -230,6 +230,7 @@ public class UserService {
 					salesmanRepository.deleteBySalesManagerId(salesManager.getId());
 					salesmanagerRepository.delete(salesManager.getId());
 				}
+				userPlanService.deleteByUser(user);
 				userDetailRepository.deleteByUser(user);
 				userRepository.delete(user);
 			}

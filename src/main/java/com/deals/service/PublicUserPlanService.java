@@ -92,4 +92,8 @@ public class PublicUserPlanService {
 	public PublicUserPlan findByQrCodeEncryptedQrCode(String encryptedQrCode) {
 		return publicUserPlanRepository.findByQrCodeEncryptedQrCode(encryptedQrCode);
 	}
+
+	public void deleteByUser(User user) {
+		publicUserPlanRepository.deleteByUser(user);
+	}
 }
