@@ -40,8 +40,8 @@ public class LoginService {
 				if(!existUser.getAuthType().equals(AuthType.OK)){
 					status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_USER_NOT_AUTH, null);
 				}else{
-					existUser.setLoginState(LoginState.ONLINE);
-					userRepository.saveAndFlush(existUser);
+//					existUser.setLoginState(LoginState.ONLINE);
+//					userRepository.saveAndFlush(existUser);
 					status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, existUser);
 				}
 			}else{
@@ -52,8 +52,7 @@ public class LoginService {
 		}
 		return status;
 	}
-	
-	
+
 	public Status mobileLogin(User user){
 		if(user != null ){
 			User existUser = userRepository.findByMobile(user.getMobile());
@@ -64,23 +63,20 @@ public class LoginService {
 					status.setStatusMsg(App.STATUS_FAIL);
 					status.setMessage(App.MSG_USER_INCORRECT_PASSWORD);
 					status.setData(null);
-				}else if(!existUser.getAuthType().equals(AuthType.OK)){
+				} else if(!existUser.getAuthType().equals(AuthType.OK)){
 					status.setStatusCode(App.CODE_FAIL);
 					status.setStatusMsg(App.STATUS_FAIL);
 					status.setMessage(App.MSG_AUTH_DENINED);
 					status.setData(null);
 				}
 			}else{
-				UserDetail userDetail = userDetailRepository.findByUserId(user.getId());
-				
-				PublicUserPlan publicUserPlan = userPlanRepository.findByUserId(user.getId());
-				
-				UserVO userVo = new UserVO();
+				/*UserVO userVo = new UserVO();
 				userVo.setId(user.getId());
 				userVo.setEmail(user.getEmail());
 				userVo.setName(user.getName());
 				userVo.setUserType(user.getUserType());
-				
+
+				UserDetail userDetail = userDetailRepository.findByUserId(user.getId());
 				if(userDetail != null){
 					userVo.setAddress1(userDetail.getAddress1());
 					userVo.setAddress2(userDetail.getAddress2());
@@ -89,13 +85,13 @@ public class LoginService {
 					userVo.setLatitude(userDetail.getLatitude());
 					userVo.setLongitude(userDetail.getLongitude());
 				}
-				
 				if(user.getPlan() != null){
 					userVo.setPlanId(user.getPlan().getId());
 					userVo.setPlanName(user.getPlan().getName());
 					userVo.setPlanDescription(user.getPlan().getDescription());
 				}
-				
+
+				PublicUserPlan publicUserPlan = userPlanRepository.findByUserId(user.getId());
 				if(publicUserPlan != null){
 					userVo.setQrCode(publicUserPlan.getQrCode().getNormalQrCode());
 					userVo.setEncryptedQrCode(publicUserPlan.getQrCode().getEncryptedQrCode());
@@ -106,9 +102,9 @@ public class LoginService {
 					userVo.setShopName(userDetail.getShopName());
 					userVo.setStateName(userDetail.getVillage().getTaluka().getCity().getState().getName());
 					userVo.setTimings(userDetail.getDescription());
-				}
+				}*/
 				
-				status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_USER_NOT_REGISTERED, userVo);
+				status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, user.getMobile() + " " + App.MSG_USER_NOT_REGISTERED, user);
 			}
 		}else{
 			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_LOGIN_ERROR, user);

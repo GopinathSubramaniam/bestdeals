@@ -18,22 +18,11 @@ public class LoginController {
 	@Autowired
 	private LoginService loginService;
 	
-	@RequestMapping(value="/", method= RequestMethod.POST, produces={"application/json"})
-	public Status login(@RequestBody User user){
-		return loginService.login(user);
-	}
-	
-	@RequestMapping(value="/loginClient", method= RequestMethod.POST, produces={"application/json"})
-	public Status loginForClient(@RequestBody User user){
-		return loginService.login(user);
-	}
-	
-	@RequestMapping(value="/mobileLogin", method= RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value={"/",""}, method= RequestMethod.POST, produces={"application/json"})
 	public Status mobileLogin(@RequestBody User user){
 		return loginService.mobileLogin(user);
 	}
-	
-	
+
 	@RequestMapping(value="/out/{userId}", method= RequestMethod.GET)
 	public Status logout(@PathVariable Long userId){
 		return loginService.logout(userId);

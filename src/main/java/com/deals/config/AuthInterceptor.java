@@ -14,11 +14,21 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
+    final String API_KEY = "API_KEY";
+    final String API_VALUE = "ea74cea31ed48c6d020167980b1b1aba1815907ecf14ec7242d47f9cfd72fcdf";
     static Logger log = LoggerFactory.getLogger(AuthInterceptor.class);
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
 
         if(log.isDebugEnabled()) log.debug("AuthInterceptor: "+httpServletRequest.getRequestURI());
+
+        if (httpServletRequest.getRequestURI().startsWith("/BestDeals/rest")){
+            if( API_VALUE.equals(httpServletRequest.getHeader(API_KEY)) ||
+                    httpServletRequest.getSession().getAttribute("userId") != null) {
+                log.info("AuthInterceptor: invalid URI " + httpServletRequest.getRequestURI());
+                return true;
+            }
+        }
 
         // Avoid a redirect loop for some urls
         if( !httpServletRequest.getRequestURI().equals("/BestDeals/") &&
@@ -27,8 +37,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                 !httpServletRequest.getRequestURI().equals("/BestDeals/registerPage") &&
                 !httpServletRequest.getRequestURI().equals("/BestDeals/registerPage/") &&
                 !httpServletRequest.getRequestURI().equals("/BestDeals/admin") &&
-                !httpServletRequest.getRequestURI().equals("/BestDeals/admin/") &&
-                !httpServletRequest.getRequestURI().startsWith("/BestDeals/rest"))
+                !httpServletRequest.getRequestURI().equals("/BestDeals/admin/"))
         {
             if( httpServletRequest.getSession().getAttribute("userId") == null) {
                 log.info("AuthInterceptor: invalid session");
