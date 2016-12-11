@@ -25,7 +25,6 @@ public class AuthInterceptor implements HandlerInterceptor {
         if (httpServletRequest.getRequestURI().startsWith("/BestDeals/rest")){
             if( API_VALUE.equals(httpServletRequest.getHeader(API_KEY)) ||
                     httpServletRequest.getSession().getAttribute("userId") != null) {
-                log.info("AuthInterceptor: invalid URI " + httpServletRequest.getRequestURI());
                 return true;
             }
         }
@@ -37,10 +36,9 @@ public class AuthInterceptor implements HandlerInterceptor {
                 !httpServletRequest.getRequestURI().equals("/BestDeals/registerPage") &&
                 !httpServletRequest.getRequestURI().equals("/BestDeals/registerPage/") &&
                 !httpServletRequest.getRequestURI().equals("/BestDeals/admin") &&
-                !httpServletRequest.getRequestURI().equals("/BestDeals/admin/"))
-        {
+                !httpServletRequest.getRequestURI().equals("/BestDeals/admin/")) {
             if( httpServletRequest.getSession().getAttribute("userId") == null) {
-                log.info("AuthInterceptor: invalid session");
+                log.info("AuthInterceptor: invalid session for " + httpServletRequest.getRequestURI());
                 httpServletResponse.sendRedirect("/BestDeals/");
                 return false;
             }

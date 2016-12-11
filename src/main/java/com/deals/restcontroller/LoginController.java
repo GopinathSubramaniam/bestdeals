@@ -18,7 +18,7 @@ public class LoginController {
 	@Autowired
 	private LoginService loginService;
 	
-	@RequestMapping(value={"/",""}, method= RequestMethod.POST, produces={"application/json"})
+	@RequestMapping(value={"/mobileLogin/","/mobileLogin"}, method= RequestMethod.POST, produces={"application/json"})
 	public Status mobileLogin(@RequestBody User user){
 		return loginService.mobileLogin(user);
 	}
