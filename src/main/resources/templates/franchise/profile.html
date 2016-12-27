@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="base-css">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<style type="text/css">
+	#map {
+        height: 250px;
+        width: 100%;
+       }
+.controls {
+        margin-top: 10px;
+        border: 1px solid transparent;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        height: 32px;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      }
+
+      #pac-input {
+        background-color: #fff;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        margin-left: 12px;
+        padding: 0 11px 0 13px;
+        text-overflow: ellipsis;
+        width: 300px;
+      }
+
+      #pac-input:focus {
+        border-color: #4d90fe;
+      }
+
+      .pac-container {
+        font-family: Roboto;
+      }
+
+      #type-selector {
+        color: #fff;
+        background-color: #4d90fe;
+        padding: 5px 11px 0px 11px;
+      }
+
+      #type-selector label {
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 300;
+      }
+      #target {
+        width: 345px;
+      }
+
+</style>
+	<div th:include="header"></div>
+	<div th:include="left-side"></div>
+	<div class="container-fluid content-wrapper">
+		<div class="row" style="overflow: auto; max-height:830px;">
+			<section class="content">
+				<div class="col-lg-12 col-xs-12">
+					<div class=" userInfoHeadDiv">
+						<div class="col-md-6 col-lg-6">
+							<h3>User Information</h3>
+						</div>
+						<div class="col-md-6 col-lg-6">
+							<button id="displayUserInfoEditBtn" onclick="UserProfile.displayUserInfoEditBtn()" class="btn btn-primary btn-flat pull-right">
+                                <i class="fa fa-edit"></i> Edit
+							</button>
+						</div>
+					</div>
+					<div class="userInfoDiv">
+						<table class="table">
+							<tr>
+								<td>
+									<label for="inputEmail3" class="col-sm-12 col-md-12 col-lg-12 control-label">Name</label>
+								</td>
+								<td>
+									<div class="col-sm-12 col-md-12 col-lg-12">
+				              			<label id="labelName" th:text="${user.name}"></label>
+				            		</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label for="inputEmail3" class="col-sm-12 col-md-12 col-lg-12 control-label">Email</label>
+								</td>
+								<td>
+									<div class="col-sm-12 col-md-12 col-lg-12">
+					              		<label class="form-label" id="labelEmail" th:text="${user.email}"></label>
+					            	</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label for="inputEmail3" class="col-sm-12 col-md-12 col-lg-12 control-label">Mobile</label>
+								</td>
+								<td>
+									<div class="col-sm-12 col-md-12 col-lg-12">
+					              		<label class="form-label" id="labelMobile" th:text="${user.mobile}"></label>
+					            	</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label for="inputEmail3" class="col-sm-12 col-md-12 col-lg-12 control-label">Profile Created Date</label>
+								</td>
+								<td>
+					            	<div class="col-sm-12 col-md-12 col-lg-12">
+					              		<label class="form-label" id="labelProfileCreateDate" th:text="${user.createdDate}"></label>
+					            	</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<form id="userInfoEditForm" class="hidden" action="javascript:void(0);" method="post" onsubmit="UserProfile.update(this)">
+						<div class="row">
+							<input type="hidden" name="id" th:value="${user.id}"/>
+							<h3>Edit User Information</h3>
+							<table class="table">
+								<tr>
+									<td>
+										<label for="inputEmail3" class="col-sm-12 col-md-12 col-lg-12 control-label">Name</label>
+									</td>
+									<td>
+										<div class="col-sm-12 col-md-12 col-lg-12">
+						              		<input type="text" class="form-control" name="name" th:value="${user.name}"/>
+						            	</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<label for="inputEmail3" class="col-sm-12 col-md-12 col-lg-12 control-label">Email</label>
+									</td>
+									<td>
+										<div class="col-sm-12 col-md-12 col-lg-12">
+						              		<input type="text" class="form-control" name="email" id="labelEmail" th:value="${user.email}"/>
+						            	</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<label for="inputEmail3" class="col-sm-12 col-md-12 col-lg-12 control-label">Mobile</label>
+									</td>
+									<td>
+										<div class="col-sm-12 col-md-12 col-lg-12">
+						              		<input type="text" class="form-control" name="mobile"  id="labelMobile" th:value="${user.mobile}"/>
+						            	</div>
+									</td>
+								</tr>
+							</table>
+				          	<div class="form-group pull-right">
+				            	<div class="col-sm-12 col-lg-12 col-md-12">
+				              		<button type="button" class="btn btn-warning btn-flat" onclick="UserProfile.displayUserInfoEditBtn()">Cancel</button>
+				              		<button type="submit" class="btn btn-primary btn-flat">Update</button>
+				            	</div>
+				          	</div>
+				          	<hr/>
+						</div>
+					</form>
+				</div>
+				<div class="col-lg-12">
+					<div class="row userDetailHeadDiv">
+						<div class="col-md-6 col-lg-6">
+							<h3>User Details</h3>
+						</div>
+						<div class="col-md-6 col-lg-6">
+							<button id="displayUserDetailEditBtn" onclick="UserProfile.displayUserDetailEditBtn()" class="btn btn-primary btn-flat pull-right">
+                                <i class="fa fa-edit"></i> Edit
+                                </button>
+						</div>
+					</div>
+					<div class="userDetailDiv">
+						<table class="table">
+							<tr>
+								<td>
+									<label for="inputEmail3" class="control-label">Shop Name</label>
+								</td>
+								<td>
+									<div class="col-sm-10">
+                                        <label th:text="${user.shopName}"></label>
+
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label for="inputAddress1" class="control-label">Address1</label>
+								</td>
+								<td>
+									<div class="col-sm-12 col-md-12 col-lg-12">
+					              		<label id="labelAddress1" th:text="${user.address1}"></label>
+					            	</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label for="inputAddress2" class="control-label">Address2</label>
+								</td>
+								<td>
+									<div class="col-sm-12 col-md-12 col-lg-12">
+					              		<label id="labelAddress2" th:text="${user.address2}"></label>
+					            	</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label for="inputAddress3" class="control-label">Address3</label>
+								</td>
+								<td>
+									<div class="col-sm-12 col-md-12 col-lg-12">
+					              		<label id="labelAddress3" th:text="${user.address3}"></label>
+					            	</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label for="inputPhoneNumbers" class="control-label">Phone Numbers</label>
+								</td>
+								<td>
+									<div class="col-sm-12 col-md-12 col-lg-12">
+					              		<label class="form-label" id="labelProfileCreateDate" th:text="${#strings.listJoin(user.phoneNumbers, ',')}"></label>
+					            	</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label for="inputDescription" class="control-label">Description/Timings</label>
+								</td>
+								<td>
+									<div class="col-sm-12 col-md-12 col-lg-12">
+					              		<label id="labelDescription" th:text="${user.timings}"></label>
+					            	</div>
+								</td>
+							</tr>
+						</table>
+
+					</div>
+					<form id="userDetailEditForm" class="hidden" action="javascript:void(0);" method="post" onsubmit="UserProfile.updateDetail(this)">
+						<input type="hidden" id="latitude" name="latitude" th:value="${user.latitude}"/>
+						<input type="hidden" id="longitude" name="longitude" th:value="${user.longitude}"/>
+						<input type="hidden" name="id" th:value="${user.userDetailId}"/>
+						<input type="hidden" name="userId" th:value="${user.id}"/>
+						<div class="col-lg-12 ">
+							<h3>Edit User Details</h3>
+							<table class="table">
+								<tr>
+									<td>
+										<label for="inputEmail3" class="control-label">Shop Name</label>
+									</td>
+									<td>
+										<div class="col-md-12">
+											<input type="text" class="form-control" name="shopName" th:value="${user.shopName}"/>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<label for="inputEmail3" class="control-label">Address1</label>
+									</td>
+									<td>
+										<div class="col-md-12">
+						              		<input type="text" class="form-control" name="address1" id="inputName" th:value="${user.address1}"/>
+						            	</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<label for="inputEmail3" class="control-label">Address2</label>
+									</td>
+									<td>
+										<div class="col-md-12">
+						              		<input type="text" class="form-control" name="address2" id="labelEmail" th:value="${user.address2}"/>
+						            	</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<label for="inputEmail3" class="control-label">Address3</label>
+									</td>
+									<td>
+										<div class="col-md-12">
+						              		<input type="text" class="form-control"  name="address3" id="labelMobile" th:value="${user.address3}"/>
+						            	</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<label for="inputPhoneNumbers" class="control-label">Phone Numbers</label>
+									</td>
+									<td>
+										<div class="col-sm-10">
+						              		<textarea class="form-control" id="textPhoneNumbers" name="phoneNumbers" th:text="${#strings.listJoin(user.phoneNumbers, ',')}"></textarea>
+						            	</div>
+									</td>
+								</tr>
+								<tr>
+                                <td>
+                                    <label for="inputDescription" class="control-label">Description/Timings</label>
+                                </td>
+                                <td>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control" name="description" id="textDescription" th:text="${user.timings}"></textarea>
+                                    </div>
+                                </td>
+                            </tr>
+							</table>
+
+							<div class="form-group pull-right">
+				            	<div class="col-sm-12 col-lg-12 col-md-12">
+				              		<button type="button" class="btn btn-warning btn-flat" onclick="UserProfile.displayUserDetailEditBtn()"> Cancel </button>
+				              		<button type="submit" class="btn btn-primary btn-flat"> Update </button>
+				            	</div>
+			          		</div>
+						</div>
+					</form>
+
+					<div class="col-lg-12">
+						<label class="control-label"> Your Shop Location </label>
+					</div>
+					<div class="col-lg-12">
+						<input id="pac-input" class="controls hiddden" type="text" placeholder="Search Box"/>
+						<div id="map"></div>
+					</div>
+
+				</div>
+			</section>	
+		</div>
+	</div>
+ 	
+	<div th:include="footer"></div>
+	<div th:include="base-js"></div>
+	<script type="text/javascript" src="scripts/services/u-profile.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwelkrFN__LksGXcg-Sy_kWecvrEpFzvU&amp;libraries=places&amp;callback=initMap" defer="defer" async="async"></script>
+	
+</body>
+</html>

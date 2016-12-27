@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.deals.enums.PlanType;
 import com.deals.model.*;
 import com.deals.service.PublicUserPlanService;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,9 +150,10 @@ public class BaseController {
 			PublicUserPlan userPlan = publicUserPlanService.findByUserId(userId);
 			if (userPlan == null)
 				return App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, "User plan not found", qrRes);
-			if(userPlan.getQrCode()!=null && userPlan.getEndDate().getTime() > new Date().getTime()){
+			JSONObject rule = new JSONObject(plan.getRules());
+			boolean checkValidity = rule.getBoolean("check_validity");
+			if(userPlan.getQrCode()!=null && (checkValidity ? userPlan.getEndDate().getTime() > new Date().getTime() : true )){
 				qrRes.setQr(userPlan.getQrCode());
-				System.out.println("UserPlan :::: "+userPlan);
 				PublicPlanResponse planRes = new PublicPlanResponse();
 				planRes.setId(userPlan.getId());
 				planRes.setAmount(userPlan.getAmount());

@@ -36,7 +36,7 @@ public class LoginService {
 			User existUser = userRepository.findByMobileAndPassword(user.getMobile(), user.getPassword());
 			log.info("User :::: "+user);
 			System.out.println("user ::: "+user);
-			if(existUser!=null && user.getUserType().equals(existUser.getUserType())){
+			if(existUser!=null){
 				if(!existUser.getAuthType().equals(AuthType.OK)){
 					status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_USER_NOT_AUTH, null);
 				}else{

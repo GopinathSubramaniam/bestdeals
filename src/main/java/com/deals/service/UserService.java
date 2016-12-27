@@ -325,6 +325,9 @@ public class UserService {
 		return userRepository.findByMobile(mobile);
 	}
 
+	public List<User> findByCreatedBy(String createdBy) {
+		return userRepository.findByCreatedBy(createdBy);
+	}
 	public List<User> findByUserType(UserType userType) {
 		return userRepository.findByUserType(userType);
 	}

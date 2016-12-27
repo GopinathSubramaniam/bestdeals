@@ -247,7 +247,9 @@ var App = (function(){
 	        }, function (results, status) {
 	            if (status == google.maps.GeocoderStatus.OK) {
 	                callback(results[0]);
-	            }
+	            } else {
+                    callback(undefined);
+				}
 	        });
 	    }
 	};
@@ -284,13 +286,27 @@ var App = (function(){
 			$('#inputVillage').html(dropdownHtml);
 		});
 	};
-	
+    /*$(document).ready(function(){
+        $(".sidebar-toggle").click(function(){
+            $("body").toggleClass("sidebar-collapse");
+        });
+    });*/
+    //$(window).resize(function() {
+        if ($(window).width() < 960) {
+            $(".sidebar-toggle").click(function(){
+                $("body").toggleClass("sidebar-open");
+            });
+        } else {
+            $(".sidebar-toggle").click(function(){
+                $("body").toggleClass("sidebar-collapse");
+            });
+        }
+    //});
 	// START
 	var userName = sessionStorage.getItem('username');
 	if(userName) $('#username').html(sessionStorage.getItem('username'));
 
 	$('.sidebar-menu li').click(function(ev){
-		console.log('>>>> Side bar clicked >>>');
 		var elems = $('.sidebar-menu li');
 		$.each(elems, function(i, elem){
 			elem.className = '';

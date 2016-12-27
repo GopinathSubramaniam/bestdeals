@@ -18,6 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	User findByMobileOrEmail(String mobile, String email);
 	List<User> findAllByUserType(UserType userType, Pageable pageable);
 	List<User> findByUserType(UserType userType);
+	List<User> findByCreatedBy(String createdBy);
 
 	User findByPlanId(Long id);
 }

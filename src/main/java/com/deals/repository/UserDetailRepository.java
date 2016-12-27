@@ -19,7 +19,8 @@ public interface UserDetailRepository extends JpaRepository<UserDetail, Long>{
 
 	List<UserDetail> findAllByUserId(Long id);
 	List<UserDetail> findByUserUserType(UserType userType);
-	UserDetail findByUserId(Long id); 
+	List<UserDetail> findByUserCreatedBy(String createdBy);
+	UserDetail findByUserId(Long id);
 	
 	UserDetail findByPlaceNameLikeAndVillageNameLike(String placeName, String cityName);
 	

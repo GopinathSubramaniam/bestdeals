@@ -23,11 +23,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @Entity
-public class PublicUserPlan {
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
+public class PublicUserPlan extends BaseEntity {
 	
 	@Enumerated(EnumType.STRING)
 	private PlanType planType;
@@ -36,7 +32,7 @@ public class PublicUserPlan {
 	
 	@Column(columnDefinition="Decimal(10,2) default '0.00'")
 	private Double amount = 0.00;
-	private Integer validityInMonths = 6;
+	private Integer validityInMonths = 0;
 	
 	@Temporal(TemporalType.DATE)
 	private Date startDate;

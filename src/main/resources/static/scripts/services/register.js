@@ -129,7 +129,7 @@ var Register = (function(){
 			$('#registerMerchantForm').removeClass('hidden');
 			$('#registerFranchiseForm').addClass('hidden');
 			$('#registerMerchantForm #userType').val('MERCHANT');
-		}else{
+		}else if(type == 'FRANCHISE'){
 			$('#registerFranchiseForm').removeClass('hidden');
 			$('#registerMerchantForm').addClass('hidden');
 			$('#registerFranchiseForm #userType').val('FRANCHISE');

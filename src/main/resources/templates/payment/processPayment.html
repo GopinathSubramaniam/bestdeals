@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="base-css">
+</head>
+<body class="hold-transition skin-blue sidebar-mini" onload="document.forms.payuForm.submit();">
+<div th:include="header"></div>
+
+<div class="content-wrapper">
+    <div class="row">
+        <section class="content">
+            <div class="row">
+                <div class="col-lg-3 col-xs-6" th:text="${message}">
+
+                </div>
+            </div>
+            <div class="row">
+                <h2 class="title">Payment Confirmation In Progress</h2>
+                <form action="${actionPUM}" method="post" name="payuForm" style="display:none;">
+                    <input type="hidden" name="amount" value="${amount}" />
+                    <input type="hidden" name="key" value="${merchant_key}" />
+                    <input type="hidden" name="hash" value="${hash}"/>
+                    <input type="hidden" name="txnid" value="${txnid}" />
+                    <input type="hidden" name="udf2" value="${txnid}" />
+                    <input type="hidden" name="service_provider" value="${payu_paisa}" />
+
+                    <input name="firstname" id="firstname" value="${firstname}" />
+                    <input name="email" id="email" value="${email}" />
+                    <input name="phone" value="${phone}" />
+                    <input name="productinfo" value="${productinfo}" size="64" />
+                    <input name="surl" value="${surl}" size="64" />
+                    <input name="furl" value="${furl}" size="64" />
+                    <input name="udf1" value="${udf1}" />
+                    <input name="udf3" value="${udf3}" />
+                    <input name="udf4" value="${udf4}" />
+                </form>
+                <p>Please wait....</p>
+            </div>
+        </section>
+    </div>
+</div>
+<div th:include="footer"></div>
+<!--<div th:include="base-js"></div>-->
+<!--<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        //$('#tabs').tab();
+        //console.log('tabs initiated');
+        $("#buy_plan_frm").submit(function(e){
+
+            var plans = $('input[name="plan"]:checked', $(this));
+            console.log(plans);
+            if(plans.length <= 0){
+                e.preventDefault();
+                return false;
+            }
+        });
+    });
+</script>-->
+</body>
+</html>

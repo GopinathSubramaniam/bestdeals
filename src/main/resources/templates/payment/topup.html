@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="base-css">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div th:include="header"></div>
+<div th:include="left-side"></div>
+<div class="content-wrapper">
+    <div class="row">
+
+        <div class="col-lg-12">
+            <div class="col-lg-6 col-xs-6  alert-warning" id="msgDiv" th:text="${message}"></div>
+        </div>
+        <div class="col-lg-12">
+            <div class="col-lg-6">
+                <form action="initpayment" method="post">
+                <div class="input-group">
+                    <input type="hidden" name="type" id="type" value="BUY_TOPUP" />
+                    <input type="text" name="amount" id="topupAmount" class="form-control" placeholder="Topup Amount" />
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit" >Topup!</button>
+                    </span>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="footer"></div>
+<div th:include="base-js"></div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(function(){
+        $('#topupBtn').click(function(){
+            var amount = parseFloat(('#topupAmount').val());
+            if (amount  != NaN && amount > 0) {
+                window.location='topup';
+            } else {
+                $('#msgDiv').html('Not a valid amount').fadeOut(15000);
+            }
+        });
+    });
+    /*]]>*/
+</script>
+</body>
+</html>

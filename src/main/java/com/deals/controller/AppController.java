@@ -123,6 +123,7 @@ public class AppController {
 						model.addAttribute("publicUsers", userService.findAllPublic(pageable));
 						model.addAttribute("plans", planService.findAll());
 						model.addAttribute("message", "Welcome to BestDeals franchise!!!");
+						model.addAttribute("myPlan", publicUserPlanservice.findByUserId(user.getId()));
 						page = "franchise/home";
 						break;
 					case MERCHANT:
@@ -130,6 +131,7 @@ public class AppController {
 						page = "u-greetings";
 						break;
 					case SALES_MAN:
+						model.addAttribute("publicUsers", userService.findByCreatedBy(user.getMobile()));
 						model.addAttribute("message", "Welcome to BestDeals salesman!!!");
 						page = "salesman/home";
 						break;
@@ -230,6 +232,8 @@ public class AppController {
 		model.addAttribute("states", states);
 		List<Category> categories = (List<Category>)categoryService.findAllCategory().getData();
 		model.addAttribute("categories", categories);
+		// fix for null deals in below conditions
+		model.addAttribute("deals", Collections.emptyList());
 
 		String isError = req.getParameter("error");
 		if(isError != null && isError.equals("0")){
@@ -254,8 +258,6 @@ public class AppController {
 	public String updatePlan(HttpServletRequest req, Model model){
 		Long userId = (Long) getSessionVal("userId");
 		Long planId = Long.parseLong(req.getParameter("pid"));
-		log.info("UserId = "+userId);
-		log.info("PlanId = "+planId);
 		planService.assignPlanToUser(userId, planId);
 		return "redirect:userplan";
 	}
@@ -486,8 +488,8 @@ public class AppController {
 						   @RequestParam(defaultValue = "0", name = "page", required = false) int page,
 						   @RequestParam(defaultValue = "20", name = "size", required = false) int size) {
 		if (!UserType.ADMIN.name().equals(getSessionVal("usertype"))) {
-			model.addAttribute("message", "Not authorized admin pages.");
-			return "greetings";
+			model.addAttribute("message", "Not authorized to show admin pages.");
+			return "redirect:/";
 		}
 		model.addAttribute("userName", getSessionVal("username"));
 		model.addAttribute("userId", getSessionVal("userId"));
@@ -517,9 +519,6 @@ public class AppController {
 			model.addAttribute("villages", villages);
 		}
 
-		List<String> userTypes = App.getUserTypes();
-		Pageable pageable = new PageRequest(page, size);
-
 		List<User> users = null;
 		List<UserDetail> userDetails = null;
 		if (userType == UserType.MERCHANT) {
@@ -534,6 +533,10 @@ public class AppController {
 //			users = userService.findAllPublic(pageable);
 //			users = userService.findByUserType(UserType.PUBLIC);
 			userDetails = userDetailService.findByUserUserType(UserType.PUBLIC);
+		} else if (userType == UserType.SALES_MAN) {
+//			users = userService.findAllPublic(pageable);
+//			users = userService.findByUserType(UserType.PUBLIC);
+			userDetails = userDetailService.findByUserUserType(UserType.SALES_MAN);
 		}
 //		if (users == null || users.size() == 0){
 		if (userDetails == null || userDetails.size() == 0){
@@ -546,14 +549,77 @@ public class AppController {
 		if (page > 0)
 			model.addAttribute("prev", page - 1);
 
+		model.addAttribute("currentUserType", userType.name());
 		model.addAttribute("plans", planService.findAll().getData());
 		model.addAttribute("title", userType +" Users List");
 		model.addAttribute("popupTitle", "Create New User");
 		model.addAttribute("tab", userType);
 		model.addAttribute("addNewBtnText", "Add New User");
-		model.addAttribute("userTypes", userTypes);
+		model.addAttribute("userTypes", App.getUserTypes());
 
 		return "userList";
+	}
+
+	@RequestMapping(value="/sales")
+	public String userSalesPage(//@PathVariable Long userId,
+						   Model model,
+						   @RequestParam Long userId,
+						   @RequestParam(defaultValue = "0", name = "page", required = false) int page,
+						   @RequestParam(defaultValue = "20", name = "size", required = false) int size) {
+		if (!UserType.ADMIN.name().equals(getSessionVal("usertype"))) {
+			model.addAttribute("message", "Not authorized to show admin pages.");
+			return "redirect:/";
+		}
+		User salesman = userService.findOne(userId);
+		String username = (String) getSessionVal("username");
+		model.addAttribute("userName", username);
+		model.addAttribute("userId", getSessionVal("userId"));
+		model.addAttribute("userType", getSessionVal("usertype"));
+		model.addAttribute("currentUserType", salesman.getUserType().name());
+
+		List<City> cities = new ArrayList<City>();
+		List<Taluka> talukas = new ArrayList<Taluka>();
+		List<Village> villages = new ArrayList<Village>();
+		List<State> states = stateRepository.findAll();
+
+		if (states.size() > 0) {
+			model.addAttribute("states", states);
+			cities = cityRepository.findAllByStateId(states.get(0).getId());
+		}
+		if (cities.size() > 0) {
+			model.addAttribute("cities", cities);
+			talukas = talukaRepository.findAllByCityId(cities.get(0).getId());
+		}
+		if (talukas.size() > 0) {
+			model.addAttribute("talukas", talukas);
+			villages = villageRepository.findAllByTalukaId(talukas.get(0).getId());
+		}
+
+		if (villages.size() > 0) {
+			model.addAttribute("villages", villages);
+		}
+
+		List<UserDetail> userDetails = null;
+		userDetails = userDetailService.findByUserCreatedBy(salesman.getMobile());
+
+//		if (users == null || users.size() == 0){
+		if (userDetails == null || userDetails.size() == 0){
+			model.addAttribute("message", "No users found");
+		} else {
+			model.addAttribute("userDetails", userDetails);
+			model.addAttribute("next", page + 1);
+		}
+		if (page > 0)
+			model.addAttribute("prev", page - 1);
+
+		model.addAttribute("plans", planService.findAll().getData());
+		model.addAttribute("title", " Users brought by " + salesman.getName() );
+		model.addAttribute("popupTitle", "Create New User");
+		model.addAttribute("tab", username);
+		model.addAttribute("addNewBtnText", "Add New User");
+		model.addAttribute("userTypes", App.getUserTypes());
+
+		return "salesUserList";
 	}
 
 	@RequestMapping(value="/plan")
@@ -616,7 +682,6 @@ public class AppController {
 
 	@RequestMapping(value="/createDeal")
 	public String createDeal(HttpServletRequest req, HttpServletResponse res, Model model){
-
 		String page = "redirect:advertisement";
 		int dealCount = 0;
 		int maxAdvCount = 0;

@@ -10,22 +10,13 @@
 	<div class="container-fluid content-wrapper">
 		<div class="form-group">
 			<h3 th:text="${title}" ></h3>
-			<div class="col-sm-6">
-				<ul class="pagination pagination-sm">
-					<li><a th:if="${prev != null}" th:href="'user?userType='+ ${pageUserType} +'&amp;page='+${prev}">Previous</a></li>
-					<li><a th:if="${next != null}" th:href="'user?userType='+ ${pageUserType} +'&amp;page='+${next}">Next</a></li>
-				</ul>
-			</div>
-			<div class="col-sm-6">
-				 <button class="btn btn-primary btn-flat pull-right" data-toggle="modal" data-target="#userRegisterationModal"> <i class="fa fa-plus-circle"></i> Create New </button>
-			</div>
 		</div>
 		<h5 th:text="${message}" ></h5>
 		<div class="tab-pane active" id="tab_1" th:if="${userDetails} != null">
 			<table id="userListTable" class="table table-striped">
 				<thead>
 					<tr>
-						<th th:if="${userType == 'MERCHANT'}">Shop Name</th>
+						<th>Shop Name</th>
 						<th>Owner</th>
 						<th>Mobile</th>
 						<th>Email</th>
@@ -35,18 +26,12 @@
 				</thead>
 				<tbody>
 					<tr th:each="userDetail : ${userDetails}">
-						<td th:text="${userDetail.shopName}" th:if="${userType == 'MERCHANT'}"></td>
+						<td th:text="${userDetail.shopName}"></td>
 						<td th:text="${userDetail.user.name}"></td>
 						<td th:text="${userDetail.user.mobile}"></td>
 						<td th:text="${userDetail.user.email}"></td>
 						<td th:text="${userDetail.user.plan} != null ? (${userDetail.user.plan.name}+' - '+${userDetail.user.plan.planType}) : ''"></td>
 						<td align="right">
-							<a title="View Sales" class="btn btn-xs btn-info btn-flat"
-							   th:if="${currentUserType == 'SALES_MAN'}"
-									th:href="'./sales?userId='+${userDetail.user.id}">
-								<i class="fa fa-fw fa-trash"></i> View Sales
-							</a>
-
 							<button th:id="${userDetail.user.userType}" title="Edit"
 								class="btn btn-xs btn-primary btn-flat" data-toggle="modal"
 								data-target="#editUserModal"

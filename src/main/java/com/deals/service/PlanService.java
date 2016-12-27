@@ -1,8 +1,13 @@
 package com.deals.service;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import com.deals.enums.PlanType;
+import com.deals.model.PublicUserPlan;
+import com.deals.vo.PublicPlanResponse;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +30,7 @@ public class PlanService {
 	
 	@Autowired
 	private UserRepository userRepository;
-	
+	@Autowired PublicUserPlanService publicUserPlanService;
 	
 	public Status create(Plan plan){
 		Status status = null;
@@ -75,9 +80,13 @@ public class PlanService {
 	public Status assignPlanToUser(Long userId, Long planId){
 		Plan plan = planRepository.findOne(planId);
 		User user = userRepository.findOne(userId);
-		user.setPlan(plan);
-		user = userRepository.saveAndFlush(user);
-		Status status = App.getResponse(App.CODE_OK, App.STATUS_UPDATE, App.MSG_UPDATE, user);
+		Status status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_FAIL, user);
+		if (user != null) {
+			user.setPlan(plan);
+			user = userRepository.saveAndFlush(user);
+			publicUserPlanService.updatePlanForUser(user, plan);
+			status = App.getResponse(App.CODE_OK, App.STATUS_UPDATE, App.MSG_UPDATE, user);
+		}
 		return status;
 	}
 
@@ -89,4 +98,5 @@ public class PlanService {
 	public Plan getByPlanType(PlanType planType){
 		return planRepository.findByPlanType( planType);
 	}
+
 }

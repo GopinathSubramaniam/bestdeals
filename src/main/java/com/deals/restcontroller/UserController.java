@@ -25,6 +25,8 @@ import com.deals.service.UserService;
 import com.deals.util.Status;
 import com.deals.vo.RegisterVo;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/rest/user")
 public class UserController {
@@ -56,7 +58,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/register", method=RequestMethod.POST, produces={"application/json"})
-	public Status register(@RequestBody RegisterVo registerVo){
+	public Status register(@RequestBody RegisterVo registerVo, HttpServletRequest request){
 
 		Status status = new Status();
 		User user = userService.findUserByMobile(registerVo.getMobile());
@@ -70,13 +72,15 @@ public class UserController {
 			user.setUserType(registerVo.getUserType());
 			user.setPlan(planService.getByPlanType(PlanType.FREE));
 
+			Object userId = request.getSession().getAttribute("userId");
+			if ( userId != null ) {
+				user.setCreatedBy(userService.findOne((Long)userId).getMobile());
+			}
 			status = userService.createOnlyUser(user);
 			user = (User)status.getData();
 			
-			if(user.getUserType().equals(UserType.PUBLIC)){
-				log.info("Public User::: Create QR code and plan");
-				userPlanService.create(user);
-			}
+			userPlanService.create(user);
+
 			UserDetail userDetail = new UserDetail();
 			if(status.getStatusCode() != "500" && registerVo.getShopName() != null && registerVo.getAddress1() != null){
 				userDetail.setAddress1(registerVo.getAddress1());
@@ -89,8 +93,8 @@ public class UserController {
 			userDetail.setUser(user);
 			userDetail.setLikes(new Long(0));
 			userDetail.setViews(new Long(0));
-			userDetail.setLatitude(registerVo.getLatitude());
-			userDetail.setLongitude(registerVo.getLongitude());
+			userDetail.setLatitude(registerVo.getLatitude() == 0.0d ? 18.5204303d : registerVo.getLatitude());
+			userDetail.setLongitude(registerVo.getLongitude() == 0.0d ? 73.8567437d : registerVo.getLatitude());
 
 			userDetailService.create(userDetail);
 		}else{
@@ -198,5 +202,40 @@ public class UserController {
 	public Status updatePublicPlan(@RequestBody PublicUserPlan publicUserPlan){
 		return userPlanService.updatePublicUserPlan(publicUserPlan);
 	}
-	
+
+	@RequestMapping(value="/updateToSimplePlan", method=RequestMethod.GET)
+	public Status updateUserPlanToSimple( @RequestParam String userId, HttpServletRequest request){
+		Object val = request.getSession().getAttribute("userId");
+		if(val != null){
+			long franchiseUserId = Long.parseLong(val.toString());
+			if (userId != null && !userId.isEmpty()){
+				try {
+					PublicUserPlan publicUserPlan = userPlanService.updateUserPlanToSimple(userService.findOne(franchiseUserId), Long.parseLong(userId));
+					return App.getResponse(App.CODE_OK, App.STATUS_UPDATE, App.MSG_UPDATE, publicUserPlan);
+				} catch (Exception e) {
+					e.printStackTrace();
+					return App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, e.getMessage(), null);
+				}
+			}
+		}
+		return App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_USER_NOT_AUTH, null);
+	}
+
+	@RequestMapping(value="/buyPlan", method=RequestMethod.GET)
+	public Status buyPlan( @RequestParam String userId,@RequestParam String planId, HttpServletRequest request){
+		Object val = request.getSession().getAttribute("userId");
+		if(val != null){
+			long merchantId = Long.parseLong(val.toString());
+			if (userId != null && !userId.isEmpty()){
+				try {
+					PublicUserPlan publicUserPlan = userPlanService.updateUserPlanToSimple(userService.findOne(merchantId), Long.parseLong(userId));
+					return App.getResponse(App.CODE_OK, App.STATUS_UPDATE, App.MSG_UPDATE, publicUserPlan);
+				} catch (Exception e) {
+					e.printStackTrace();
+					return App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, e.getMessage(), null);
+				}
+			}
+		}
+		return App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_USER_NOT_AUTH, null);
+	}
 }

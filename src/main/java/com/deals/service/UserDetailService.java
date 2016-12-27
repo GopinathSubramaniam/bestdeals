@@ -92,6 +92,9 @@ public class UserDetailService {
 	public List<UserDetail> findByUserUserType(UserType userType){
 		return  userDetailRepository.findByUserUserType(userType);
 	}
+	public List<UserDetail> findByUserCreatedBy(String createdBy){
+			return  userDetailRepository.findByUserCreatedBy(createdBy);
+		}
 
 	public Status findAllByUserId(Long userId){
 		List<UserDetail> userDetail = userDetailRepository.findAllByUserId(userId);

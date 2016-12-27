@@ -14,44 +14,54 @@
 			          <div class="box-group" id="accordion">
 			            <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
 			            <div class="panel box box-primary" th:each="p : ${plans}">
-			              <div class="box-header with-border">
-			                <h4 class="box-title">
+							<div class="box-header with-border">
+								<h4 class="box-title">
 				                <span th:if="${plan} != null and ${p.id} == ${plan.id}">
-				                  	<input type="radio" name="radio" th:value="${p.id}" th:if="${p.id} == ${plan.id}" th:checked="checked" th:id="${p.id}+'_'+${p.planType}+'_'+RADIO"/>
+				                  	<input type="radio" name="radio" th:value="${p.id}" th:if="${p.id} == ${plan.id}"
+										   th:checked="checked" th:id="${p.id}+'_'+${p.planType}+'_'+RADIO"/>
 				                </span>
-				                <span th:unless="${plan} != null and ${p.id} == ${plan.id}">
+									<span th:unless="${plan} != null and ${p.id} == ${plan.id}">
 				                  	<input type="radio" name="radio" th:value="${p.id}"/>
 				                </span>
-				                
-			                 	<a data-toggle="collapse" data-parent="#accordion" th:href="'#'+${p.id}+'_'+${p.planType}" aria-expanded="${p.id}">
-			                 		<span th:text="${p.planType}+'-'+${p.name}"></span>
-		                 			<span th:if="(${plan} != null) and (${plan.id} == ${p.id})">( Current Plan )</span>
-			                 	</a>
-			                </h4>
-			              </div>
-			              <div th:id="${p.id}+'_'+${p.planType}" class="panel-collapse collapse">
-			                <div class="box-body">
-			                	<table>
-			                		<tr>
-			                			<td> Name </td><td th:text="${p.name}"></td>
-			                		</tr>
-			                		<tr>
-			                			<td> Type </td><td th:text="${p.planType}"></td>
-			                		</tr>
-									<tr>
-			                			<td> Amount </td><td th:text="${'₹ '+p.amount}"></td>
-			                		</tr>
-			                		<tr>
-			                			<td> Description </td><td th:text="${p.description}"></td>
-			                		</tr>
-			                	</table>
-			                </div>
-			              </div>
-			            </div>
+
+									<a data-toggle="collapse" data-parent="#accordion"
+									   th:href="'#'+${p.id}+'_'+${p.planType}" aria-expanded="${p.id}">
+										<span th:text="${p.planType}+'-'+${p.name}"></span>
+										<span th:if="(${plan} != null) and (${plan.id} == ${p.id})">( Current Plan )</span>
+									</a>
+								</h4>
+							</div>
+							<div th:id="${p.id}+'_'+${p.planType}" class="panel-collapse collapse">
+								<div class="box-body">
+									<table>
+										<tr>
+											<td> Name</td>
+											<td th:text="${p.name}"></td>
+										</tr>
+										<tr>
+											<td> Type</td>
+											<td th:text="${p.planType}"></td>
+										</tr>
+										<tr>
+											<td> Amount</td>
+											<td th:text="${'₹ '+p.amount}"></td>
+										</tr>
+										<tr>
+											<td> Description</td>
+											<td th:text="${p.description}"></td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</div>
 			          </div>
-						<a class="btn btn-primary pull-right" id="changePlan" href="updatePlan">
-							<span class="glyphicon glyphicon-cash form-control-feedback"></span>Buy Plan
-						</a>
+						<form action="initpayment" method="post">
+							<input type="hidden" name="type" id="type" value="BUY_PLAN" />
+							<input type="hidden" name="planId" id="planIdInput" th:value="${plan.id}"/>
+							<button class="btn btn-primary pull-right" type="submit">
+								<span class="glyphicon glyphicon-cash form-control-feedback"></span>Buy Plan
+							</button>
+						</form>
 			        </div><!-- /.box-body -->
 				</div>
 			</section>

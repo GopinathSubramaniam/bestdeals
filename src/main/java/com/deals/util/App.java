@@ -46,10 +46,14 @@ public class App {
 	
 	public static String MSG_USER_NOT_AUTH = "User not authenticated";
 	public static String MSG_USER_NOT_REGISTERED = "Mobile number is not registered";
+	public static String MSG_USER_NOT_FOUND = "User is not registered";
 	public static String MSG_USER_INCORRECT_PASSWORD = "Invalid password";
 	public static String MSG_USER_EXISTS = "User already exists";
 	public static String MSG_USER_INVALID_EMAIL = "Invalid Email";
-	
+
+	public static String MSG_INSUFFICIENT_BAL = "Insufficient balance";
+	public static String MSG_NO_BALANCE_DETAILS = "No balance details";
+
 	public static String MSG_USER_ALREADY_VIEWED = "You have already viewd this user";
 	
 	public static String COUNTRY_CODE_IN = "91";
