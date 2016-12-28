@@ -1,8 +1,7 @@
 package com.deals.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.deals.model.OTP;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OTPRepository extends JpaRepository<OTP, Long>{
 	

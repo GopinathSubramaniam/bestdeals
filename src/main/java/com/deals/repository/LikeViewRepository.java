@@ -1,10 +1,9 @@
 package com.deals.repository;
 
-import javax.transaction.Transactional;
-
+import com.deals.model.LikeView;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.deals.model.LikeView;
+import javax.transaction.Transactional;
 
 @Transactional
 public interface LikeViewRepository extends JpaRepository<LikeView, Long>{

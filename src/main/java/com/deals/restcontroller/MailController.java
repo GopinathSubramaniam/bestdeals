@@ -1,18 +1,5 @@
 package com.deals.restcontroller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.deals.enums.EmailType;
-import com.deals.model.EMail;
-import com.deals.service.MailService;
-import com.deals.util.App;
-import com.deals.util.Status;
-
 //@RestController
 //@RequestMapping("/rest/mail")
 public class MailController {

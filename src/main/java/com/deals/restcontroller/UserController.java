@@ -1,10 +1,20 @@
 package com.deals.restcontroller;
 
-import java.util.List;
-
+import com.deals.enums.AuthType;
 import com.deals.enums.PlanType;
+import com.deals.enums.UserType;
+import com.deals.model.PublicUserPlan;
+import com.deals.model.User;
+import com.deals.model.UserDetail;
+import com.deals.model.Village;
+import com.deals.repository.VillageRepository;
 import com.deals.service.PlanService;
+import com.deals.service.PublicUserPlanService;
+import com.deals.service.UserDetailService;
+import com.deals.service.UserService;
 import com.deals.util.App;
+import com.deals.util.Status;
+import com.deals.vo.RegisterVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,20 +22,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import com.deals.enums.AuthType;
-import com.deals.enums.UserType;
-import com.deals.model.PublicUserPlan;
-import com.deals.model.User;
-import com.deals.model.UserDetail;
-import com.deals.model.Village;
-import com.deals.repository.VillageRepository;
-import com.deals.service.PublicUserPlanService;
-import com.deals.service.UserDetailService;
-import com.deals.service.UserService;
-import com.deals.util.Status;
-import com.deals.vo.RegisterVo;
-
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping("/rest/user")

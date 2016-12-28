@@ -1,12 +1,11 @@
 package com.deals.vo;
 
-import java.util.Date;
-
 import com.deals.enums.PlanType;
-
 import groovy.transform.ToString;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Date;
 
 @ToString
 @Getter

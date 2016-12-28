@@ -1,18 +1,10 @@
 package com.deals.service;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
-import com.deals.model.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
 import com.deals.enums.PlanType;
+import com.deals.model.Deal;
+import com.deals.model.SubCategory;
+import com.deals.model.User;
+import com.deals.model.UserDetail;
 import com.deals.repository.CategoryRepository;
 import com.deals.repository.DealRepository;
 import com.deals.repository.SubCategoryRepository;
@@ -21,11 +13,20 @@ import com.deals.util.Status;
 import com.deals.vo.DealVO;
 import com.deals.vo.ImageVo;
 import com.deals.vo.UserVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 @Service
 public class DealService {

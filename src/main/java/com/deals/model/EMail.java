@@ -1,7 +1,6 @@
 package com.deals.model;
 
 import com.deals.enums.EmailType;
-
 import groovy.transform.ToString;
 import lombok.Getter;
 import lombok.Setter;

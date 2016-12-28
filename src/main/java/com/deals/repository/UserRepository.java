@@ -1,12 +1,11 @@
 package com.deals.repository;
 
-import java.util.List;
-
+import com.deals.enums.UserType;
+import com.deals.model.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.deals.enums.UserType;
-import com.deals.model.User;
+import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long>{
 	

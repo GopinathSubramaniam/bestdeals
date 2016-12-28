@@ -1,13 +1,5 @@
 package com.deals.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.deals.model.Category;
 import com.deals.model.SubCategory;
 import com.deals.repository.CategoryRepository;
@@ -16,6 +8,13 @@ import com.deals.repository.SubCategoryRepository;
 import com.deals.util.App;
 import com.deals.util.Status;
 import com.deals.vo.CategoryVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CategoryService {

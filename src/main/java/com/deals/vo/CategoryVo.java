@@ -1,6 +1,5 @@
 package com.deals.vo;
 
-import com.deals.model.Category;
 import groovy.transform.ToString;
 import lombok.Getter;
 import lombok.Setter;

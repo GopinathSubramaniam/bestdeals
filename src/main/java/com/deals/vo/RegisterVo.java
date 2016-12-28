@@ -1,7 +1,6 @@
 package com.deals.vo;
 
 import com.deals.enums.UserType;
-
 import groovy.transform.ToString;
 import lombok.Getter;
 import lombok.Setter;

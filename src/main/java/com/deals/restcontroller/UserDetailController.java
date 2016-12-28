@@ -1,17 +1,12 @@
 package com.deals.restcontroller;
 
-import com.deals.service.UserService;
-import com.deals.util.App;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.deals.model.UserDetail;
 import com.deals.service.UserDetailService;
+import com.deals.service.UserService;
+import com.deals.util.App;
 import com.deals.util.Status;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/rest/userDetail")

@@ -1,10 +1,10 @@
 package com.deals.vo;
 
-import java.util.List;
-
 import groovy.transform.ToString;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @ToString
 @Getter

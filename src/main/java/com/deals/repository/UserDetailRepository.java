@@ -1,18 +1,15 @@
 package com.deals.repository;
 
-import java.math.BigInteger;
-import java.util.List;
-
-import javax.transaction.Transactional;
-
 import com.deals.enums.UserType;
 import com.deals.model.User;
-import org.springframework.data.domain.Pageable;
+import com.deals.model.UserDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
-import com.deals.model.UserDetail;
 import org.springframework.data.repository.query.Param;
+
+import javax.transaction.Transactional;
+import java.math.BigInteger;
+import java.util.List;
 
 @Transactional
 public interface UserDetailRepository extends JpaRepository<UserDetail, Long>{

@@ -1,9 +1,8 @@
 package com.deals.otp;
 
+import com.deals.util.App;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
-
-import com.deals.util.App;
 
 @Service
 public class SendOTPClient {

@@ -1,15 +1,11 @@
 package com.deals.controller;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
-
 import com.deals.enums.*;
+import com.deals.model.*;
+import com.deals.repository.*;
+import com.deals.service.*;
+import com.deals.util.App;
+import com.deals.vo.UserVO;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,43 +13,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import static org.springframework.data.domain.Sort.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.deals.enums.UserType.*;
-import com.deals.model.Category;
-import com.deals.model.City;
-import com.deals.model.Deal;
-import com.deals.model.Plan;
-import com.deals.model.State;
-import com.deals.model.SubCategory;
-import com.deals.model.Taluka;
-import com.deals.model.User;
-import com.deals.model.UserDetail;
-import com.deals.model.Village;
-import com.deals.repository.CategoryRepository;
-import com.deals.repository.CityRepository;
-import com.deals.repository.DealRepository;
-import com.deals.repository.StateRepository;
-import com.deals.repository.SubCategoryRepository;
-import com.deals.repository.TalukaRepository;
-import com.deals.repository.UserRepository;
-import com.deals.repository.VillageRepository;
-import com.deals.service.AppService;
-import com.deals.service.CategoryService;
-import com.deals.service.DealService;
-import com.deals.service.LoginService;
-import com.deals.service.PlanService;
-import com.deals.service.PublicUserPlanService;
-import com.deals.service.SalesmanService;
-import com.deals.service.SubCategoryService;
-import com.deals.service.UserDetailService;
-import com.deals.service.UserService;
-import com.deals.util.App;
-import com.deals.vo.RegisterVo;
-import com.deals.vo.UserVO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static org.springframework.data.domain.Sort.Direction;
+import static org.springframework.data.domain.Sort.Order;
 
 @Controller
 public class AppController {
@@ -70,8 +45,6 @@ public class AppController {
 	private UserRepository userRepository;
 	@Autowired
 	private UserDetailService userDetailService;
-	@Autowired
-	private SalesmanService salesmanService;
 	@Autowired
 	private PlanService planService;
 	@Autowired
@@ -234,6 +207,7 @@ public class AppController {
 		model.addAttribute("categories", categories);
 		// fix for null deals in below conditions
 		model.addAttribute("deals", Collections.emptyList());
+		model.addAttribute("maxAdvCount", 0);
 
 		String isError = req.getParameter("error");
 		if(isError != null && isError.equals("0")){
@@ -397,33 +371,7 @@ public class AppController {
 	 *
 	 */
 
-	@RequestMapping(value="/salesman")
-	public String salespeople(Model model){
-
-		model.addAttribute("userName", getSessionVal("username"));
-		model.addAttribute("userId", getSessionVal("userId"));
-		model.addAttribute("userType", getSessionVal("usertype"));
-
-		model.addAttribute("title", "Sales List");
-		model.addAttribute("popupTitle", "Creaet New SalesMan");
-		model.addAttribute("salesmans", salesmanService.findAllSalesMan().getData());
-		model.addAttribute("salesManagers", salesmanService.findAllSalesManager().getData());
-
-		model.addAttribute("tab", Page.SALE.toString());
-		return "salesman";
-	}
-
-	@RequestMapping(value="/salesManager")
-	public String salesManager(Model model){
-
-		model.addAttribute("title", "SalesManager List");
-		model.addAttribute("popupTitle", "Creaet New SalesManager");
-		model.addAttribute("salesManagers", salesmanService.findAllSalesManager().getData());
-		model.addAttribute("tab", Page.SALES_MANAGER.toString());
-		return "salesmanager";
-	}
 /*
-
 	@RequestMapping(value="/user")
 	public String user(Model model){
 		if (getSessionVal("usertype") != UserType.ADMIN) {

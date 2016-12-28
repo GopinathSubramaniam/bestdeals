@@ -1,18 +1,16 @@
 package com.deals.util;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import com.deals.model.*;
-
 import com.deals.enums.EmailType;
+import com.deals.model.*;
 import com.deals.vo.DealVO;
 import com.deals.vo.ImageVo;
 import com.deals.vo.UserVO;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 //import com.way2sms.SMS;
 public class App {

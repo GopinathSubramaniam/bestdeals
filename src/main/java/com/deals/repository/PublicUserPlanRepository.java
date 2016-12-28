@@ -1,11 +1,10 @@
 package com.deals.repository;
 
-import javax.transaction.Transactional;
-
+import com.deals.model.PublicUserPlan;
 import com.deals.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.deals.model.PublicUserPlan;
+import javax.transaction.Transactional;
 
 @Transactional
 public interface PublicUserPlanRepository extends JpaRepository<PublicUserPlan, Long>{

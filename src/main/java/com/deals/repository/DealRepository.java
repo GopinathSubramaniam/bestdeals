@@ -1,21 +1,19 @@
 package com.deals.repository;
 
-import java.util.Collection;
-import java.util.List;
-
-import javax.transaction.Transactional;
-
+import com.deals.enums.PlanType;
+import com.deals.enums.Priority;
 import com.deals.model.City;
+import com.deals.model.Deal;
 import com.deals.model.SubCategory;
 import com.deals.model.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.deals.enums.PlanType;
-import com.deals.enums.Priority;
-import com.deals.model.Deal;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import javax.transaction.Transactional;
+import java.util.Collection;
+import java.util.List;
 
 @Transactional
 public interface DealRepository extends JpaRepository<Deal, Long>{

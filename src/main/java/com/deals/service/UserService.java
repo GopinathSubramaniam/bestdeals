@@ -1,10 +1,14 @@
 package com.deals.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
+import com.deals.enums.AuthType;
 import com.deals.enums.PlanType;
+import com.deals.enums.UserType;
+import com.deals.model.*;
+import com.deals.otp.SendOTPClient;
+import com.deals.repository.*;
+import com.deals.util.App;
+import com.deals.util.Status;
+import com.deals.vo.UserVO;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,25 +17,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.deals.enums.AuthType;
-import com.deals.enums.UserType;
-import com.deals.model.Deal;
-import com.deals.model.EMail;
-import com.deals.model.EmailDetail;
-import com.deals.model.LikeView;
-import com.deals.model.SalesManager;
-import com.deals.model.User;
-import com.deals.model.UserDetail;
-import com.deals.otp.SendOTPClient;
-import com.deals.repository.DealRepository;
-import com.deals.repository.LikeViewRepository;
-import com.deals.repository.SalesManagerRepository;
-import com.deals.repository.SalesmanRepository;
-import com.deals.repository.UserDetailRepository;
-import com.deals.repository.UserRepository;
-import com.deals.util.App;
-import com.deals.util.Status;
-import com.deals.vo.UserVO;
+import java.util.Collections;
+import java.util.List;
 
 
 @Service
@@ -53,12 +40,6 @@ public class UserService {
 	
 	@Autowired
 	private SendOTPClient sendOTPClient;
-	
-	@Autowired
-	private SalesManagerRepository salesmanagerRepository;
-	
-	@Autowired
-	private SalesmanRepository salesmanRepository;
 	
 	@Autowired
 	private LikeViewRepository likeViewRepository;
@@ -217,7 +198,7 @@ public class UserService {
 		}
 		return status;
 	}
-	
+
 	public Status delete(Long id){
 		if(id != null && id !=0){
 			User user = userRepository.findOne(id);
@@ -225,11 +206,6 @@ public class UserService {
 			if(user != null){
 				dealRepository.deleteByUserId(user.getId());
 				likeViewRepository.deleteAllByUserId(id);
-				List<SalesManager> salesManagers = salesmanagerRepository.findAllByUserId(user.getId());
-				for (SalesManager salesManager : salesManagers) {
-					salesmanRepository.deleteBySalesManagerId(salesManager.getId());
-					salesmanagerRepository.delete(salesManager.getId());
-				}
 				userPlanService.deleteByUser(user);
 				userDetailRepository.deleteByUser(user);
 				userRepository.delete(user);

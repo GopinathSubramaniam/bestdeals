@@ -1,21 +1,17 @@
 package com.deals.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.deals.enums.AuthType;
 import com.deals.enums.LoginState;
-import com.deals.model.PublicUserPlan;
 import com.deals.model.User;
-import com.deals.model.UserDetail;
 import com.deals.repository.PublicUserPlanRepository;
 import com.deals.repository.UserDetailRepository;
 import com.deals.repository.UserRepository;
 import com.deals.util.App;
 import com.deals.util.Status;
-import com.deals.vo.UserVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class LoginService {

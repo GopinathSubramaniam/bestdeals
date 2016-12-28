@@ -1,17 +1,13 @@
 package com.deals.vo;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.deals.enums.UserType;
 import com.deals.model.Deal;
-
-import com.deals.model.PublicUserPlan;
-import com.deals.model.User;
-import com.deals.model.UserDetail;
 import groovy.transform.ToString;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @ToString
 @Setter

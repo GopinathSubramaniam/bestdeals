@@ -1,10 +1,10 @@
 package com.deals.model;
 
-import javax.persistence.*;
-
 import groovy.transform.ToString;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.persistence.*;
 
 @ToString
 @Getter

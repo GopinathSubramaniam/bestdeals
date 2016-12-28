@@ -1,24 +1,18 @@
 package com.deals.service;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
 import com.deals.enums.PlanType;
-import com.deals.model.PublicUserPlan;
-import com.deals.vo.PublicPlanResponse;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.deals.model.Plan;
 import com.deals.model.User;
 import com.deals.repository.PlanRepository;
 import com.deals.repository.UserRepository;
 import com.deals.util.App;
 import com.deals.util.Status;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PlanService {

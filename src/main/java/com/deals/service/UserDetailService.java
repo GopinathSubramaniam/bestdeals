@@ -1,20 +1,18 @@
 package com.deals.service;
 
-import java.math.BigInteger;
-import java.util.List;
-
 import com.deals.enums.UserType;
 import com.deals.model.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
 import com.deals.model.UserDetail;
 import com.deals.repository.UserDetailRepository;
 import com.deals.util.App;
 import com.deals.util.Status;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.math.BigInteger;
+import java.util.List;
 
 @Service
 public class UserDetailService {

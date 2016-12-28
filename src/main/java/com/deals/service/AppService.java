@@ -1,17 +1,9 @@
 package com.deals.service;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
-
+import com.deals.model.AdminDetail;
+import com.deals.repository.PlanRepository;
+import com.deals.repository.UserRepository;
+import com.deals.util.App;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,12 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.deals.model.AdminDetail;
-import com.deals.repository.PlanRepository;
-import com.deals.repository.SalesManagerRepository;
-import com.deals.repository.SalesmanRepository;
-import com.deals.repository.UserRepository;
-import com.deals.util.App;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AppService {
@@ -35,12 +26,6 @@ public class AppService {
 	
 	@Autowired
 	private UserRepository userRepository;
-	
-	@Autowired
-	private SalesmanRepository salesmanRepository;
-	
-	@Autowired
-	private SalesManagerRepository salesManagerRepository;
 	
 	@Autowired
 	private PlanRepository planRepository;
@@ -125,23 +110,6 @@ public class AppService {
 		adminDetail.setIconName("fa fa-users");
 		adminDetail.setColorName("bg-aqua");
 		adminDetail.setLandingPath("user");
-		adminDetails.add(adminDetail);
-		
-		adminDetail = new AdminDetail();
-		adminDetail.setName("Sales Mans");
-		adminDetail.setCount(salesmanRepository.count());
-		adminDetail.setIconName("fa fa-users");
-		adminDetail.setColorName("bg-green");
-		adminDetail.setLandingPath("salesman");
-		adminDetails.add(adminDetail);
-		
-		
-		adminDetail = new AdminDetail();
-		adminDetail.setName("Sales Managers");
-		adminDetail.setCount(salesManagerRepository.count());
-		adminDetail.setIconName("fa fa-users");
-		adminDetail.setColorName("bg-yellow");
-		adminDetail.setLandingPath("salesManager");
 		adminDetails.add(adminDetail);
 		
 		adminDetail = new AdminDetail();

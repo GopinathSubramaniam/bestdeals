@@ -1,13 +1,12 @@
 package com.deals.restcontroller;
 
+import com.deals.model.Category;
 import com.deals.service.AppService;
+import com.deals.service.CategoryService;
+import com.deals.util.Status;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import com.deals.model.Category;
-import com.deals.service.CategoryService;
-import com.deals.util.Status;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController

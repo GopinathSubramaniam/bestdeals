@@ -1,14 +1,16 @@
 package com.deals.restcontroller;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import com.deals.enums.PlanType;
 import com.deals.model.*;
+import com.deals.repository.*;
 import com.deals.service.PublicUserPlanService;
+import com.deals.util.App;
+import com.deals.util.Secret;
+import com.deals.util.Status;
+import com.deals.vo.BasePlaceModel;
+import com.deals.vo.PlaceNameResponseVo;
+import com.deals.vo.PublicPlanResponse;
+import com.deals.vo.QRCodeResponse;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,21 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.deals.repository.CityRepository;
-import com.deals.repository.CountryRepository;
-import com.deals.repository.PublicUserPlanRepository;
-import com.deals.repository.StateRepository;
-import com.deals.repository.TalukaRepository;
-import com.deals.repository.UserDetailRepository;
-import com.deals.repository.UserRepository;
-import com.deals.repository.VillageRepository;
-import com.deals.util.App;
-import com.deals.util.Secret;
-import com.deals.util.Status;
-import com.deals.vo.BasePlaceModel;
-import com.deals.vo.PlaceNameResponseVo;
-import com.deals.vo.PublicPlanResponse;
-import com.deals.vo.QRCodeResponse;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping(value="/rest/base/")

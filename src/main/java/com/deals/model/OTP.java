@@ -1,11 +1,11 @@
 package com.deals.model;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-
 import groovy.transform.ToString;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 @ToString
 @Setter

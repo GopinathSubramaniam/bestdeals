@@ -1,12 +1,10 @@
 package com.deals.repository;
 
-import java.util.List;
-
-import javax.transaction.Transactional;
-
+import com.deals.model.Taluka;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.deals.model.Taluka;
+import javax.transaction.Transactional;
+import java.util.List;
 
 @Transactional
 public interface TalukaRepository extends JpaRepository<Taluka, Long>{

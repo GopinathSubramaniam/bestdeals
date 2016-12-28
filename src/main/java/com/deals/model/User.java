@@ -1,21 +1,14 @@
 package com.deals.model;
 
-import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-
 import com.deals.enums.AuthType;
 import com.deals.enums.LoginState;
 import com.deals.enums.UserType;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import javax.persistence.*;
+import java.util.UUID;
 
 @ToString
 @Setter
