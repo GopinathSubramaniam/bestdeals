@@ -1,10 +1,13 @@
 package com.deals.controller;
 
+import com.deals.model.Plan;
 import com.deals.model.PublicUserPlan;
 import com.deals.model.User;
+import com.deals.service.PlanService;
 import com.deals.service.PublicUserPlanService;
 import com.deals.service.UserService;
 import com.deals.service.payment.PaymentService;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -27,6 +31,8 @@ public class PaymentController {
     @Autowired private UserService userService;
     @Autowired private PaymentService paymentService;
     @Autowired private PublicUserPlanService publicUserPlanservice;
+    @Autowired
+    PlanService planService;
 
     @RequestMapping(value="/initpayment")
     public String initPayment(HttpServletRequest req, Model model){
@@ -45,10 +51,11 @@ public class PaymentController {
 
         if (type != null) {
             Long loggedInUserId = (Long) objval;
+            Long toUserId = 0l;// TODO
             long longPlanId = (planId != null && !planId.isEmpty()) ? Long.parseLong(planId) : 0;
             double longAmount = (amount != null && !amount.isEmpty()) ? Double.parseDouble(amount) : 0;
 
-            Map<String, Object> paymentAttributes = paymentService.initPayment(loggedInUserId, longPlanId, type, longAmount);
+            Map<String, Object> paymentAttributes = paymentService.initPayment(loggedInUserId, toUserId, longPlanId, type, longAmount);
             model.addAttribute("payment", paymentAttributes.get("paymentObj") );
             model.addAttribute("message", paymentAttributes.get("fMessage"));
             return "payment/initPayment";
@@ -63,7 +70,10 @@ public class PaymentController {
         String paymentType = req.getParameter("type");
         String planId = req.getParameter("planId");
         String amount = req.getParameter("amount");
-        //model.addAttribute("message", "Incorrect payment type");
+
+        model.addAttribute("byUserId", objval);
+        model.addAttribute("toUserId", objval);
+
         if (objval == null)
             return "redirect:/";
 
@@ -79,6 +89,7 @@ public class PaymentController {
         String amount = req.getParameter("amount");
         String txnid = req.getParameter("txnid");
         String planName = req.getParameter("udf3");
+        String byUserId = req.getParameter("udf4");
 
         User paymentProcessorUser = userService.findOne((Long)objval);
         if (paymentProcessorUser == null)
@@ -88,6 +99,21 @@ public class PaymentController {
             PublicUserPlan publicUserPlan = publicUserPlanservice.findByUserId(paymentProcessorUser.getId());
             publicUserPlan.setAmount(publicUserPlan.getAmount() + Double.parseDouble(amount));
             publicUserPlanservice.updatePublicUserPlan(publicUserPlan);
+        } else if (PaymentService.PaymentType.BUY_PLAN.name().equals(planName)) {
+            Plan plan = (Plan) planService.findOne(Long.parseLong(planId)).getData();
+            publicUserPlanservice.updatePlanForUser(paymentProcessorUser, plan);
+            /*PublicUserPlan publicUserPlan = publicUserPlanservice.findByUserId(paymentProcessorUser.getId());
+            publicUserPlan.setChangedBy(paymentProcessorUser.getMobile());
+            publicUserPlan.setPlanType(plan.getPlanType());
+            publicUserPlan.setDescription(plan.getDescription());
+            publicUserPlan.setPercentage(0d);
+            publicUserPlan.setStartDate(new Date());
+
+            JSONObject rule = new JSONObject(plan.getRules());
+            int validMonths = rule.getInt("validity_months");
+            publicUserPlan.setEndDate(addMonths(publicUserPlan.getStartDate(), validMonths));
+            publicUserPlanservice.updatePublicUserPlan(publicUserPlan);*/
+
         }
         model.addAttribute("amount",amount);
         model.addAttribute("txnid",txnid);

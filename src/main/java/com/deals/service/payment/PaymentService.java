@@ -9,7 +9,7 @@ public interface PaymentService {
 
     enum PaymentType {BUY_TOPUP, BUY_PLAN}
 
-    Map<String, Object> initPayment(Long userId, Long planId, PaymentType type, double amount);
+    Map<String, Object> initPayment(Long byUserId, Long toUserId, Long planId, PaymentType type, double amount);
 
     void processPayment(Map<String, String> params);
 }

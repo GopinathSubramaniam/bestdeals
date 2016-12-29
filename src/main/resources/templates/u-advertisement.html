@@ -64,24 +64,30 @@
                             <img class="img-responsive" th:src="${deal.imgUrl}" th:alt="${deal.name}" style="height: 210px;width: 100%;"/>
                             <input type="hidden" name="user_deal_id" th:id="${deal.id}+'_'+${deal.user.id}" th:value="${deal.user.id}"/>
 
-								<div class="caption">
-									<p style="min-height: 52px;" > <strong th:text="${deal.description}" ></strong></p>
+                            <div class="caption">
+                                <p style="min-height: 52px;"><strong th:text="${deal.description}"></strong></p>
 
-                                <p><div class="overlay" th:onclick="'Deal.selectDefault('+${deal.id}+')'">
-                                <input type="radio" name="isDefault" class="minimal" th:checked="${deal.default}"/> Select as default
-                            </div></p>
+                                <p>
+                                <div class="overlay" th:if="${planType} == 'PLATINUM'" th:onclick="'Deal.selectDefault('+${deal.id}+')'">
+                                    <input type="radio" name="isDefault" class="minimal" th:checked="${deal.default}"/>
+                                    Select as default
+                                </div>
+                                </p>
 
                                 <div class="row">
                                     <div class="col-md-12">
 
-                                        <a href="#" th:href="@{'deleteDeal?id='+ ${deal.id} }"  class="btn btn-danger btn-flat col-md-5" role="button"> <i class="fa fa-trash-o"></i> Delete </a>
+                                        <a href="#" th:href="@{'deleteDeal?id='+ ${deal.id} }"
+                                           class="btn btn-danger btn-flat col-md-5" role="button"> <i
+                                                class="fa fa-trash-o"></i> Delete </a>
 
-                                        <a href="#" data-toggle="modal" data-target="#editAdvModal" th:onclick="'Deal.findById('+${deal.id}+')'" class="btn btn-primary btn-flat col-md-5 pull-right" role="button"> <i class="fa fa-pencil-square-o"></i> Edit</a>
+                                        <a href="#" data-toggle="modal" data-target="#editAdvModal"
+                                           th:onclick="'Deal.findById('+${deal.id}+')'"
+                                           class="btn btn-primary btn-flat col-md-5 pull-right" role="button"> <i
+                                                class="fa fa-pencil-square-o"></i> Edit</a>
                                     </div>
                                 </div>
-
-
-								</div>
+                            </div>
 							</div>
 						</div>
 					</div>

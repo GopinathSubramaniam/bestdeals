@@ -71,7 +71,11 @@ public class UserService {
 		status = App.getResponse(App.CODE_OK, App.STATUS_CREATE, App.MSG_CREATE, b);
 		return status;
 	}
-	
+
+	public User save(User user) {
+		return userRepository.saveAndFlush(user);
+	}
+
 	public Status createOnlyUser(User user){
 		User userExist = null;
 		if(user != null && user.getMobile() != null){

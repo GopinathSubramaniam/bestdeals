@@ -14,13 +14,15 @@
         <div class="col-lg-12">
             <div class="col-lg-6">
                 <form action="initpayment" method="post">
-                <div class="input-group">
-                    <input type="hidden" name="type" id="type" value="BUY_TOPUP" />
-                    <input type="text" name="amount" id="topupAmount" class="form-control" placeholder="Topup Amount" />
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="submit" >Topup!</button>
-                    </span>
-                </div>
+                    <div class="input-group">
+                        <input type="hidden" name="type" id="type" value="BUY_TOPUP" />
+                        <input type="hidden" name="byUserId" th:value="${byUserId}" />
+                        <input type="hidden" name="toUserId" th:value="${toUserId}" />
+                        <input type="text" name="amount" id="topupAmount" class="form-control" placeholder="Topup Amount" />
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit" >Topup!</button>
+                        </span>
+                    </div>
                 </form>
             </div>
         </div>

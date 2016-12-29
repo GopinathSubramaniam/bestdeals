@@ -49,8 +49,8 @@ public class PaymentServiceImpl implements PaymentService{
     private final String hashSequence = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
 
     @Override
-    public Map<String, Object> initPayment(Long userId , Long planId, PaymentType type, double amount) {
-        User user = userService.findOne(userId);
+    public Map<String, Object> initPayment(Long byUserId, Long toUserId, Long planId, PaymentType type, double amount) {
+        User user = userService.findOne(byUserId);
         String phone = user.getMobile();
 
         /*String base_url = "";
@@ -75,8 +75,6 @@ public class PaymentServiceImpl implements PaymentService{
         Random rand = new Random();
         String rndm = Integer.toString(rand.nextInt())+(System.currentTimeMillis() / 1000L);
         txnid = hashCal("SHA-256",rndm).substring(0,20);
-
-        String udf2 = txnid;
 
 //        StringBuffer response_url = request.getRequestURL();// + "/payment_resp.jsp";
         Map<String, Object> params = new HashMap<>();
@@ -103,14 +101,15 @@ public class PaymentServiceImpl implements PaymentService{
 
         if (type == PaymentType.BUY_PLAN && planId > 0) {
             Plan plan = (Plan) planService.findOne(planId).getData();
-            Double payAmount = user.getPlan().getAmount();
-            String planName = user.getPlan().getName();
+            //user.setPlan(plan);
+            Double payAmount = plan.getAmount();
+            String planName = plan.getName();
 
             pVo.setAmount(payAmount);
             pVo.setPlan(planName);
             pVo.setPlanId(planId);
             pVo.setUdf1(planId.toString());
-            pVo.setUdf3(planName);
+            pVo.setUdf3(PaymentType.BUY_PLAN.name());
         } else if(type == PaymentType.BUY_TOPUP && amount > 0){
             pVo.setAmount(amount);
             pVo.setPlan("");
@@ -119,8 +118,8 @@ public class PaymentServiceImpl implements PaymentService{
             pVo.setUdf3(PaymentType.BUY_TOPUP.name());
         } else
             params.put("fMessage", "Payment validation failed");
-        pVo.setUdf2(udf2);
-        pVo.setUdf4(userId.toString());
+        pVo.setUdf2(txnid);
+        pVo.setUdf4(byUserId.toString());
 
         params.put("paymentObj", pVo);
         return params;

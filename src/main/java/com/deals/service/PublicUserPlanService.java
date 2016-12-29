@@ -78,6 +78,9 @@ public class PublicUserPlanService {
 		int validMonths = rule.getInt("validity_months");
 		publicUserPlan.setEndDate(addMonths(publicUserPlan.getStartDate(), validMonths));
 
+		user.setPlan(plan);
+		userService.save(user);
+
 		return save(publicUserPlan);
 	}
 

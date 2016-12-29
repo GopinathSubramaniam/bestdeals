@@ -209,13 +209,15 @@ public class AppController {
 		model.addAttribute("deals", Collections.emptyList());
 		model.addAttribute("maxAdvCount", 0);
 
+		User user = userService.findOne((long) getSessionVal("userId"));
+		model.addAttribute("planType", user.getPlan().getPlanType().name());
+
 		String isError = req.getParameter("error");
 		if(isError != null && isError.equals("0")){
 			model.addAttribute("message", "Please update your plan to create advertisement");
 		}else if(isError != null && isError.equals("1")){
 			model.addAttribute("message", "You limit exceed");
 		} else {
-			User user = userService.findOne((long) getSessionVal("userId"));
 			if (user.getPlan() != null) {
 				JSONObject rule = new JSONObject(user.getPlan().getRules());
 				int maxAdvCount = rule.getInt("max_adv_count");
@@ -755,7 +757,7 @@ public class AppController {
 			int count = (availableAdvCount <= 0) ? 0 : (availableAdvCount);
 			log.info("Adv Count Left :::: "+count);
 			if(count == 0){
-				model.addAttribute("message", "Your is limit exceed. Your can create only "+session.getAttribute("maxAdvCount")+" advertisement.");
+				model.addAttribute("message", "Your is limit exceed. Your can create only "+maxAdvCount+" advertisements.");
 			}
 		}else{
 			model.addAttribute("maxAdvCount", 0);
