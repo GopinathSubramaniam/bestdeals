@@ -19,10 +19,16 @@ public class AuthInterceptor implements HandlerInterceptor {
     static Logger log = LoggerFactory.getLogger(AuthInterceptor.class);
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-
         if(log.isDebugEnabled()) log.debug("AuthInterceptor: "+httpServletRequest.getRequestURI());
 
-        if (httpServletRequest.getRequestURI().startsWith("/BestDeals/rest")){
+        String requestUri = httpServletRequest.getRequestURI();
+        if (requestUri.startsWith("/BestDeals/rest/base/findAllCitiesByState") ||
+                requestUri.startsWith("/BestDeals/rest/base/findAllTalukasByCityId") ||
+                requestUri.startsWith("/BestDeals/rest/base/findAllVillagesByTalukaId")){
+                return true;
+        }
+
+        if (requestUri.startsWith("/BestDeals/rest")){
             if( API_VALUE.equals(httpServletRequest.getHeader(API_KEY)) ||
                     httpServletRequest.getSession().getAttribute("userId") != null) {
                 return true;
@@ -30,15 +36,15 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         // Avoid a redirect loop for some urls
-        if( !httpServletRequest.getRequestURI().equals("/BestDeals/") &&
-                !httpServletRequest.getRequestURI().equals("/BestDeals/login") &&
-                !httpServletRequest.getRequestURI().equals("/BestDeals/login/") &&
-                !httpServletRequest.getRequestURI().equals("/BestDeals/registerPage") &&
-                !httpServletRequest.getRequestURI().equals("/BestDeals/registerPage/") &&
-                !httpServletRequest.getRequestURI().equals("/BestDeals/admin") &&
-                !httpServletRequest.getRequestURI().equals("/BestDeals/admin/")) {
+        if( !requestUri.equals("/BestDeals/") &&
+                !requestUri.equals("/BestDeals/login") &&
+                !requestUri.equals("/BestDeals/login/") &&
+                !requestUri.equals("/BestDeals/registerPage") &&
+                !requestUri.equals("/BestDeals/registerPage/") &&
+                !requestUri.equals("/BestDeals/admin") &&
+                !requestUri.equals("/BestDeals/admin/")) {
             if( httpServletRequest.getSession().getAttribute("userId") == null) {
-                log.info("AuthInterceptor: invalid session for " + httpServletRequest.getRequestURI());
+                if(log.isDebugEnabled()) log.debug("AuthInterceptor: invalid session for " + requestUri);
                 httpServletResponse.sendRedirect("/BestDeals/");
                 return false;
             }

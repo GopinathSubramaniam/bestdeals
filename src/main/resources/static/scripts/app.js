@@ -240,8 +240,8 @@ var App = (function(){
 	
 	var getLatitudeLongitude = function (address, callback) {
 	    address = address || 'Pune';
-	    var geocoder = new google.maps.Geocoder();
-	    if (geocoder) {
+	    if (google) {
+            var geocoder = new google.maps.Geocoder();
 	        geocoder.geocode({
 	            'address': address
 	        }, function (results, status) {
@@ -251,7 +251,9 @@ var App = (function(){
                     callback(undefined);
 				}
 	        });
-	    }
+	    } else {
+            callback(undefined);
+		}
 	};
 	
 	var findAllCitiesByStateId = function(stateId){
@@ -317,7 +319,9 @@ var App = (function(){
 	displayAdvTab(); // Hide advertisement tab for non admin ppl
 	
 	 $('body').on('hidden.bs.modal', '.modal', function () {
-		 $(this).find('form')[0].reset();
+	 	if ($(this).find('form').length > 0 ) {
+			$(this).find('form')[0].reset();
+		}
       });
 	 
 	// END

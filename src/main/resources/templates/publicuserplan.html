@@ -37,7 +37,6 @@
                     		<td th:text="${publicUserPlan.startDate}"></td>
                     		<td th:text="${publicUserPlan.endDate}"></td>
                     		<td align="right">
-                    			<button title="Delete" class="btn btn-xs btn-danger btn-flat" th:onclick="'Plan.deletePlan('+${publicUserPlan.id}+')'"><i class="fa fa-fw fa-trash"></i>Delete</button>
 								<button title="Edit" class="btn btn-xs btn-primary btn-flat" data-toggle="modal" data-target="#planUpdateModal" th:onclick="'PublicUserPlan.findPlan('+${publicUserPlan.id}+')'"><i class="fa fa-fw fa-edit"></i>Edit</button>
                     		</td>
                     	</tr>
