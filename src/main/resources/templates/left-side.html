@@ -16,7 +16,7 @@
             <li th:class="${tab} == 'PUBLIC' ? 'active' : ''"><a href="userlist?userType=PUBLIC"><i class="fa fa-fw fa-users text-aqua"></i><span>Public Users</span></a></li>
             <li th:class="${tab} == 'PLAN' ? 'active' : ''"><a href="plan"><i class="fa fa-fw fa-sticky-note text-aqua"></i> <span>Plans</span></a></li>
             <li th:class="${tab} == 'CATEGORY' ? 'active' : ''"><a href="category"><i class="fa fa-fw fa-sticky-note text-aqua"></i> <span>Category</span></a></li>
-            <li th:class="${tab} == 'PUBLIC_USER_PLAN' ? 'active' : ''"><a href="publicUserPlan"><i class="fa fa-fw fa-sticky-note text-aqua"></i> <span>Public User Plan</span></a></li>
+            <!--<li th:class="${tab} == 'PUBLIC_USER_PLAN' ? 'active' : ''"><a href="publicUserPlan"><i class="fa fa-fw fa-sticky-note text-aqua"></i> <span>Public User Plan</span></a></li>-->
         </ul>
         <ul class="sidebar-menu" th:case="'PUBLIC'">
             <li th:class="${tab} == 'GREETINGS' ? 'active' : ''"><a href="/BestDeals/"><i class="fa fa-fw fa-dashboard text-aqua"></i><span>Dashboard</span></a></li>
