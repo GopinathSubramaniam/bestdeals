@@ -184,6 +184,7 @@ public class DealService {
 				queryCondition.append(" and ");
 			queryCondition.append(" userdetail4_.shop_name = :shopname ");
 		}
+		queryCondition.append("	group by deal0_.user_id " );
 		queryCondition.append("	order by deal0_.id DESC" );
 		Query nativeQuery = em.createNativeQuery( mQuery + queryCondition.toString(), Deal.class);
 		if (iscategoryName)

@@ -62,6 +62,7 @@ public interface DealRepository extends JpaRepository<Deal, Long>{
 			"        or deal0_.description LIKE LOWER(CONCAT('%',:description, '%'))  " +
 			"        or deal0_.name LIKE LOWER(CONCAT('%',:dealName, '%'))  " +
 			"        or userdetail4_.shop_name LIKE LOWER(CONCAT('%',:shopname, '%'))  " +
+			"	group by deal0_.user_id" +
 			"	order by deal0_.id DESC" +
 			"	LIMIT 50"
 			)
