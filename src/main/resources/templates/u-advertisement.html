@@ -41,7 +41,10 @@
                                     th:disabled="${deals.size()} &gt; 0"
                                     onchange="Deal.getSubCatByCategory($('#dealCategory').val()); $('#inputCategory').val($('#dealCategory').val());">
                                     <option value="">-&#45;&#45; Select -&#45;&#45;</option>
-                                    <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                                    <option th:each="category : ${categories}"
+                                            th:value="${category.id}"
+                                            th:text="${category.name}"
+                                            th:selected="${ deals.size() > 0 ? category.id == deals.get(0).subCategory.category.id : false }"></option>
                                 </select>
                         </div>
                     </div>
