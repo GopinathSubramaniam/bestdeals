@@ -32,6 +32,9 @@ public class AuthInterceptor implements HandlerInterceptor {
             if( API_VALUE.equals(httpServletRequest.getHeader(API_KEY)) ||
                     httpServletRequest.getSession().getAttribute("userId") != null) {
                 return true;
+            } else {
+                httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+                return false;
             }
         }
 
