@@ -23,8 +23,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import static org.springframework.data.domain.Sort.Direction;
@@ -238,10 +240,10 @@ public class AppController {
 		return "redirect:userplan";
 	}
 
-	@RequestMapping("/error")
+	/*@RequestMapping("/error")
 	public String error(){
 		return "error";
-	}
+	}*/
 
 	/**
 	 * User Plan Page
@@ -779,5 +781,31 @@ public class AppController {
 		return val;
 	}
 
-	
+	@RequestMapping(value="/salesmanSales")
+	public String salesmanSales(@RequestParam(name = "fromDate", required = false) Long fromDate,
+								@RequestParam(name = "toDate", required = false) Long toDate,
+								Model model, HttpServletRequest req) {
+		Object objval = getSessionVal("userId");
+		if (objval != null) {
+			Long userId = (Long) objval;
+			User user = userService.findOne(userId);
+			if (user != null) {
+				model.addAttribute("tab", Page.SALES.toString());
+				model.addAttribute("userName", user.getName());
+				model.addAttribute("userId", user.getId());
+				model.addAttribute("userType", user.getUserType().name());
+				model.addAttribute("message", "My Sales");
+				Date to = toDate == null ? new Date():new Date(toDate);
+				Date from = fromDate == null ? App.addMonths(to, -1): new Date(fromDate);
+				SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+				model.addAttribute("daterangeString", dateFormat.format(from ) + " - "+ dateFormat.format(to));
+				model.addAttribute("dateFrom", from);
+				model.addAttribute("dateTo", to);
+//				model.addAttribute("publicUsers", userService.findByCreatedBy(user.getMobile()));
+				model.addAttribute("publicUsers", userService.findByCreatedByBetweenDates(from, to, user.getMobile()));
+				return "salesman/home";
+			}
+		}
+		return "";
+	}
 }

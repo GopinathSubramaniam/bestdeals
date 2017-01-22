@@ -8,9 +8,7 @@ import com.deals.vo.UserVO;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 //import com.way2sms.SMS;
 public class App {
@@ -204,6 +202,20 @@ public class App {
 			result = result + alphabet.charAt(r.nextInt(n)); // 13
 
 		return result;
+	}
+
+	public static Date addDays(Date date, int days) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.DATE, days); //minus number would decrement the days
+		return cal.getTime();
+	}
+
+	public static Date addMonths(Date date, int months) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.MONTH, months); //minus number would decrement the months
+		return cal.getTime();
 	}
 	
 	public static String sendSMS(){

@@ -76,7 +76,7 @@ public class PublicUserPlanService {
 
 		JSONObject rule = new JSONObject(plan.getRules());
 		int validMonths = rule.getInt("validity_months");
-		publicUserPlan.setEndDate(addMonths(publicUserPlan.getStartDate(), validMonths));
+		publicUserPlan.setEndDate(App.addMonths(publicUserPlan.getStartDate(), validMonths));
 
 		user.setPlan(plan);
 		userService.save(user);
@@ -151,17 +151,4 @@ public class PublicUserPlanService {
 		return publicUserPlanRepository.saveAndFlush(publicUserPlan);
 	}
 
-	public static Date addDays(Date date, int days) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-		cal.add(Calendar.DATE, days); //minus number would decrement the days
-		return cal.getTime();
-	}
-
-	public static Date addMonths(Date date, int months) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-		cal.add(Calendar.MONTH, months); //minus number would decrement the months
-		return cal.getTime();
-	}
 }

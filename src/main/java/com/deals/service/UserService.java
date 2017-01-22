@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 
@@ -307,6 +308,10 @@ public class UserService {
 
 	public List<User> findByCreatedBy(String createdBy) {
 		return userRepository.findByCreatedBy(createdBy);
+	}
+
+	public List<User> findByCreatedByBetweenDates(Date fromDate, Date toDate, String createdBy) {
+		return userRepository.findByCreatedByBetweenDates(fromDate, toDate, createdBy);
 	}
 	public List<User> findByUserType(UserType userType) {
 		return userRepository.findByUserType(userType);

@@ -37,6 +37,7 @@
         </ul>
         <ul class="sidebar-menu" th:case="'SALES_MAN'">
             <li th:class="${tab} == 'DASHBOARD' ? 'active' : ''"><a href="/BestDeals/"><i class="fa fa-fw fa-dashboard text-aqua"></i><span>Dashboard</span></a></li>
+            <li th:class="${tab} == 'SALES' ? 'active' : ''"><a href="/BestDeals/salesmanSales"><i class="fa fa-fw fa-dashboard text-aqua"></i><span>My Sales</span></a></li>
             <li th:class="${tab} == 'USERPROFILE' ? 'active' : ''"><a class="userProfile" href="profile"><i class="fa fa-fw fa-user text-aqua"></i><span>My Profile</span></a></li>
         </ul>
     </section>
