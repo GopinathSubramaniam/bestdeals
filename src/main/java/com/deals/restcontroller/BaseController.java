@@ -8,7 +8,7 @@ import com.deals.util.App;
 import com.deals.util.Secret;
 import com.deals.util.Status;
 import com.deals.vo.BasePlaceModel;
-import com.deals.vo.PlaceNameResponseVo;
+import com.deals.vo.ShopNameResponseVo;
 import com.deals.vo.PublicPlanResponse;
 import com.deals.vo.QRCodeResponse;
 import org.json.JSONObject;
@@ -116,11 +116,11 @@ public class BaseController {
 	
 	@RequestMapping(value="/findAllPlaceNames/{cityId}", method = RequestMethod.GET)
 	public Status findAllPlaceNames(@PathVariable Long cityId){
-		List<String> placeNames = userDetailRepository.findAllPlaceNameByVillageTalukaCityId(cityId);
-		PlaceNameResponseVo nameResponseVo = new PlaceNameResponseVo();
+		List<String> placeNames = userDetailRepository.findAllShopNameByVillageTalukaCityId(cityId);
+		ShopNameResponseVo nameResponseVo = new ShopNameResponseVo();
 		nameResponseVo.setCityId(cityId);
 		nameResponseVo.setPlaceNames(placeNames);
-		log.info("PlaceNameResponseVos ::: "+nameResponseVo);
+		log.debug("findAllShopNameByVillageTalukaCityId ResponseVos ::: "+nameResponseVo);
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.STATUS_OK, nameResponseVo);
 		return status;
 	}

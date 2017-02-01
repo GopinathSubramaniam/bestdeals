@@ -3,6 +3,8 @@ package com.deals.model;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,7 +15,7 @@ import java.util.Date;
 @Setter
 @MappedSuperclass
 public class BaseEntity implements Serializable {
-	
+	private static final Logger log = LoggerFactory.getLogger(BaseEntity.class);
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -28,6 +30,8 @@ public class BaseEntity implements Serializable {
 	@PreUpdate
 	public void update(){
 		this.changedDate = new Date();
+		if (log.isDebugEnabled())
+			log.debug(this.getClass().getName() + " Updated");
 	}
 	
 	@PrePersist

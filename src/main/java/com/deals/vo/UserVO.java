@@ -31,14 +31,11 @@ public class UserVO {
 	private Long views;
 	private double latitude;
 	private double longitude;
-	private List<Deal> deals;
 	private List<ImageVo> imageUrls;
 	
-	private String placeName; //Village Name
 	private String shopName; //Shop Name
 	private String cityName;
 	private String stateName;
-	private String description;
 	private String qrCode;
 	private String encryptedQrCode;
 	

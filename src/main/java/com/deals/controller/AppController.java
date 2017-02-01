@@ -759,11 +759,11 @@ public class AppController {
 			int count = (availableAdvCount <= 0) ? 0 : (availableAdvCount);
 			log.info("Adv Count Left :::: "+count);
 			if(count == 0){
-				model.addAttribute("message", "Your is limit exceed. Your can create only "+maxAdvCount+" advertisements.");
+				model.addAttribute("message", "Your limit exceed. Your can create only "+maxAdvCount+" advertisements.");
 			}
 		}else{
 			model.addAttribute("maxAdvCount", 0);
-			model.addAttribute("message", "Buy plan to post advertisement!!!. Go to plan section and purchase.");
+			model.addAttribute("message", "Buy plan to post advertisement!!!. Go to My Plan and purchase.");
 		}
 
 		return model;

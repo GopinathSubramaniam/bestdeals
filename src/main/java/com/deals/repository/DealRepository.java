@@ -35,7 +35,6 @@ public interface DealRepository extends JpaRepository<Deal, Long>{
 			"        deal0_.img_url as img_url8_4_," +
 			"        deal0_.is_default as is_defau9_4_," +
 			"        deal0_.name as name10_4_," +
-			"        deal0_.place_name as place_n11_4_," +
 			"        deal0_.priority as priorit12_4_," +
 			"        deal0_.sub_category_id as sub_cat15_4_," +
 			"        deal0_.type as type13_4_," +
@@ -49,30 +48,35 @@ public interface DealRepository extends JpaRepository<Deal, Long>{
 			"        category category2_ " +
 			"            on subcategor1_.category_id=category2_.id " +
 			"    left outer join" +
-			"        city city3_ " +
-			"            on deal0_.city_id=city3_.id " +
-			"    left outer join" +
 			"        user_detail userdetail4_ " +
 			"            on deal0_.user_id=userdetail4_.user_id " +
+			"    left outer join" +
+			"        city city3_ " +
+			"            on deal0_.city_id=city3_.id " +
 			"    where " +
 			"        category2_.name LIKE LOWER(CONCAT('%',:categoryName, '%')) " +
 			"        or subcategor1_.name LIKE LOWER(CONCAT('%',:subcategoryName, '%')) " +
 			"        or city3_.name LIKE LOWER(CONCAT('%',:cityNme, '%')) " +
-			"        or deal0_.place_name LIKE LOWER(CONCAT('%',:placeName, '%'))  " +
 			"        or deal0_.description LIKE LOWER(CONCAT('%',:description, '%'))  " +
 			"        or deal0_.name LIKE LOWER(CONCAT('%',:dealName, '%'))  " +
 			"        or userdetail4_.shop_name LIKE LOWER(CONCAT('%',:shopname, '%'))  " +
+
+			" 		or deal0_.user_id in (select ud.user_id from user_detail as ud where " +
+			//"ud.city_id = (select id from city where city.name = '') OR " +
+			" ud.village_id in (select v.id from village v where v.taluka_id in (select t.id from taluka t where t.name = :talukaName))) " +
+
 			"	group by deal0_.user_id" +
 			"	order by deal0_.id DESC" +
-			"	LIMIT 50"
+			"	LIMIT :limit"
 			)
 	public List<Deal> findByAny(@Param(value = "categoryName") 		String categoryName,
 								@Param(value = "subcategoryName") 	String subcategoryName,
 								@Param(value = "cityNme") 			String cityNme,
-								@Param(value = "placeName")			String placeName,
+								@Param(value = "talukaName")			String talukaName,
 								@Param(value = "description") 		String description,
 								@Param(value = "dealName") 			String dealName,
-								@Param(value = "shopname") 			String shopname
+								@Param(value = "shopname") 			String shopname,
+								@Param(value = "limit") 			int limit
 	);
 
 	public Deal findByUserIdAndIsDefault(Long id, boolean isDefault);
@@ -87,9 +91,11 @@ public interface DealRepository extends JpaRepository<Deal, Long>{
 	public List<Deal> findAllByPriorityAndUserPlanPlanType(Priority priority, PlanType planType);
 
 	public List<Deal> findAllByUserPlanPlanTypeAndIsDefault(PlanType planType, boolean isDefault);
-	public List<Deal> findAllByUserPlanPlanTypeAndIsDefault(PlanType planType, boolean isDefault, Pageable pageable);
 
-	public List<Deal> findByUserInAndUserPlanPlanTypeAndIsDefault(Collection<User> users, PlanType planType, boolean isDefault, Pageable pageable);
+
+	public List<Deal> findAllByUserPlanPlanTypeAndIsDefaultOrderByChangedDateDesc(PlanType planType, boolean isDefault, Pageable pageable);
+
+	public List<Deal> findByUserInAndUserPlanPlanTypeAndIsDefaultOrderByChangedDateDesc(Collection<User> users, PlanType planType, boolean isDefault, Pageable pageable);
 
 	public List<Deal> findAllBySubCategoryId(Long id);
 	public List<Deal> findAllBySubCategoryIdAndIsDefault(Long id, boolean isDefault);
@@ -117,10 +123,6 @@ public interface DealRepository extends JpaRepository<Deal, Long>{
 	@Query( "select d from Deal d where d.subCategory.id in :ids group by d.user order by d.id desc" )
 	public List<Deal> findBySubCategoryIdInAndOnePerUser(@Param("ids") List<Long> subCategoryIdList);
 
-	public List<Deal> findByPlaceName(String placeName);
-
-	public List<Deal> findByCity(City city);
-
 	@Query("SELECT d FROM Deal d WHERE " +
 			"LOWER(d.city.name) LIKE LOWER(CONCAT('%',:searchTerm, '%'))")
 	public List<Deal> findByCityName(@Param("searchTerm") String cityName);
@@ -129,10 +131,8 @@ public interface DealRepository extends JpaRepository<Deal, Long>{
 	public List<Deal> findImageUrlAndDescriptionByUserId(Long id);
 	
 	public Integer countByUserId(Long id);
-//	public Long removeAllByUserId(Long id);
 	public Long deleteByUserId(Long id);
-	public List<Deal> findAllBySubCategoryCategoryNameOrSubCategoryNameOrCityNameOrPlaceNameOrDescriptionOrNameOrUserNameOrUserMobileOrUserPlanNameOrUserEmailAndUserPlanPlanType(String categoryName, String subCatName, String cityName, String placeName, String description, String name, String userName, String mobile, String planName, String email, PlanType planType);
-	public List<Deal> findAllBySubCategoryCategoryNameAndSubCategoryNameOrCityNameOrPlaceNameAndUserPlanPlanType(String categoryName, String subCatName, String cityName, String placeName, PlanType planType);
-	
-	
+	public List<Deal> findAllBySubCategoryCategoryNameOrSubCategoryNameOrCityNameOrDescriptionOrNameOrUserNameOrUserMobileOrUserPlanNameOrUserEmailAndUserPlanPlanType(String categoryName, String subCatName, String cityName,String description, String name, String userName, String mobile, String planName, String email, PlanType planType);
+	public List<Deal> findAllBySubCategoryCategoryNameAndSubCategoryNameOrCityNameAndUserPlanPlanType(String categoryName, String subCatName, String cityName, PlanType planType);
+
 }

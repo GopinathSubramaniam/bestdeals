@@ -226,7 +226,7 @@
 										<label for="inputState" class="col-sm-2 control-label">State</label>
 										<div class="col-sm-10">
 											<select name="state" id="inputState" class="form-control" onchange="Register.findAllCitiesByStateId($('#inputState').val());">
-												<option th:each="state : ${states}" th:value="${state.id}"
+												<option th:each="state : ${states}" th:value="${state.id}" th:selected="${state.name} == 'Maharashtra'"
 													th:text="${state.name}"></option>
 											</select>
 										</div>
@@ -234,7 +234,7 @@
 								</div>
 								<div class="col-sm-6 col-md-6 col-lg-6">
 									<div class="form-group">
-										<label for="inputDistrict" class="col-sm-2 control-label">District</label>
+										<label for="inputCity" class="col-sm-2 control-label">District</label>
 										<div class="col-sm-10">
 											<select name="city" id="inputCity" class="form-control" onchange="Register.findAllTalukasByCityId($('#inputCity').val());">
 												<option th:each="city : ${cities}" th:value="${city.id}" th:text="${city.name}"></option>
@@ -242,7 +242,7 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label for="inputDistrict" class="col-sm-2 control-label">Taluka</label>
+										<label for="inputTaluka" class="col-sm-2 control-label">Taluka</label>
 										<div class="col-sm-10">
 											<select name="taluka" id="inputTaluka" class="form-control" onchange="Register.findAllVillagesByTalukaId($('#inputTaluka').val());">
 												<option th:each="taluka : ${talukas}" th:value="${taluka.id}" th:text="${taluka.name}"></option>
@@ -250,116 +250,47 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label for="inputDistrict" class="col-sm-2 control-label">Village</label>
+										<label for="inputVillage" class="col-sm-2 control-label">Village</label>
 										<div class="col-sm-10">
 											<select name="village" id="inputVillage" class="form-control">
 												<option th:each="village : ${villages}" th:value="${village.id}" th:text="${village.name}"></option>
 											</select>
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="inputDistrict" class="col-sm-2 control-label">Shop
-											Name</label>
-										<div class="col-sm-10">
-											<input type="text" name="shopName" id="inputShopName"
-												class="form-control" placeholder="Shop Name" />
+									<div class="" id="shopDetailContainer">
+										<div class="form-group">
+											<label for="inputShopName" class="col-sm-2 control-label">Shop
+												Name</label>
+											<div class="col-sm-10">
+												<input type="text" name="shopName" id="inputShopName"
+													class="form-control" placeholder="Shop Name" />
+											</div>
 										</div>
-									</div>
-									<div class="form-group">
-										<label for="inputDistrict" class="col-sm-2 control-label">Shop
-											Address</label>
-										<div class="col-sm-10">
-											<input type="text" name="address1" id="inputAddress"
-												class="form-control" placeholder="Shop Address" />
+										<div class="form-group">
+											<label for="inputAddress" class="col-sm-2 control-label">Shop
+												Address</label>
+											<div class="col-sm-10">
+												<input type="text" name="address1" id="inputAddress"
+													class="form-control" placeholder="Shop Address" />
+											</div>
 										</div>
-									</div>
-									<div class="form-group">
-										<label for="inputDistrict" class="col-sm-2 control-label">Shop
-											Contact Number</label>
-										<div class="col-sm-10">
-											<input type="text" name="phoneNumbers" id="inputPhoneNumbers"
-												class="form-control" placeholder="Shop Contact Number" />
+										<div class="form-group">
+											<label for="inputPhoneNumbers" class="col-sm-2 control-label">Shop
+												Contact Number</label>
+											<div class="col-sm-10">
+												<input type="text" name="phoneNumbers" id="inputPhoneNumbers"
+													class="form-control" placeholder="Shop Contact Number" />
+											</div>
 										</div>
-									</div>
-									<div class="form-group">
-										<label for="inputDistrict" class="col-sm-2 control-label">Shop Description/Timing</label>
-										<div class="col-sm-10">
-											<textarea name="description" id="inputDescription"
-												class="form-control" placeholder="Shop Description/Timing"></textarea>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- /.box-body -->
-							<div class="box-footer pull-right">
-								<button class="btn btn-default" data-dismiss="modal">Close</button>
-								<button type="submit" class="btn btn-primary">Register</button>
-							</div>
-							<!-- /.box-footer -->
-						</form>
-						<form id="registerFranchiseForm" class="form-horizontal frachiseForm" method="post">
-							<div class="box-body">
-								<div class="col-sm-3 col-md-3 col-lg-3"></div>
-								<div class="col-sm-6 col-md-6 col-lg-6">
-									<div class="form-group">
-										<label for="inputEmail3" class="col-sm-2 control-label">User
-											Type</label>
-										<div class="col-sm-10">
-											<select name="userType" id="userType" class="form-control" onchange="Register.changeRegisterForm($('#registerFranchiseForm #userType').val())">
-												<option value="">-- Select --</option>
-												<option value="MERCHANT">MERCHANT</option>
-												<option value="FRANCHISE" selected="selected">FRANCHISE</option>
-											</select>
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="inputName" class="col-sm-2 control-label">Name</label>
-										<div class="col-sm-10">
-											<input type="text" name="name" class="form-control"
-												id="inputName" placeholder="Name" />
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="inputEmail" class="col-sm-2 control-label">Email</label>
-										<div class="col-sm-10">
-											<input type="email" name="email" class="form-control"
-												id="inputEmail" placeholder="Email" />
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="inputPassword" class="col-sm-2 control-label">Password</label>
-										<div class="col-sm-10">
-											<input type="password" name="password" class="form-control"
-												id="inputPassword" placeholder="Password" />
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="inputConfirmPassword" class="col-sm-2 control-label">Confirm
-											Password</label>
-										<div class="col-sm-10">
-											<input type="password" name="confirmPassword"
-												class="form-control" id="inputConfirmPassword"
-												placeholder="Confirm Password" />
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="inputMobile" class="col-sm-2 control-label">Mobile</label>
-										<div class="col-sm-10">
-											<input type="number" name="mobile" class="form-control"
-												id="inputMobile" placeholder="Mobile" />
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="inputState" class="col-sm-2 control-label">State</label>
-										<div class="col-sm-10">
-											<select name="state" id="inputState" class="form-control" onchange="Register.findAllCitiesByStateId($('#inputState').val());">
-												<option th:each="state : ${states}" th:value="${state.id}"
-													th:text="${state.name}"></option>
-											</select>
+										<div class="form-group">
+											<label for="inputDescription" class="col-sm-2 control-label">Shop Description/Timing</label>
+											<div class="col-sm-10">
+												<textarea name="description" id="inputDescription"
+													class="form-control" placeholder="Shop Description/Timing"></textarea>
+											</div>
 										</div>
 									</div>
 								</div>
-								<div class="col-sm-3 col-md-3 col-lg-3"></div>
 							</div>
 							<!-- /.box-body -->
 							<div class="box-footer pull-right">
@@ -374,31 +305,13 @@
 		</div>
 	</div>
 	<!-- Create new user model end -->
-	<!-- Delete Modal Dialog -->
-	<div class="modal fade" id="confirmDelete" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title">Delete Parmanently</h4>
-				</div>
-				<div class="modal-body">
-					<p>Are you sure about this ?</p>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-					<button type="button" class="btn btn-danger" id="confirm">Delete</button>
-				</div>
-			</div>
-		</div>
-	</div>
 
 	<script src="plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
 
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwelkrFN__LksGXcg-Sy_kWecvrEpFzvU&amp;sensor=false" defer="defer" async="async"></script>
-	<script src="bootstrap-validator/js/bootstrapValidator.js"></script>
+	<script src="bootstrap-validator/js/bootstrapValidator.min.js"></script>
 	<script src="scripts/services/register.js"></script>
 	<script src="scripts/services/user.js"></script>
 	<!-- Dialog show event handler -->
@@ -410,14 +323,14 @@
             $(this).find('.modal-title').text($title);
 
             var userid = $(e.relatedTarget).attr('data-userid');
-            $(this).find('.modal-footer #confirm').data('userid', userid);
+            $(this).find('.modal-footer #confirmDeleteBtn').data('userid', userid);
             // Pass form reference to modal for submission on yes/ok
 //            var form = $(e.relatedTarget).closest('form');
 //            $(this).find('.modal-footer #confirm').data('form', form);
         });
 
         <!-- Form confirm (yes/ok) handler, submits form -->
-        $('#confirmDelete').find('.modal-footer #confirm').on('click', function(){
+        $('#confirmDelete').find('.modal-footer #confirmDeleteBtn').on('click', function(){
             //$(this).data('form').submit();
             User.deleteUser($(this).data('userid'));
         });

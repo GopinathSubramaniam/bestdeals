@@ -37,7 +37,7 @@ public class UserDetailService {
 		return status;
 	}
 	
-	public Status update(UserDetail userDetail){
+	public UserDetail update(UserDetail userDetail){
 		if(userDetail != null){
 			UserDetail existsUserDetail = null;
 			if(userDetail.getId() != null){
@@ -45,42 +45,32 @@ public class UserDetailService {
 			}else{
 				existsUserDetail = new UserDetail();
 			}
-			if(userDetail.getPhoneNumbers() != null){
-				String phoneNumbers = "";
-				String[] numbers = userDetail.getPhoneNumbers().split(",");
-				for (String number : numbers) {
-					phoneNumbers += number;
-				}
-				existsUserDetail.setPhoneNumbers(phoneNumbers);
+			if(userDetail.getPhoneNumbers() != null && !userDetail.getPhoneNumbers().isEmpty()){
+				existsUserDetail.setPhoneNumbers(userDetail.getPhoneNumbers());
 			}
 			existsUserDetail.setLatitude(userDetail.getLatitude());
 			existsUserDetail.setLongitude(userDetail.getLongitude());
 
-			if( userDetail.getAddress1() != null ){
+			if( userDetail.getAddress1() != null && !userDetail.getAddress1().isEmpty()){
 				existsUserDetail.setAddress1(userDetail.getAddress1());
 			}
-			if( userDetail.getAddress2() != null ){
+			if( userDetail.getAddress2() != null && !userDetail.getAddress2().isEmpty()){
 				existsUserDetail.setAddress2(userDetail.getAddress2());
 			}
-			if( userDetail.getAddress3() != null ){
+			if( userDetail.getAddress3() != null && !userDetail.getAddress3().isEmpty()){
 				existsUserDetail.setAddress3(userDetail.getAddress3());
 			}
-			if( userDetail.getDescription() != null ){
+			if( userDetail.getDescription() != null && !userDetail.getDescription().isEmpty()){
 				existsUserDetail.setDescription(userDetail.getDescription());
 			}
-			if( userDetail.getPlaceName() != null ){
-				existsUserDetail.setPlaceName(userDetail.getPlaceName());
-			}
-			if( userDetail.getShopName() != null ){
+			if( userDetail.getShopName() != null && !userDetail.getShopName().isEmpty()){
 				existsUserDetail.setShopName(userDetail.getShopName());
 			}
-			existsUserDetail.setUser(userDetail.getUser());
+			//existsUserDetail.setUser(userDetail.getUser());
 			userDetailRepository.saveAndFlush(existsUserDetail);
-			status = App.getResponse(App.CODE_OK, App.STATUS_CREATE, App.MSG_CREATE, existsUserDetail);
-		}else{
-			status = App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_FAIL, userDetail);
+			return existsUserDetail;
 		}
-		return status;
+		return userDetail;
 	}
 
 	public List<UserDetail> findByUser(User user){
@@ -100,8 +90,8 @@ public class UserDetailService {
 		return status;
 	}
 	
-	public Status findLikeCityAndPlaceName(String cityName, String placeName){
-		UserDetail userDetail = userDetailRepository.findByPlaceNameLikeAndVillageNameLike(placeName, cityName);
+	public Status findLikeCityAndPlaceName(String cityName){
+		UserDetail userDetail = userDetailRepository.findByVillageNameLike(cityName);
 		status = App.getResponse(App.CODE_OK, App.STATUS_OK, App.MSG_OK, userDetail);
 		return status;
 	}

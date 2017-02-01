@@ -10,12 +10,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-public class UserDetail {
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
-	
+public class UserDetail extends BaseEntity {
 	private String shopName;
 	private String address1;
 	private String address2;
@@ -28,7 +23,6 @@ public class UserDetail {
 	private Long likes;
 	private Long views;
 	private String phoneNumbers;
-	private String placeName;
 	
 	@ManyToOne
 	private User user;

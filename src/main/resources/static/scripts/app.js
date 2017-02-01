@@ -206,7 +206,7 @@ var App = (function(){
 					message : 'The mobile is required and can\'t be empty'
 				},
 				regexp : {
-					regexp : /^[0-9]+$/,
+					regexp : /^([789]{1})([0-9]{9})$/,
 					message : 'The mobile can have only number '
 				}
 			}

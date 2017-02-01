@@ -66,11 +66,10 @@ public class DealService {
 			String categoryName,
 			String subcategoryName,
 			String cityNme,
-			String placeName,
+			String talukaName,
 			String description,
 			String dealName,
 			String shopname			){
-		List<Deal> platinumDeals = new ArrayList<>();
 		// Query for a List of objects.
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		/*CriteriaQuery<Deal> cq = cb.createQuery(Deal.class);
@@ -94,8 +93,8 @@ public class DealService {
 		if (cityNme != null && !cityNme.isEmpty()) {
 			predicates.add(cb.equal(cityJ.get("name"), cityNme));
 		}
-		if (placeName != null && !placeName.isEmpty()) {
-			predicates.add(cb.equal(dealRoot.get("placeName"), placeName));
+		if (talukaName != null && !talukaName.isEmpty()) {
+			predicates.add(cb.equal(dealRoot.get("talukaName"), talukaName));
 		}
 		if (description != null && !description.isEmpty()) {
 			predicates.add(cb.equal(dealRoot.get("description"), description));
@@ -115,7 +114,7 @@ public class DealService {
 		boolean iscategoryName = false;
 		boolean issubcategoryName = false;
 		boolean iscityNme = false;
-		boolean isplaceName = false;
+		boolean isTalukaName = false;
 		boolean isdescription = false;
 		boolean isdealName = false;
 		boolean isshopname = false;
@@ -155,13 +154,15 @@ public class DealService {
 				queryCondition.append(" and ");
 			queryCondition.append(" city3_.name = :cityNme ");
 		}
-		if (placeName != null && !placeName.isEmpty()) {
-			isplaceName = true;
+		if (talukaName != null && !talukaName.isEmpty()) {
+			isTalukaName = true;
 			if (queryCondition.length() < 1 ) queryCondition.append(" where ");
 			else
 				queryCondition.append(" and ");
-			queryCondition.append(" deal0_.place_name = :placeName ");
-
+			queryCondition.append(" deal0_.user_id in (select ud.user_id from user_detail as ud where " +
+					//"ud.city_id = (select id from city where city.name = '') OR " +
+					" ud.village_id in " +
+					"(select v.id from village v where v.taluka_id in (select t.id from taluka t where t.name = :talukaName))) ");
 		}
 		if (description != null && !description.isEmpty()) {
 			isdescription = true;
@@ -193,31 +194,30 @@ public class DealService {
 			nativeQuery.setParameter("subcategoryName", subcategoryName);
 		if (iscityNme)
 			nativeQuery.setParameter("cityNme", cityNme);
-		if (isplaceName)
-			nativeQuery.setParameter("placeName", placeName);
+		if (isTalukaName)
+			nativeQuery.setParameter("talukaName", talukaName);
 		if (isdescription)
 			nativeQuery.setParameter("description", description);
 		if (isdealName)
 			nativeQuery.setParameter("dealName", dealName);
 		if (isshopname)
 			nativeQuery.setParameter("shopname", shopname);
-		platinumDeals = nativeQuery.setMaxResults(50).getResultList();
+		List<Deal> platinumDeals = nativeQuery.setMaxResults(50).getResultList();
 		return mergeDealVOs(platinumDeals);
 	}
 	
-	public Status searchGlobal(String searchKey){
-		List<Deal> platinumDeals = new ArrayList<>();
-		List<Deal> goldDeals = new ArrayList<>();
-		List<Deal> silverDeals = new ArrayList<>();
+	public Status searchGlobal(String searchKey, int max){
+		List<Deal> platinumDeals = Collections.emptyList();
 		if (searchKey != null && !searchKey.isEmpty())
-			platinumDeals = dealRepository.findByAny(searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey);
-/*		platinumDeals = dealRepository.findAllBySubCategoryCategoryNameOrSubCategoryNameOrCityNameOrPlaceNameOrDescriptionOrNameOrUserNameOrUserMobileOrUserPlanNameOrUserEmailAndUserPlanPlanType(searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey,PlanType.PLATINUM);
+			platinumDeals = dealRepository.findByAny(searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, max);
 
+/*		platinumDeals = dealRepository.findAllBySubCategoryCategoryNameOrSubCategoryNameOrCityNameOrPlaceNameOrDescriptionOrNameOrUserNameOrUserMobileOrUserPlanNameOrUserEmailAndUserPlanPlanType(searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey,PlanType.PLATINUM);
+		List<Deal> goldDeals = new ArrayList<>();
 		if(platinumDeals.size() == 0 ){
 			goldDeals = dealRepository.findAllBySubCategoryCategoryNameOrSubCategoryNameOrCityNameOrPlaceNameOrDescriptionOrNameOrUserNameOrUserMobileOrUserPlanNameOrUserEmailAndUserPlanPlanType(searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, PlanType.GOLD);
 			platinumDeals = goldDeals;
 		}
-		
+		List<Deal> silverDeals = new ArrayList<>();
 		if(platinumDeals.size() == 0 && goldDeals.size() == 0){
 			silverDeals = dealRepository.findAllBySubCategoryCategoryNameOrSubCategoryNameOrCityNameOrPlaceNameOrDescriptionOrNameOrUserNameOrUserMobileOrUserPlanNameOrUserEmailAndUserPlanPlanType(searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, PlanType.SILVER);
 			platinumDeals = silverDeals;
@@ -256,7 +256,7 @@ public class DealService {
 		} else if (!cityName.isEmpty()) {
 			deals = dealRepository.findByCityName(cityName);
 		} else if (!placeName.isEmpty()) {
-			deals = dealRepository.findByPlaceName(placeName);
+//			deals = dealRepository.findByPlaceName(placeName);
 		}
 		List<DealVO> dealVOs = null;
 		if (deals != null && deals.size() > 0) {
@@ -279,15 +279,15 @@ public class DealService {
 		List<Deal> goldDeals = new ArrayList<>();
 		List<Deal> silverDeals = new ArrayList<>();
 		
-		platinumDeals = dealRepository.findAllBySubCategoryCategoryNameAndSubCategoryNameOrCityNameOrPlaceNameAndUserPlanPlanType(categoryName, subCatName, cityName, placeName, PlanType.PLATINUM);
+		platinumDeals = dealRepository.findAllBySubCategoryCategoryNameAndSubCategoryNameOrCityNameAndUserPlanPlanType(categoryName, subCatName, cityName, PlanType.PLATINUM);
 		
 		if(platinumDeals.size() == 0 ){
-			goldDeals = dealRepository.findAllBySubCategoryCategoryNameAndSubCategoryNameOrCityNameOrPlaceNameAndUserPlanPlanType(categoryName, subCatName, cityName, placeName, PlanType.GOLD);
+			goldDeals = dealRepository.findAllBySubCategoryCategoryNameAndSubCategoryNameOrCityNameAndUserPlanPlanType(categoryName, subCatName, cityName, PlanType.GOLD);
 			platinumDeals = goldDeals;
 		}
 		
 		if(platinumDeals.size() == 0 && goldDeals.size() == 0){
-			silverDeals = dealRepository.findAllBySubCategoryCategoryNameAndSubCategoryNameOrCityNameOrPlaceNameAndUserPlanPlanType(categoryName, subCatName, cityName, placeName, PlanType.SILVER);
+			silverDeals = dealRepository.findAllBySubCategoryCategoryNameAndSubCategoryNameOrCityNameAndUserPlanPlanType(categoryName, subCatName, cityName, PlanType.SILVER);
 			platinumDeals = silverDeals;
 		}
 		List<DealVO> dealVOs = mergeDealVOs(platinumDeals);
@@ -301,10 +301,10 @@ public class DealService {
 		List<Deal> goldDeals = new ArrayList<>();
 		List<Deal> silverDeals = new ArrayList<>();
 		
-		platinumDeals = dealRepository.findAllByUserPlanPlanTypeAndIsDefault(PlanType.PLATINUM, true, new PageRequest(page, max));
+		platinumDeals = dealRepository.findAllByUserPlanPlanTypeAndIsDefaultOrderByChangedDateDesc(PlanType.PLATINUM, true, new PageRequest(page, max));
 		
 		if(platinumDeals.size() < max ){
-			goldDeals = dealRepository.findAllByUserPlanPlanTypeAndIsDefault(PlanType.GOLD, true, new PageRequest(page, max - platinumDeals.size()));
+			goldDeals = dealRepository.findAllByUserPlanPlanTypeAndIsDefaultOrderByChangedDateDesc(PlanType.GOLD, true, new PageRequest(page, max - platinumDeals.size()));
 			if ( platinumDeals.size() == 0 )
 				platinumDeals = goldDeals;
 			else if ( goldDeals.size() > 0 )
@@ -312,7 +312,7 @@ public class DealService {
 		}
 		
 		if ( platinumDeals.size() < max ){
-			silverDeals = dealRepository.findAllByUserPlanPlanTypeAndIsDefault(PlanType.SILVER, true, new PageRequest(page, max - platinumDeals.size() ));
+			silverDeals = dealRepository.findAllByUserPlanPlanTypeAndIsDefaultOrderByChangedDateDesc(PlanType.SILVER, true, new PageRequest(page, max - platinumDeals.size() ));
 			if ( platinumDeals.size() == 0 )
 				platinumDeals = silverDeals;
 			else if ( silverDeals.size() > 0 )
@@ -324,9 +324,7 @@ public class DealService {
 	}
 
 	public Status findNearByDealsForDashboard(int page, int max, double latPoint, double lngPoint, double radius){
-		List<Deal> platinumDeals = new ArrayList<>();
-		List<Deal> goldDeals = new ArrayList<>();
-		List<Deal> silverDeals = new ArrayList<>();
+		List<Deal> platinumDeals = Collections.emptyList();
 
 		List<BigInteger> userIds = userDetailService.findNearByUserIdsByLatLongInRange(latPoint,lngPoint, radius);
 		if (userIds == null || userIds.size() == 0)
@@ -336,10 +334,10 @@ public class DealService {
 		for (int i = 0; i < userIds.size(); i++) {
 			userList.add(new User(userIds.get(i).longValue()));
 		}
-		platinumDeals = dealRepository.findByUserInAndUserPlanPlanTypeAndIsDefault( userList, PlanType.PLATINUM, true, new PageRequest(page, max));
+		platinumDeals = dealRepository.findByUserInAndUserPlanPlanTypeAndIsDefaultOrderByChangedDateDesc( userList, PlanType.PLATINUM, true, new PageRequest(page, max));
 
 		if(platinumDeals.size() < max ){
-			goldDeals = dealRepository.findByUserInAndUserPlanPlanTypeAndIsDefault( userList, PlanType.GOLD, true, new PageRequest(page, max - platinumDeals.size()));
+			List<Deal> goldDeals = dealRepository.findByUserInAndUserPlanPlanTypeAndIsDefaultOrderByChangedDateDesc( userList, PlanType.GOLD, true, new PageRequest(page, max - platinumDeals.size()));
 			if ( platinumDeals.size() == 0 )
 				platinumDeals = goldDeals;
 			else if ( goldDeals.size() > 0 )
@@ -347,7 +345,7 @@ public class DealService {
 		}
 
 		if ( platinumDeals.size() < max ){
-			silverDeals = dealRepository.findByUserInAndUserPlanPlanTypeAndIsDefault( userList, PlanType.SILVER, true, new PageRequest(page, max - platinumDeals.size() ));
+			List<Deal> silverDeals = dealRepository.findByUserInAndUserPlanPlanTypeAndIsDefaultOrderByChangedDateDesc( userList, PlanType.SILVER, true, new PageRequest(page, max - platinumDeals.size() ));
 			if ( platinumDeals.size() == 0 )
 				platinumDeals = silverDeals;
 			else if ( silverDeals.size() > 0 )

@@ -13,7 +13,7 @@
 					<div class="box-body">
 			          <div class="box-group" id="accordion">
 			            <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
-			            <div class="panel box box-primary" th:each="p : ${plans}">
+			            <div class="panel box box-primary" th:each="p : ${plans}" th:object="${p}" th:if="${p.name} != 'SIMPLE'">
 							<div class="box-header with-border">
 								<h4 class="box-title">
 				                <span th:if="${plan} != null and ${p.id} == ${plan.id}">

@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 @ToString
 @Setter
 @Getter
-@Entity
+//@Entity
 public class OTP extends BaseEntity{
 	
 	private static final long serialVersionUID = 1L;

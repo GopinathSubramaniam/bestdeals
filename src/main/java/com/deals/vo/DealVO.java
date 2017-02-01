@@ -15,10 +15,6 @@ public class DealVO {
 	private String imgUrl;
 	private String type;
 	private String description;
-	private String stateName;
-	private String cityName;
-	private String placeName;
-	
 	private UserVO user;
 
 	public DealVO() {}
@@ -28,9 +24,6 @@ public class DealVO {
 		this.imgUrl = deal.getImgUrl();
 		this.type = deal.getType().name();
 		this.description = deal.getDescription();
-//		this.stateName = deal
-		this.cityName = deal.getCity() == null ? "" : deal.getCity().getName();
-		this.placeName = deal.getPlaceName();
 		this.user = userVO;
 	}
 }

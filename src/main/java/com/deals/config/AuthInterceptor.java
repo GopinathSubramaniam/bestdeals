@@ -19,10 +19,14 @@ public class AuthInterceptor implements HandlerInterceptor {
     static Logger log = LoggerFactory.getLogger(AuthInterceptor.class);
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-        if(log.isDebugEnabled()) log.debug("AuthInterceptor: "+httpServletRequest.getRequestURI());
+        Object userId = httpServletRequest.getSession().getAttribute("userId");
+        if(log.isDebugEnabled()) log.debug((Long)userId + " AuthInterceptor Start: "+httpServletRequest.getRequestURI() );
 
         String requestUri = httpServletRequest.getRequestURI();
-        if (requestUri.startsWith("/BestDeals/rest/base/findAllCitiesByState") ||
+
+        if (requestUri.equals("/BestDeals/error") ||
+                requestUri.startsWith("/BestDeals/rest/user/register") ||
+                requestUri.startsWith("/BestDeals/rest/base/findAllCitiesByState") ||
                 requestUri.startsWith("/BestDeals/rest/base/findAllTalukasByCityId") ||
                 requestUri.startsWith("/BestDeals/rest/base/findAllVillagesByTalukaId")){
                 return true;
@@ -30,7 +34,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         if (requestUri.startsWith("/BestDeals/rest")){
             if( API_VALUE.equals(httpServletRequest.getHeader(API_KEY)) ||
-                    httpServletRequest.getSession().getAttribute("userId") != null) {
+                    userId != null) {
                 return true;
             } else {
                 httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
@@ -46,7 +50,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                 !requestUri.equals("/BestDeals/registerPage/") &&
                 !requestUri.equals("/BestDeals/admin") &&
                 !requestUri.equals("/BestDeals/admin/")) {
-            if( httpServletRequest.getSession().getAttribute("userId") == null) {
+            if( userId == null) {
                 if(log.isDebugEnabled()) log.debug("AuthInterceptor: invalid session for " + requestUri);
                 httpServletResponse.sendRedirect("/BestDeals/");
                 return false;
@@ -57,11 +61,11 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
-        if(log.isDebugEnabled()) log.debug("AuthInterceptor: "+httpServletRequest.getRequestURI());
+        //if(log.isDebugEnabled()) log.debug("AuthInterceptor postHandle: "+httpServletRequest.getRequestURI());
     }
 
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
-
+        if(log.isDebugEnabled()) log.debug("AuthInterceptor End: "+httpServletRequest.getRequestURI());
     }
 }

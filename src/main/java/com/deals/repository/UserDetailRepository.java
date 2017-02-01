@@ -19,10 +19,10 @@ public interface UserDetailRepository extends JpaRepository<UserDetail, Long>{
 	List<UserDetail> findByUserCreatedBy(String createdBy);
 	UserDetail findByUserId(Long id);
 	
-	UserDetail findByPlaceNameLikeAndVillageNameLike(String placeName, String cityName);
+	UserDetail findByVillageNameLike(String cityName);
 	
-	@Query("select placeName from UserDetail where village.taluka.city.id = :id")
-	List<String> findAllPlaceNameByVillageTalukaCityId(@Param("id") Long id);
+	@Query("select shopName from UserDetail where village.taluka.city.id = :id")
+	List<String> findAllShopNameByVillageTalukaCityId(@Param("id") Long id);
 
 	@Query(nativeQuery = true,
 			value = "SELECT z.user_id FROM user_detail AS z" +

@@ -192,10 +192,7 @@ public class UserService {
 			// Never update number, it is unique identifier
 //			if(user.getPassword() != null && !user.getMobile().isEmpty())
 //				existingUser.setMobile(user.getMobile());
-			if(user.getPlan() != null){
-				existingUser.setPlan(user.getPlan());
-			}
-			
+
 			user = userRepository.saveAndFlush(existingUser);
 			status = App.getResponse(App.CODE_OK, App.STATUS_UPDATE, App.MSG_UPDATE, user);
 		}else{

@@ -24,8 +24,8 @@ public class RegisterVo {
 	private String address2;
 	private String address3;
 	private String phoneNumbers;
-	private String placeName;
-	
+	private Long city;
+	private Long taluka;
 	private Long village;
-	
+
 }

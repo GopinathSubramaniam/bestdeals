@@ -13,7 +13,8 @@ var Deal = (function(){
 		deal.contact = obj.contact;
 		var subCatId = $('#dealSubCategory').val();
 		if (obj.subCategory == undefined || obj.subCategory == '' || subCatId == "") {
-			alert("Please select Subcategory.");
+            $('#alertMessageDiv').html('<i class="fa fa-times"></i> Please select Subcategory.');
+            $('.alertModal').modal('show');
 			return;
 		}
 		deal.subCategory = obj.subCategory;
@@ -36,7 +37,9 @@ var Deal = (function(){
 			if(res.statusCode == '200'){
 				window.location.reload();
 			}else{
-				$('#errorMsg').html('<i class="fa fa-times"></i> Error in creating advertisement. Please try again later.').fadeIn().fadeOut(20000);
+				//$('#errorMsg').html('<i class="fa fa-times"></i> Error in creating advertisement. Please try again later.').fadeIn().fadeOut(20000);
+                $('#alertMessageDiv').html('<i class="fa fa-times"></i> Error in creating advertisement. Please try again later.');
+                $('.alertModal').modal('show');
 			}
 		});
 	};
@@ -53,7 +56,8 @@ var Deal = (function(){
 				$('#editFileImage').attr('src', obj.imgUrl);
 				$('#editFileImage').removeClass('hidden');
 			}else{
-				$('#errorMsg').html('<i class="fa fa-times"></i> Error in Fetching advertisement. Please try again later.').fadeIn().fadeOut(20000);
+				$('#alertMessageDiv').html('<i class="fa fa-times"></i> Error in getting advertisement. Please try again later.');
+                $('.alertModal').modal('show');
 			}
 		});
 	};
@@ -71,25 +75,45 @@ var Deal = (function(){
 			$('#dealSubCategory').html('<option>-- Select --</option>');
 		}
 	};
+
 	var deleteDeal = function(id){
 		App.DeleteRequest(URL+id).then(function(res){
 			if(res.statusCode == '200'){
 				window.location.reload();
 			}else{
-				$('#errorMsg').html('<i class="fa fa-times"></i> Error in deleting advertisement. Please try again later.').fadeIn().fadeOut(20000);
+				$('#alertMessageDiv').html('<i class="fa fa-times"></i> Error in deleting advertisement. Please try again later.');
+                $('.alertModal').modal('show');
 			}
 		});
 	};
-	
-	var selectDefault = function(id){
+    $('#confirmDelete').on('show.bs.modal', function (e) {
+        var $message = $(e.relatedTarget).attr('data-message');
+        $(this).find('.modal-body p').text($message);
+        var $title = $(e.relatedTarget).attr('data-title');
+        $(this).find('.modal-title').text($title);
+
+        var dealId = $(e.relatedTarget).attr('data-dealid');
+        $(this).find('.modal-footer #confirmDeleteBtn').data('dealid', dealId);
+        // Pass form reference to modal for submission on yes/ok
+//            var form = $(e.relatedTarget).closest('form');
+//            $(this).find('.modal-footer #confirm').data('form', form);
+    });
+    <!-- Form confirm (yes/ok) handler, submits form -->
+    $('#confirmDelete').find('.modal-footer #confirmDeleteBtn').on('click', function(){
+        //$(this).data('form').submit();
+        deleteDeal($(this).data('dealid'));
+    });
+
+    var selectDefault = function(id){
 		var userId = $('#hiddenUserId').val();
 		App.GetRequest(URL+'selectDefault/'+id+'/true/'+userId).then(function(res){
 			if(res.statusCode == '200'){
-				$('#inputSuccess').html('You have updated the default image');
-				window.location.reload();
+				$('#alertMessageDiv').html('<span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span> You have updated the default image.');
+				//window.location.reload();
 			}else{
-				$('#inputError').html('Update default image is failed');
+				$('#alertMessageDiv').html('<i class="fa fa-times"></i> Set default image is failed');
 			}
+            $('.alertModal').modal('show');
 		});
 	};
 	

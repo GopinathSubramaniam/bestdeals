@@ -24,10 +24,11 @@ public class UserDetailController {
 	
 	@RequestMapping(value="/", method=RequestMethod.PUT, produces={"application/json"})
 	public Status update(@RequestBody UserDetail userDetail){
-		if ( userDetail != null && userDetail.getUser() != null && userDetail.getUser().getId() != 0) {
-			userService.update(userDetail.getUser());
+		if(userDetail != null){
+			userDetail = userDetailService.update(userDetail);
+			return App.getResponse(App.CODE_OK, App.STATUS_CREATE, App.MSG_CREATE, userDetail);
 		}
-		return userDetailService.update(userDetail);
+		return App.getResponse(App.CODE_FAIL, App.STATUS_FAIL, App.MSG_FAIL, userDetail);
 	}
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
@@ -42,7 +43,7 @@ public class UserDetailController {
 
 	@RequestMapping(value="/findLikeCityAndPlaceName/{cityName}/{placeName}", method=RequestMethod.GET)
 	public Status findLikeCityAndPlaceName( @PathVariable String cityName, @PathVariable String placeName){
-		return userDetailService.findLikeCityAndPlaceName(cityName, placeName);
+		return userDetailService.findLikeCityAndPlaceName(cityName);
 	}
 	
 }

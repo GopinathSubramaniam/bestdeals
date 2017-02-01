@@ -69,14 +69,13 @@ public class UserController {
 			user.setPassword(registerVo.getPassword());
 			user.setUserType(registerVo.getUserType());
 			user.setPlan(planService.getByPlanType(PlanType.FREE));
-
 			Object userId = request.getSession().getAttribute("userId");
 			if ( userId != null ) {
 				user.setCreatedBy(userService.findOne((Long)userId).getMobile());
-			}
+			} else
+				user.setCreatedBy("anonymous");
 			status = userService.createOnlyUser(user);
 			user = (User)status.getData();
-			
 			userPlanService.create(user);
 
 			UserDetail userDetail = new UserDetail();
@@ -84,10 +83,10 @@ public class UserController {
 				userDetail.setAddress1(registerVo.getAddress1());
 				userDetail.setDescription(registerVo.getDescription());
 				userDetail.setPhoneNumbers(registerVo.getPhoneNumbers());
-				userDetail.setPlaceName(registerVo.getPlaceName());
 				userDetail.setShopName(registerVo.getShopName());
-				userDetail.setVillage(new Village(registerVo.getVillage()));
 			}
+			if (registerVo.getVillage() != null)
+				userDetail.setVillage(new Village(registerVo.getVillage()));
 			userDetail.setUser(user);
 			userDetail.setLikes(new Long(0));
 			userDetail.setViews(new Long(0));
@@ -100,33 +99,6 @@ public class UserController {
 			status.setStatusCode(App.CODE_FAIL);
 			status.setStatusMsg(App.MSG_FAIL);
 		}
-
-		/*status = userService.createOnlyUser(user);
-		if (status.getStatusCode() != App.CODE_OK || status.getData() == null) {
-			return status;
-		}
-		user = (User)status.getData();
-		
-		if(user.getUserType().equals(UserType.PUBLIC)){
-			log.info("Public User::: Create QR code and plan");
-			userPlanService.create(user);
-		}
-		UserDetail userDetail = new UserDetail();
-		if(status.getStatusCode() != "500" && registerVo.getShopName() != null && registerVo.getAddress1() != null){
-			userDetail.setAddress1(registerVo.getAddress1());
-			userDetail.setLatitude(registerVo.getLatitude());
-			userDetail.setLongitude(registerVo.getLongitude());
-			userDetail.setPhoneNumbers(registerVo.getPhoneNumbers());
-			userDetail.setPlaceName(registerVo.getPlaceName());
-			userDetail.setShopName(registerVo.getShopName());
-		}
-		userDetail.setDescription(registerVo.getDescription());
-		userDetail.setVillage(new Village(registerVo.getVillage()));
-		userDetail.setUser(user);
-		userDetail.setLikes(new Long(0));
-		userDetail.setViews(new Long(0));
-
-		userDetailService.create(userDetail);*/
 		return status;
 	}
 	

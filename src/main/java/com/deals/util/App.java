@@ -130,7 +130,6 @@ public class App {
 			userVO.setViews(userDetail.getViews());
 			userVO.setTimings(userDetail.getDescription());
 			userVO.setShopName(userDetail.getShopName());
-			userVO.setPlaceName(userDetail.getPlaceName());
 			if (userDetail.getVillage() != null)
 				if (userDetail.getVillage().getTaluka() != null)
 					if (userDetail.getVillage().getTaluka().getCity() != null) {

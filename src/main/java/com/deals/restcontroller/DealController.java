@@ -28,14 +28,24 @@ import java.util.List;
 @RequestMapping("/rest/deal")
 public class DealController {
 
-	
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	
+	private int radius = 300;
+	private final int maxSearchResults = 50;
+
 	@Autowired
 	private DealService dealService;
 	
 	@Autowired
 	private AppService appService;
+
+	@RequestMapping(value={"/set"}, method= RequestMethod.GET)
+	public int setRadius(@RequestParam(name = "radius", required = false) int radius){
+		if (radius <= 0 || this.radius <= 0)
+			this.radius = 300;
+		else
+			this.radius = radius;
+		return this.radius;
+	}
 
 	@RequestMapping(value={"/", ""}, method= RequestMethod.GET)
 	public Status findAllDealsForDashboard(HttpServletRequest req){
@@ -43,7 +53,7 @@ public class DealController {
 			String latitude = req.getParameter("latitude");
 			String lngitude = req.getParameter("longitude");
 			if (latitude!= null && !latitude.isEmpty() && lngitude!= null && !lngitude.isEmpty()) {
-				Status status = dealService.findNearByDealsForDashboard( 0, 20, Double.parseDouble(latitude),Double.parseDouble(lngitude), 50);
+				Status status = dealService.findNearByDealsForDashboard( 0, 20, Double.parseDouble(latitude),Double.parseDouble(lngitude), this.radius);
 				if (status.getData() != null)
 					return status;
 			} else
@@ -78,8 +88,6 @@ public class DealController {
 		deal.setName(jsonDeal.getString("name"));
 		deal.setDescription(jsonDeal.getString("name"));
 		deal.setCity(city);
-		deal.setContact(jsonDeal.getString("contact"));
-		deal.setPlaceName(jsonDeal.getString("placeName"));
 		deal.setType(DealType.ADVERTISEMENT);
 		deal.setPriority(Priority.HIGH);
 		deal.setUser(user);
@@ -104,11 +112,11 @@ public class DealController {
 		String categoryName = req.getParameter("cname");
 		String subcategoryName = req.getParameter("scname");
 		String cityName = req.getParameter("cityName");
-		String placeName = req.getParameter("placeName");
+		String talukaName = req.getParameter("placeName");
 		List<DealVO> dealVOS = dealService.filter(categoryName,
 				 subcategoryName,
 				cityName,
-				 placeName,
+				 talukaName,
 				 "",
 				 "",
 				 "");
@@ -121,11 +129,11 @@ public class DealController {
 		if(type != null && type.toLowerCase().equals("global")){
 			log.info("Global Search");
 			String searchKey = req.getParameter("key");
-			return dealService.searchGlobal(searchKey);
+			return dealService.searchGlobal(searchKey, maxSearchResults);
 		}else{
 			double latPoint = 1000.00d;
 			double lngPoint = 1000.00d;
-			int radius = 0;
+			int radius = this.radius;
 			log.info("Advanced Search");
 			String categoryName = req.getParameter("cname");
 			if (categoryName == null) categoryName = "";
